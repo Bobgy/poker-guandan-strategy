@@ -1,4 +1,4 @@
-ºìÌÒ£º?H | ºÚÌÒ£º?S | Ã·»¨£º?C | ·½¿é£º?D | Ğ¡¹í£ºSJ | ´ó¹í£ºBJ | Êı×Ö10£º0? | ÆäÓàºÍÅÆÃæÏàÍ¬
+çº¢æ¡ƒï¼š?H | é»‘æ¡ƒï¼š?S | æ¢…èŠ±ï¼š?C | æ–¹å—ï¼š?D | å°é¬¼ï¼šSJ | å¤§é¬¼ï¼šBJ | æ•°å­—10ï¼š0? | å…¶ä½™å’Œç‰Œé¢ç›¸åŒ
 Enter the number of cards:Enter the main rank:Enter the cards:Least hands: 6
 ------------- 3S QS ------------
 | 2H 3C 3D 3S 4D 4H 4H 7H 7S 0C 0S BJ || AD 0C JH QS KD || 5C 6C 7C 8D 9C || 9S 0S JS QS KS |

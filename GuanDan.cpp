@@ -361,7 +361,7 @@ int main()
     freopen("output.txt","w",stdout);
     THandCards hc,UsedAs;
     list<string> solution;
-    cout<<"ºìÌÒ£º?H | ºÚÌÒ£º?S | Ã·»¨£º?C | ·½¿é£º?D | Ð¡¹í£ºSJ | ´ó¹í£ºBJ | Êý×Ö10£º0? | ÆäÓàºÍÅÆÃæÏàÍ¬"<<endl;
+    cout<<"çº¢æ¡ƒï¼š?H | é»‘æ¡ƒï¼š?S | æ¢…èŠ±ï¼š?C | æ–¹å—ï¼š?D | å°é¬¼ï¼šSJ | å¤§é¬¼ï¼šBJ | æ•°å­—10ï¼š0? | å…¶ä½™å’Œç‰Œé¢ç›¸åŒ"<<endl;
     int N;
     cout<<"Enter the number of cards:";
     cin>>N;

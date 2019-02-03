@@ -1,0 +1,7 @@
+Enter the number of cards:Enter the main rank:Enter the cards:Least hands: 8
+------------- ------------
+| AD AD AS 2C 2S 3D 3H 3H 4S 0H SJ || JC JD QC QH KC KH || 6S 7S 8S 9H 0H || 3D 4C 5H 6H 7C |
+| AD AD AS 3H 3H 6S 7S KC KH SJ || 0H 0H JC JD QC QH || 2C 2S 3D 3D 4C 4S || 5H 6H 7C 8S 9H |
+| AD AD AS 3H 3H 6S 7S 0H 0H SJ || JC JD QC QH KC KH || 2C 2S 3D 3D 4C 4S || 5H 6H 7C 8S 9H |
+| AD AD AS 2C 2S 3D 3D 3H 3H 4C 4S 6S 7S KC KH SJ || 0H 0H JC JD QC QH || 5H 6H 7C 8S 9H |
+| AD AD AS 2C 2S 3D 3D 3H 3H 4C 4S 6S 7S 0H 0H SJ || JC JD QC QH KC KH || 5H 6H 7C 8S 9H |
