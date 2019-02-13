@@ -1,0 +1,28 @@
+{
+  "name": "poker-guandan-strategy",
+  "version": "1.0.0",
+  "description": "guandan strategy calculation",
+  "main": "lib/strategy.wasm",
+  "scripts": {
+    "npm:init:win": "npm config set script-shell \"C:\\bin\\Git\\bin\\bash.exe\"",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prebuild": "mkdir -p lib",
+    "build": "em++ strategy.cpp -O2 -s WASM=1 -s SIDE_MODULE=1 -o lib/strategy.wasm",
+    "clean": "rm -rf a.out* a.exe output.txt lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bobgy/poker-guandan-strategy.git"
+  },
+  "keywords": [
+    "guandan",
+    "strategy",
+    "wasm"
+  ],
+  "author": "Yuan Gong",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Bobgy/poker-guandan-strategy/issues"
+  },
+  "homepage": "https://github.com/Bobgy/poker-guandan-strategy#readme"
+}

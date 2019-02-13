@@ -3,3 +3,4 @@ a.out*
 .vscode
 *.o
 bin
+lib
