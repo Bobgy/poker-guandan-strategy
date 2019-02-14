@@ -7,7 +7,7 @@
     "npm:init:win": "npm config set script-shell \"C:\\bin\\Git\\bin\\bash.exe\"",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prebuild": "npm run clean && mkdir -p lib",
-    "build": "em++ strategy.cpp -o lib/strategy.js -s EXTRA_EXPORTED_RUNTIME_METHODS='[\"cwrap\", \"ccall\"]'",
+    "build": "em++ strategy.cpp -o lib/strategy.js -s EXTRA_EXPORTED_RUNTIME_METHODS='[\"cwrap\", \"ccall\"]' --bind",
     "clean": "rm -rf a.out* a.exe output.txt lib/*"
   },
   "repository": {

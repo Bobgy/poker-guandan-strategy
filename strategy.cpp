@@ -1,14 +1,15 @@
+#include <emscripten/bind.h>
 #include <emscripten/emscripten.h>
 
 // #include <cmath>
 // #include <list>
 // #include <map>
 // #include <set>
-// #include <string>
+#include <string>
 // #include <utility>
 // #include <vector>
 
-// using namespace std;
+using namespace std;
 
 // typedef pair<int, char> TCard;
 // typedef map<int, multiset<char> > THandCards;
@@ -295,9 +296,9 @@
 //     return 0;
 // }
 
-// avoid c++ mangling of method name
-extern "C" {
 int EMSCRIPTEN_KEEPALIVE add(int a, int b) { return a + b; }
+string EMSCRIPTEN_KEEPALIVE concat(string a, string b) { return a + b; }
+
 // // cards: cards represented in string
 // // 红桃：?H | 黑桃：?S | 梅花：?C | 方块：?D | 小鬼：SJ | 大鬼：BJ |
 // 数字10：0?
@@ -325,4 +326,8 @@ int EMSCRIPTEN_KEEPALIVE add(int a, int b) { return a + b; }
 //     // }
 //     // return 0;
 // }
+
+EMSCRIPTEN_BINDINGS(my_module) {
+    emscripten::function("add", &add);
+    emscripten::function("concat", &concat);
 }

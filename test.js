@@ -1,5 +1,6 @@
-const binding = require('./binding')
+const cppModule = require('./lib/strategy')
 
-binding.cppModule.onRuntimeInitialized = () => {
-    console.log(binding.add(1, 2))
+cppModule.onRuntimeInitialized = () => {
+    console.log(cppModule.add(2, 3))
+    console.log(cppModule.concat('Hello,', ' World'))
 }
