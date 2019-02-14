@@ -8,6 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "prebuild": "npm run clean && mkdir -p lib",
     "build": "em++ strategy.cpp -o lib/strategy.js -s EXTRA_EXPORTED_RUNTIME_METHODS='[\"cwrap\", \"ccall\"]' --bind",
+    "build:prod": "npm run build -- -O2 --",
     "clean": "rm -rf a.out* a.exe output.txt lib/*"
   },
   "repository": {
