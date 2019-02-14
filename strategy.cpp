@@ -298,6 +298,11 @@ using namespace std;
 
 int EMSCRIPTEN_KEEPALIVE add(int a, int b) { return a + b; }
 string EMSCRIPTEN_KEEPALIVE concat(string a, string b) { return a + b; }
+vector<string> EMSCRIPTEN_KEEPALIVE makeArr(string a, string b) {
+    vector<string> arr({a, b});
+
+    return arr;
+}
 
 // // cards: cards represented in string
 // // 红桃：?H | 黑桃：?S | 梅花：?C | 方块：?D | 小鬼：SJ | 大鬼：BJ |
@@ -327,7 +332,12 @@ string EMSCRIPTEN_KEEPALIVE concat(string a, string b) { return a + b; }
 //     // return 0;
 // }
 
+namespace emscripten {
 EMSCRIPTEN_BINDINGS(my_module) {
-    emscripten::function("add", &add);
-    emscripten::function("concat", &concat);
+    function("add", &add);
+    function("concat", &concat);
+    function("makeArr", &makeArr);
+
+    register_vector<string>("vector<string>");
 }
+}  // namespace emscripten
