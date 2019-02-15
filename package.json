@@ -2,16 +2,15 @@
   "name": "poker-guandan-strategy",
   "version": "1.0.0",
   "description": "guandan strategy calculation",
-  "main": "lib/strategy.wasm",
   "scripts": {
     "npm:init:win": "npm config set script-shell \"C:\\bin\\Git\\bin\\bash.exe\"",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prebuild": "npm run clean && mkdir -p docs/static",
-    "build": "em++ strategy.cpp -o docs/static/strategy.js -s EXTRA_EXPORTED_RUNTIME_METHODS='[\"cwrap\", \"ccall\"]' --bind",
-    "build:prod": "npm run build -- -O2 && cd guandan-app && npm run build && cp -r build ../docs/static",
-    "clean": "rm -rf a.out* a.exe docs/static/*",
-    "aa-deploy": "cd guandan-app && npm run build",
-    "deploy": "rm -rf docs/* && cp -r guandan-app/build/* docs"
+    "prebuild": "npm run clean && mkdir -p app/public/res",
+    "build": "em++ strategy.cpp -o app/public/res/strategy.js -s EXTRA_EXPORTED_RUNTIME_METHODS='[\"cwrap\", \"ccall\"]' --bind",
+    "clean": "rm -rf a.out* a.exe app/public/res/*",
+    "build:prod": "npm run build -- -O2 && cd app && npm run build",
+    "predeploy": "npm run build:prod",
+    "deploy": "rm -rf docs/* && cp -r app/build/* docs"
   },
   "repository": {
     "type": "git",
