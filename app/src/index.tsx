@@ -5,7 +5,9 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { loadCppModule } from './loadCppModule';
 
-loadCppModule().then(console.log);
+loadCppModule().then(cppModule => {
+    console.log(cppModule.calc('BJADKDJH0S0C0CAH8D7S7H4H4D4H3D3C2H9C7CAH6C5CKSQSJS0S9S', 'A'))
+});
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
