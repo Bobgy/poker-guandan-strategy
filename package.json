@@ -8,8 +8,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "prebuild": "npm run clean && mkdir -p docs/static",
     "build": "em++ strategy.cpp -o docs/static/strategy.js -s EXTRA_EXPORTED_RUNTIME_METHODS='[\"cwrap\", \"ccall\"]' --bind",
-    "build:prod": "npm run build -- -O2 --",
-    "clean": "rm -rf a.out* a.exe docs/static/*"
+    "build:prod": "npm run build -- -O2 && cd guandan-app && npm run build && cp -r build ../docs/static",
+    "clean": "rm -rf a.out* a.exe docs/static/*",
+    "aa-deploy": "cd guandan-app && npm run build",
+    "deploy": "rm -rf docs/* && cp -r guandan-app/build/* docs"
   },
   "repository": {
     "type": "git",
@@ -25,5 +27,6 @@
   "bugs": {
     "url": "https://github.com/Bobgy/poker-guandan-strategy/issues"
   },
-  "homepage": "https://github.com/Bobgy/poker-guandan-strategy#readme"
+  "homepage": "https://github.com/Bobgy/poker-guandan-strategy#readme",
+  "devDependencies": {}
 }
