@@ -6,10 +6,10 @@
   "scripts": {
     "npm:init:win": "npm config set script-shell \"C:\\bin\\Git\\bin\\bash.exe\"",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prebuild": "npm run clean && mkdir -p lib",
-    "build": "em++ strategy.cpp -o lib/strategy.js -s EXTRA_EXPORTED_RUNTIME_METHODS='[\"cwrap\", \"ccall\"]' --bind",
+    "prebuild": "npm run clean && mkdir -p docs/static",
+    "build": "em++ strategy.cpp -o docs/static/strategy.js -s EXTRA_EXPORTED_RUNTIME_METHODS='[\"cwrap\", \"ccall\"]' --bind",
     "build:prod": "npm run build -- -O2 --",
-    "clean": "rm -rf a.out* a.exe output.txt lib/*"
+    "clean": "rm -rf a.out* a.exe docs/static/*"
   },
   "repository": {
     "type": "git",
