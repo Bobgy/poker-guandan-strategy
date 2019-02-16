@@ -1,21 +1,19 @@
-import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import React, { Component } from 'react'
+import { View, Text } from 'react-native'
 
-class App extends Component {
-  render() {
-    return (
-      <View style={{
+function App() {
+  return (
+    <View
+      style={{
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: 'lightblue',
-      }}>
-        <Text>
-          Some Text
-        </Text>
-      </View>
-    );
-  }
+      }}
+    >
+      <Text>Current Card:</Text>
+    </View>
+  )
 }
 
-export default App;
+export default App
