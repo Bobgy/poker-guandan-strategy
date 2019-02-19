@@ -2,21 +2,21 @@ import React, {
   useState,
   useCallback,
   FunctionComponent,
-  ReactPropTypes,
   ReactNode,
 } from 'react'
 import {
   View,
   Text,
-  Button,
   TouchableOpacity,
   StyleSheet,
   TouchableOpacityProps,
   StyleProp,
   TextStyle,
+  ScrollView,
 } from 'react-native'
 import { RANKS, SUIT, RANK, SUITS, SUITS_JOKER } from './constants'
 import { CardState, TCard } from './types'
+import { Divider } from './Divider'
 
 const palette = {
   blue: 'rgb(33, 150, 243)',
@@ -62,11 +62,21 @@ function Card({ rank, suit, isStacked }: TCard & { isStacked?: boolean }) {
     <View style={[styles.card, isStacked && styles.cardStacked]}>
       <Text
         style={{
-          fontSize: 24,
+          fontFamily: 'monospace',
+          fontSize: 16,
           color: suitDef.color,
+          lineHeight: 16,
+          textAlign: 'center',
+          width: 20,
+          marginTop: 4,
+          fontWeight: 'bold',
         }}
       >
-        {suitDef.label + rankDef.label}
+        {rankDef.label === '10'
+          ? rankDef.label
+          : rankDef.label.split('').join('\n')}
+        {'\n'}
+        {suitDef.label}
       </Text>
     </View>
   )
@@ -74,12 +84,12 @@ function Card({ rank, suit, isStacked }: TCard & { isStacked?: boolean }) {
 
 interface MyButtonProps extends TouchableOpacityProps {
   title: ReactNode
-  textStyle?: StyleProp<TextStyle>
+  titleStyle?: StyleProp<TextStyle>
 }
 
 const MyButton: FunctionComponent<MyButtonProps> = ({
   style,
-  textStyle,
+  titleStyle,
   title,
   disabled,
   ...restProps
@@ -92,7 +102,7 @@ const MyButton: FunctionComponent<MyButtonProps> = ({
           : theme.button.background,
         borderRadius: 2,
         padding: 4,
-        alignContent: 'center',
+        alignItems: 'center',
         justifyContent: 'center',
       },
       style,
@@ -101,11 +111,72 @@ const MyButton: FunctionComponent<MyButtonProps> = ({
     {...restProps}
   >
     <Text
-      style={[{ color: disabled ? theme.disabled.text : 'white' }, textStyle]}
+      style={[
+        {
+          color: disabled ? theme.disabled.text : 'white',
+        },
+        titleStyle,
+      ]}
     >
       {title}
     </Text>
   </TouchableOpacity>
+)
+
+const controlStyles = StyleSheet.create({
+  incDecButton: {
+    flex: 2,
+    minWidth: 100,
+    maxWidth: 200,
+    margin: 10,
+  },
+  clearButton: {
+    flex: 1,
+    minWidth: 100,
+    maxWidth: 150,
+    margin: 10,
+  },
+  buttonTitle: {
+    fontSize: 30,
+  },
+})
+interface ControlPanelProps {
+  decRank: () => void
+  incRank: () => void
+  clearCards: () => void
+  rankID: number
+  numberOfCards: number
+}
+const ControlPanel: React.FunctionComponent<ControlPanelProps> = props => (
+  <View
+    style={{
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignContent: 'center',
+    }}
+  >
+    <MyButton
+      onPress={props.clearCards}
+      title="清除"
+      disabled={props.numberOfCards === 0}
+      style={controlStyles.clearButton}
+      titleStyle={controlStyles.buttonTitle}
+    />
+    <MyButton
+      onPress={props.decRank}
+      disabled={props.rankID <= 0}
+      title="<"
+      style={controlStyles.incDecButton}
+      titleStyle={controlStyles.buttonTitle}
+    />
+    <MyButton
+      onPress={props.incRank}
+      title=">"
+      disabled={props.rankID >= RANKS.length - 1}
+      style={controlStyles.incDecButton}
+      titleStyle={controlStyles.buttonTitle}
+    />
+  </View>
 )
 
 export function CardsChooser({ cards, addCard, clearCards }: CardState) {
@@ -116,63 +187,69 @@ export function CardsChooser({ cards, addCard, clearCards }: CardState) {
   } = useIncDecState()
 
   return (
-    <View>
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+    <View style={{ flex: 1 }}>
+      <ScrollView
+        style={{
+          flex: 1,
+          minHeight: 60,
+        }}
+        contentContainerStyle={{
+          flexWrap: 'wrap',
+          flexDirection: 'row',
+          paddingRight: 60,
+          paddingBottom: 60,
+          overflow: 'hidden',
+        }}
+      >
         {cards.map((card, index) => (
           <Card key={card.rank + card.suit + index} {...card} isStacked />
         ))}
-      </View>
-      <View>
-        <View
-          style={{
-            flexWrap: 'wrap',
-            flexDirection: 'row',
-          }}
-        >
-          {(RANKS[rankID].isJoker ? SUITS_JOKER : SUITS).map(suit => (
-            <TouchableOpacity
-              key={suit.value}
-              onPress={() =>
-                addCard({
-                  suit: suit.value,
-                  rank: RANKS[rankID].value,
-                })
-              }
-            >
-              <Card suit={suit.value} rank={RANKS[rankID].value} />
-            </TouchableOpacity>
-          ))}
-        </View>
-      </View>
-      <View style={{ flexDirection: 'row' }}>
-        <MyButton onPress={decRank} disabled={rankID <= 0} title="<" />
-        <Text>{RANKS[rankID].label}</Text>
-        <MyButton
-          onPress={incRank}
-          title=">"
-          disabled={rankID >= RANKS.length - 1}
-        />
-        <MyButton
-          onPress={clearCards}
-          title="清除"
-          disabled={cards.length === 0}
-        />
-      </View>
+      </ScrollView>
+      <Divider />
+      <ScrollView
+        style={{ height: 110, flexGrow: 0 }}
+        contentContainerStyle={{
+          flex: 1,
+          justifyContent: 'center',
+        }}
+        horizontal
+      >
+        {(RANKS[rankID].isJoker ? SUITS_JOKER : SUITS).map(suit => (
+          <TouchableOpacity
+            key={suit.value}
+            onPress={() =>
+              addCard({
+                suit: suit.value,
+                rank: RANKS[rankID].value,
+              })
+            }
+          >
+            <Card suit={suit.value} rank={RANKS[rankID].value} />
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
+      <ControlPanel
+        numberOfCards={cards.length}
+        clearCards={clearCards}
+        rankID={rankID}
+        incRank={incRank}
+        decRank={decRank}
+      />
     </View>
   )
 }
 
 const styles = StyleSheet.create({
   card: {
-    width: 100,
-    height: 162,
+    width: 80,
+    height: 60 * 1.618,
     backgroundColor: 'white',
     borderColor: 'black',
     borderWidth: 2,
-    marginRight: 6,
-    marginBottom: 6,
+    margin: 3,
   },
   cardStacked: {
     marginRight: -60,
+    marginBottom: -60,
   },
 })
