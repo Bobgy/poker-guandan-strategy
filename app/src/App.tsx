@@ -1,7 +1,7 @@
 /// <reference path="lib.d.ts"/>
 
 import React, { useState, useEffect } from 'react'
-import { View, Text, Button } from 'react-native'
+import { View, Text, Button, ScrollView, StyleSheet } from 'react-native'
 import { createSwitchNavigator } from '@react-navigation/core'
 import { createBrowserApp } from '@react-navigation/web'
 import { NavigationProps, TCard } from './types'
@@ -23,6 +23,24 @@ function cardsToString(cards: TCard[]) {
     .join('')
 }
 
+const styles = StyleSheet.create({
+  container: {
+    padding: 10,
+  },
+  borderBox: {
+    borderWidth: 2,
+    borderColor: 'black',
+  },
+  divider: {
+    height: 2,
+    backgroundColor: 'black',
+  },
+})
+
+function Divider() {
+  return <View style={styles.divider} />
+}
+
 function Home({ screenProps, navigation }: NavigationProps) {
   const { rank, setRank, cards, clearCards, addCard } = screenProps
   const [strategyResult, setResult]: [
@@ -31,27 +49,76 @@ function Home({ screenProps, navigation }: NavigationProps) {
   ] = useState(null) as any
 
   return (
-    <View>
-      <RankChooser rank={rank} setRank={setRank} />
-      <CardsChooser cards={cards} addCard={addCard} clearCards={clearCards} />
-      <Button
-        title="计算策略"
-        onPress={() => {
-          if (strategyModule != null) {
-            const cardsStr = cardsToString(cards)
-            console.log(cardsStr)
+    <ScrollView
+      style={[styles.borderBox, { height: '100%' }]}
+      contentContainerStyle={{
+        flex: 1,
+      }}
+    >
+      <View
+        style={[
+          styles.container,
+          {
+            height: 54,
+            justifyContent: 'center',
+            alignItems: 'center',
+          },
+        ]}
+      >
+        <RankChooser rank={rank} setRank={setRank} />
+      </View>
+      <Divider />
+      <ScrollView
+        style={[
+          styles.container,
+          {
+            flex: 2,
+            // minHeight: 300,
+          },
+        ]}
+      >
+        <CardsChooser cards={cards} addCard={addCard} clearCards={clearCards} />
+      </ScrollView>
+      <Divider />
+      <View
+        style={[
+          styles.container,
+          {
+            height: 60,
+            justifyContent: 'center',
+          },
+        ]}
+      >
+        <Button
+          title="计算策略"
+          onPress={() => {
+            if (strategyModule != null) {
+              const cardsStr = cardsToString(cards)
+              console.log(cardsStr)
 
-            setResult(strategyModule.calc(cardsStr, rank))
-          }
-        }}
-      />
-      {strategyResult && (
-        <View>
-          <Text>{`最少${strategyResult.minHands}手可以出完`}</Text>
-          <Text>{strategyResult.solutions.join('\n')}</Text>
-        </View>
-      )}
-    </View>
+              setResult(strategyModule.calc(cardsStr, rank))
+            }
+          }}
+        />
+      </View>
+      <Divider />
+      <ScrollView
+        style={[
+          styles.container,
+          {
+            flex: 1,
+            // minHeight: 200,
+          },
+        ]}
+      >
+        {strategyResult && (
+          <>
+            <Text>{`最少${strategyResult.minHands}手可以出完`}</Text>
+            <Text>{strategyResult.solutions.join('\n')}</Text>
+          </>
+        )}
+      </ScrollView>
+    </ScrollView>
   )
 }
 Home.navigationOptions = {
@@ -100,9 +167,8 @@ function App(props: any) {
     <View
       style={{
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
         backgroundColor: 'lightblue',
+        height: '100%',
       }}
     >
       <AppNavigator

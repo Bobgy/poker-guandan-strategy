@@ -1,7 +1,42 @@
-import React, { useState, useCallback } from 'react'
-import { View, Text, Button, TouchableOpacity, StyleSheet } from 'react-native'
+import React, {
+  useState,
+  useCallback,
+  FunctionComponent,
+  ReactPropTypes,
+  ReactNode,
+} from 'react'
+import {
+  View,
+  Text,
+  Button,
+  TouchableOpacity,
+  StyleSheet,
+  TouchableOpacityProps,
+  StyleProp,
+  TextStyle,
+} from 'react-native'
 import { RANKS, SUIT, RANK, SUITS, SUITS_JOKER } from './constants'
 import { CardState, TCard } from './types'
+
+const palette = {
+  blue: 'rgb(33, 150, 243)',
+  grey: {
+    0: 'black',
+    4: 'rgb(161, 161, 161)',
+    6: 'rgb(223, 223, 223)',
+    8: 'white',
+  },
+}
+
+const theme = {
+  disabled: {
+    background: palette.grey[6],
+    text: palette.grey[4],
+  },
+  button: {
+    background: palette.blue,
+  },
+}
 
 function useIncDecState(defaultValue = 0) {
   const [value, setValue] = useState(defaultValue)
@@ -36,6 +71,42 @@ function Card({ rank, suit, isStacked }: TCard & { isStacked?: boolean }) {
     </View>
   )
 }
+
+interface MyButtonProps extends TouchableOpacityProps {
+  title: ReactNode
+  textStyle?: StyleProp<TextStyle>
+}
+
+const MyButton: FunctionComponent<MyButtonProps> = ({
+  style,
+  textStyle,
+  title,
+  disabled,
+  ...restProps
+}) => (
+  <TouchableOpacity
+    style={[
+      {
+        backgroundColor: disabled
+          ? theme.disabled.background
+          : theme.button.background,
+        borderRadius: 2,
+        padding: 4,
+        alignContent: 'center',
+        justifyContent: 'center',
+      },
+      style,
+    ]}
+    disabled={disabled}
+    {...restProps}
+  >
+    <Text
+      style={[{ color: disabled ? theme.disabled.text : 'white' }, textStyle]}
+    >
+      {title}
+    </Text>
+  </TouchableOpacity>
+)
 
 export function CardsChooser({ cards, addCard, clearCards }: CardState) {
   const {
@@ -74,14 +145,14 @@ export function CardsChooser({ cards, addCard, clearCards }: CardState) {
         </View>
       </View>
       <View style={{ flexDirection: 'row' }}>
-        <Button onPress={decRank} title="<" disabled={rankID <= 0} />
+        <MyButton onPress={decRank} disabled={rankID <= 0} title="<" />
         <Text>{RANKS[rankID].label}</Text>
-        <Button
+        <MyButton
           onPress={incRank}
           title=">"
           disabled={rankID >= RANKS.length - 1}
         />
-        <Button
+        <MyButton
           onPress={clearCards}
           title="清除"
           disabled={cards.length === 0}

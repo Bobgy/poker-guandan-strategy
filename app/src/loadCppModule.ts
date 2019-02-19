@@ -1,3 +1,5 @@
+import { TCard } from './types'
+
 interface VectorString {
   size: () => number
   get: (index: number) => string
@@ -39,32 +41,40 @@ function vector2Array(vec: VectorString): string[] {
   return arr
 }
 
+function portCppModule(cppModule: CppModule) {
+  return {
+    calc: (cards: string, mainRank: string): StrategyResult => {
+      const { minHands, solutions: originalSolutions } = cppModule.calc(
+        cards,
+        mainRank.charCodeAt(0),
+      )
+
+      return {
+        minHands,
+        solutions: vector2Array(originalSolutions),
+      }
+    },
+  }
+}
+
 export function loadCppModule(): Promise<PortedCppModule> {
   return new Promise((resolve, reject) => {
-    const s = document.createElement('script')
-    s.src = 'res/strategy.js'
-    s.onload = () => {
-      const cppModule = window.Module
-      cppModule.onRuntimeInitialized = () => {
-        resolve({
-          calc: (cards, mainRank): StrategyResult => {
-            const { minHands, solutions: originalSolutions } = cppModule.calc(
-              cards,
-              mainRank.charCodeAt(0),
-            )
-
-            return {
-              minHands,
-              solutions: vector2Array(originalSolutions),
-            }
-          },
-        })
+    if (window.Module) {
+      return resolve(portCppModule(window.Module))
+    } else {
+      const s = document.createElement('script')
+      s.src = 'res/strategy.js'
+      s.onload = () => {
+        const cppModule = window.Module
+        cppModule.onRuntimeInitialized = () => {
+          resolve(portCppModule(window.Module))
+        }
+        cppModule.onAbort = () => {
+          reject('wasm module aborted during loading')
+        }
       }
-      cppModule.onAbort = () => {
-        reject('wasm module aborted during loading')
-      }
+      s.onerror = () => reject('wasm module failed to load')
+      document.body.appendChild(s)
     }
-    s.onerror = () => reject('wasm module failed to load')
-    document.body.appendChild(s)
   })
 }
