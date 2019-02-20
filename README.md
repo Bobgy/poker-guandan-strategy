@@ -7,7 +7,7 @@ cpp program using dfs with _heavy_ optimization (lol) to calculate best (min han
 - [x] improve strategy output visualization
 - [x] generate random start hands as examples
 - [x] delete last card
-- [ ] check card count validity
+- [x] check card count validity
 - [ ] [strategy output] improve readability when mulitline
 - [ ] [strategy output] reduce solution duplication
 - [ ] change solution calculation to async

@@ -8,8 +8,10 @@ export function Card({
   rank,
   suit,
   isStacked,
+  disabled,
 }: TCard & {
   isStacked?: boolean
+  disabled?: boolean
 }) {
   const rankDef = RANK[rank]
   const suitDef = SUIT[suit]
@@ -33,6 +35,18 @@ export function Card({
         {'\n'}
         {suitDef.label}
       </Text>
+      {disabled && (
+        <View
+          style={{
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.3)',
+          }}
+        />
+      )}
     </View>
   )
 }

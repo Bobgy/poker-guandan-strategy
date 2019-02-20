@@ -14,7 +14,7 @@ import {
   TextStyle,
   ScrollView,
 } from 'react-native'
-import { RANKS, SUITS, SUITS_JOKER } from './cardUtils'
+import { RANKS, SUITS, SUITS_JOKER, canIAddCard } from './cardUtils'
 import { CardState } from './types'
 import { Divider } from './Divider'
 import { CardDeck, Card } from './Card'
@@ -207,19 +207,23 @@ export function CardsChooser({
         }}
         horizontal
       >
-        {(RANKS[rankID].isJoker ? SUITS_JOKER : SUITS).map(suit => (
-          <TouchableOpacity
-            key={suit.value}
-            onPress={() =>
-              addCard({
-                suit: suit.value,
-                rank: RANKS[rankID].value,
-              })
-            }
-          >
-            <Card suit={suit.value} rank={RANKS[rankID].value} />
-          </TouchableOpacity>
-        ))}
+        {(RANKS[rankID].isJoker ? SUITS_JOKER : SUITS).map(suit => {
+          const card = {
+            suit: suit.value,
+            rank: RANKS[rankID].value,
+          }
+          const canIAddThisCard = canIAddCard(cards, card)
+
+          return (
+            <TouchableOpacity
+              key={suit.value}
+              onPress={() => addCard(card)}
+              disabled={!canIAddThisCard}
+            >
+              <Card suit={suit.value} rank={RANKS[rankID].value} disabled={!canIAddThisCard}/>
+            </TouchableOpacity>
+          )
+        })}
       </ScrollView>
       <ControlPanel
         numberOfCards={cards.length}

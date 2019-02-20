@@ -90,7 +90,7 @@ export const SUIT: SuiteIndex = {
 export const SUITS = [SUIT.H, SUIT.S, SUIT.C, SUIT.D]
 export const SUITS_JOKER = [SUIT.B, SUIT.R]
 
-const ALL_CARDS: TCard[] = RANKS.map(rank =>
+const ALL_CARDS_ONE_DECK: TCard[] = RANKS.map(rank =>
   rank.isJoker
     ? SUITS_JOKER.map(suit => ({
         rank: rank.value,
@@ -130,10 +130,18 @@ function cardCompare(a: TCard, b: TCard): number {
   return a.suit < b.suit ? -1 : a.suit === b.suit ? 0 : 1
 }
 
+function cardEqual(a: TCard, b: TCard): boolean {
+  return cardCompare(a, b) === 0
+}
+
 function sortCards(a: TCard[]): TCard[] {
   return a.sort(cardCompare)
 }
 
 export function generateRandomHands(): TCard[] {
-  return sortCards(shuffle([...ALL_CARDS]).slice(0, 27))
+  return sortCards(shuffle([...ALL_CARDS_ONE_DECK, ...ALL_CARDS_ONE_DECK]).slice(0, 27))
+}
+
+export function canIAddCard(cards: TCard[], cardToAdd: TCard): boolean {
+  return cards.filter(card => cardEqual(card, cardToAdd)).length < 2
 }
