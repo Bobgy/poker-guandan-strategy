@@ -11,6 +11,7 @@ import {
 } from './loadCppModule'
 import { Divider } from './Divider'
 import { RANK, SUIT } from './constants'
+import { CardDeck } from './Card'
 
 let strategyModule: PortedCppModule | null = null
 
@@ -103,15 +104,16 @@ export function Home({ screenProps }: NavigationProps) {
         {strategyResult && (
           <>
             <Text>{`最少${strategyResult.minHands}手可以出完`}</Text>
-            <Text>
-              {JSON.stringify(
-                strategyResult.solutions.map(solution => {
-                  return solution.actualHands.map(hand =>
+            <View>
+              {strategyResult.solutions.map((solution, solutionIndex) => (
+                <CardDeck
+                  key={solutionIndex}
+                  hands={solution.actualHands.map(hand =>
                     hand.map(card => parseRawCard(card, { rank, suit: 'H' })),
-                  )
-                }),
-              )}
-            </Text>
+                  )}
+                />
+              ))}
+            </View>
           </>
         )}
       </ScrollView>

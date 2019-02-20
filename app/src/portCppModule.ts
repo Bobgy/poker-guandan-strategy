@@ -8,6 +8,7 @@ export function portCppModule(cppModule: CppModule) {
         mainRank.charCodeAt(0),
       )
       const solutionsRaw = vector2Array(originalSolutions)
+
       return {
         minHands,
         solutionsRaw,
@@ -52,31 +53,48 @@ export function restoreWildCards(
 }
 
 export function parseSolutions(solutions: string[]) {
-  if (solutions.length % 2 !== 0) {
-    throw new Error(
-      'solutions wrong format, it should have even lines, every 2 lines show a solution',
-    )
+  try {
+    return parseSolutionsUnsafe(solutions)
+  } catch (e) {
+    console.log(solutions)
+    throw e
   }
+}
 
+export function parseSolutionsUnsafe(solutions: string[]) {
   const parsedSolutions = []
+  let wildCards: null | string[] = null
 
-  for (let i = 0; i < solutions.length; i += 2) {
-    const wildCardsRawStr = solutions[i]
-    const handsRawStr = solutions[i + 1]
-    const asHands = handsRawStr
-      .split('|')
-      .map(hand => hand.split(' ').filter(str => str.match(cardRegex)))
-      .filter(foundCards => foundCards.length > 0)
-    const wildCards = wildCardsRawStr
-      .split(' ')
-      .filter(str => str.match(cardRegex))
-    const actualHands = restoreWildCards(asHands, wildCards, '??')
+  for (let i = 0; i < solutions.length; ++i) {
+    if (solutions[i].length === 0) {
+      throw new Error("solutions shouldn't have empty line: #" + i)
+    }
 
-    parsedSolutions.push({
-      wildCards,
-      actualHands,
-      asHands,
-    })
+    if (solutions[i][0] === '-') {
+      // section of wild cards
+      const wildCardsRawStr = solutions[i]
+      wildCards = wildCardsRawStr.split(' ').filter(str => str.match(cardRegex))
+    } else {
+      // section of a solution
+      if (wildCards == null) {
+        throw new Error(
+          'wildcard definition should be before solution definition',
+        )
+      }
+
+      const handsRawStr = solutions[i]
+      const asHands = handsRawStr
+        .split('|')
+        .map(hand => hand.split(' ').filter(str => str.match(cardRegex)))
+        .filter(foundCards => foundCards.length > 0)
+      const actualHands = restoreWildCards(asHands, wildCards, '??')
+
+      parsedSolutions.push({
+        wildCards,
+        actualHands,
+        asHands,
+      })
+    }
   }
   console.log(parsedSolutions)
 

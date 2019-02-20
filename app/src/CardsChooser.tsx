@@ -14,9 +14,10 @@ import {
   TextStyle,
   ScrollView,
 } from 'react-native'
-import { RANKS, SUIT, RANK, SUITS, SUITS_JOKER } from './constants'
-import { CardState, TCard } from './types'
+import { RANKS, SUITS, SUITS_JOKER } from './constants'
+import { CardState } from './types'
 import { Divider } from './Divider'
+import { CardDeck, Card } from './Card'
 
 const palette = {
   blue: 'rgb(33, 150, 243)',
@@ -52,34 +53,6 @@ function useIncDecState(defaultValue = 0) {
     increase,
     decrease,
   }
-}
-
-function Card({ rank, suit, isStacked }: TCard & { isStacked?: boolean }) {
-  const rankDef = RANK[rank]
-  const suitDef = SUIT[suit]
-
-  return (
-    <View style={[styles.card, isStacked && styles.cardStacked]}>
-      <Text
-        style={{
-          fontFamily: 'monospace',
-          fontSize: 16,
-          color: suitDef.color,
-          lineHeight: 16,
-          textAlign: 'center',
-          width: 20,
-          marginTop: 4,
-          fontWeight: 'bold',
-        }}
-      >
-        {rankDef.label === '10'
-          ? rankDef.label
-          : rankDef.label.split('').join('\n')}
-        {'\n'}
-        {suitDef.label}
-      </Text>
-    </View>
-  )
 }
 
 interface MyButtonProps extends TouchableOpacityProps {
@@ -188,23 +161,7 @@ export function CardsChooser({ cards, addCard, clearCards }: CardState) {
 
   return (
     <View style={{ flex: 1 }}>
-      <ScrollView
-        style={{
-          flex: 1,
-          minHeight: 60,
-        }}
-        contentContainerStyle={{
-          flexWrap: 'wrap',
-          flexDirection: 'row',
-          paddingRight: 60,
-          paddingBottom: 60,
-          overflow: 'hidden',
-        }}
-      >
-        {cards.map((card, index) => (
-          <Card key={card.rank + card.suit + index} {...card} isStacked />
-        ))}
-      </ScrollView>
+      <CardDeck cards={cards} />
       <Divider />
       <ScrollView
         style={{ height: 110, flexGrow: 0 }}
@@ -239,7 +196,7 @@ export function CardsChooser({ cards, addCard, clearCards }: CardState) {
   )
 }
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   card: {
     width: 80,
     height: 60 * 1.618,
