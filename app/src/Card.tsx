@@ -88,8 +88,10 @@ export const CardDeck: React.FunctionComponent<CardDeckProps> = ({
             // add separator
             return (
               <Fragment key={handID}>
-                <View style={{ width: 20 }} />
-                {handNode}
+                <View style={{ width: 16 }} />
+                <View style={{ flexDirection: 'row', flexWrap: 'nowrap' }}>
+                  {handNode}
+                </View>
               </Fragment>
             )
           } else {

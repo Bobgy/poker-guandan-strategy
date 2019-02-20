@@ -10,7 +10,6 @@ import {
   CardRaw,
 } from './loadCppModule'
 import { Divider } from './Divider'
-import { RANK, SUIT } from './cardUtils'
 import { CardDeck } from './Card'
 
 let strategyModule: PortedCppModule | null = null
