@@ -97,7 +97,7 @@ export function Home({ screenProps }: NavigationProps) {
         style={[
           styles.container,
           {
-            flex: 1,
+            flex: 2,
           },
         ]}
       >
@@ -135,7 +135,7 @@ export function Home({ screenProps }: NavigationProps) {
         style={[
           styles.container,
           {
-            flex: 3,
+            flex: 1,
           },
         ]}
       >

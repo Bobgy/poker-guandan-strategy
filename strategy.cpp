@@ -21,7 +21,17 @@ int count(THandCards hc) {
     THandCards::iterator it;
     int cnt[5];
     for (int i = 1; i <= 4; i++) cnt[i] = 0;
+
+    // special handling for joker bomb
+    bool hasJokerBomb = false;
+    if (hc[JOKER].size() == 2 && hc[JOKER + 1].size() == 2) {
+        hasJokerBomb = true;
+    }
+
     for (it = hc.begin(); it != hc.end(); it++) {
+        if (hasJokerBomb && (*it).first >= JOKER) {
+            continue; // skip jokers if it is a bomb
+        }
         if ((*it).second.size() <= 3)
             cnt[(*it).second.size()]++;
         else
