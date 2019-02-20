@@ -86,8 +86,8 @@ export function Home({ screenProps }: NavigationProps) {
     deleteLastCard,
   } = screenProps
   const [strategyResult, setResult]: [
-    null | StrategyResult,
-    (result: StrategyResult) => void
+    null | 'loading' | StrategyResult,
+    (result: StrategyResult | 'loading') => void
   ] = useState(null) as any
   return (
     <ScrollView
@@ -108,21 +108,24 @@ export function Home({ screenProps }: NavigationProps) {
           },
         ]}
       >
-        {strategyResult && (
-          <>
-            <Text>{`最少${strategyResult.minHands}手可以出完`}</Text>
-            <View>
-              {strategyResult.solutions.map((solution, solutionIndex) => (
-                <CardDeck
-                  key={solutionIndex}
-                  hands={solution.actualHands.map(hand =>
-                    hand.map(card => parseRawCard(card, { rank, suit: 'H' })),
-                  )}
-                />
-              ))}
-            </View>
-          </>
-        )}
+        {strategyResult &&
+          (strategyResult === 'loading' ? (
+            <Text style={{ fontSize: 20 }}>计算中...</Text>
+          ) : (
+            <>
+              <Text>{`最少${strategyResult.minHands}手可以出完`}</Text>
+              <View>
+                {strategyResult.solutions.map((solution, solutionIndex) => (
+                  <CardDeck
+                    key={solutionIndex}
+                    hands={solution.actualHands.map(hand =>
+                      hand.map(card => parseRawCard(card, { rank, suit: 'H' })),
+                    )}
+                  />
+                ))}
+              </View>
+            </>
+          ))}
       </ScrollView>
       <Divider />
       <View
@@ -169,11 +172,15 @@ export function Home({ screenProps }: NavigationProps) {
         <Button
           title="计算策略"
           onPress={() => {
-            if (strategyModule != null) {
-              const cardsStr = cardsToString(cards)
-              console.log(cardsStr)
-              setResult(strategyModule.calc(cardsStr, rank))
-            }
+            setResult('loading')
+
+            setTimeout(() => {
+              if (strategyModule != null) {
+                const cardsStr = cardsToString(cards)
+                console.log(cardsStr)
+                setResult(strategyModule.calc(cardsStr, rank))
+              }
+            }, 0)
           }}
         />
       </View>

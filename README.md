@@ -11,6 +11,6 @@ Now I've built a web app with react-native-web as UI for the cpp module. It is p
 - [x] delete last card
 - [x] check card count validity
 - [x] [strategy output] improve readability when mulitline
+- [x] change solution calculation to async
 - [ ] [strategy output] reduce solution duplication
-- [ ] change solution calculation to async
 - [ ] revert last operation button
