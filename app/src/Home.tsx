@@ -1,5 +1,12 @@
-import React, { useState, useEffect } from 'react'
-import { View, Text, Button, ScrollView, StyleSheet } from 'react-native'
+import React, { useState, useEffect, useCallback } from 'react'
+import {
+  View,
+  Text,
+  Button,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native'
 import { NavigationProps, TCard } from './types'
 import { CardsChooser } from './CardsChooser'
 import { RankChooser } from './useCardState'
@@ -63,6 +70,91 @@ const styles = StyleSheet.create({
   },
 })
 
+interface SolutionVisualizationProps {
+  strategyResult: StrategyResult | null | 'loading'
+  rank: string
+  isWindowMaxed: boolean
+  toggleWindowSize: () => void
+}
+
+const SolutionVisualization: React.FunctionComponent<
+  SolutionVisualizationProps
+> = ({ strategyResult, rank, isWindowMaxed, toggleWindowSize }) => (
+  <>
+    <View
+      style={{
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        alignContent: 'center',
+      }}
+    >
+      <View style={{ flex: 1 }}>
+        <Text
+          style={{
+            fontSize: 20,
+            padding: 4,
+            textAlign: 'center',
+          }}
+        >
+          拆牌策略计算结果
+        </Text>
+      </View>
+      <View style={{ width: 2, backgroundColor: 'black' }} />
+      <TouchableOpacity
+        style={{
+          width: 40,
+          alignContent: 'center',
+          justifyContent: 'center',
+        }}
+        onPress={toggleWindowSize}
+      >
+        <Text style={{ textAlign: 'center' }}>{isWindowMaxed ? '🗕' : '🗖'}</Text>
+      </TouchableOpacity>
+    </View>
+    <Divider />
+    <ScrollView
+      style={[
+        styles.container,
+        {
+          flex: 2,
+        },
+      ]}
+    >
+      {strategyResult &&
+        (strategyResult === 'loading' ? (
+          <Text
+            style={{
+              fontSize: 20,
+            }}
+          >
+            计算中...
+          </Text>
+        ) : (
+          <>
+            <Text>{`最少${strategyResult.minHands}手可以出完`}</Text>
+            <View>
+              {strategyResult.solutions.map((solution, solutionIndex) => (
+                <CardDeck
+                  key={solutionIndex}
+                  hands={solution.actualHands.map(hand =>
+                    hand.map(card =>
+                      parseRawCard(card, {
+                        rank,
+                        suit: 'H',
+                      }),
+                    ),
+                  )}
+                />
+              ))}
+            </View>
+          </>
+        ))}
+    </ScrollView>
+  </>
+)
+
+type StrategyResultState = null | 'loading' | StrategyResult
+
 export function Home({ screenProps }: NavigationProps) {
   useEffect(() => {
     loadCppModule().then(cppModule => {
@@ -76,6 +168,7 @@ export function Home({ screenProps }: NavigationProps) {
       // )
     })
   }, [])
+
   const {
     rank,
     setRank,
@@ -85,10 +178,13 @@ export function Home({ screenProps }: NavigationProps) {
     randomCards,
     deleteLastCard,
   } = screenProps
-  const [strategyResult, setResult]: [
-    null | 'loading' | StrategyResult,
-    (result: StrategyResult | 'loading') => void
-  ] = useState(null) as any
+  const [strategyResult, setResult] = useState<StrategyResultState>(null)
+  const [isResultWindowMaxed, setResultWindowState] = useState<boolean>(false)
+  const toggleResultWindowSize = useCallback(
+    () => setResultWindowState(prevState => !prevState),
+    [setResultWindowState],
+  )
+
   return (
     <ScrollView
       style={[styles.borderBox, { height: '100%' }]}
@@ -96,94 +192,73 @@ export function Home({ screenProps }: NavigationProps) {
         height: '100%',
       }}
     >
-      <Text style={{ fontSize: 20, padding: 4, textAlign: 'center' }}>
-        拆牌策略计算结果
-      </Text>
-      <Divider />
-      <ScrollView
-        style={[
-          styles.container,
-          {
-            flex: 2,
-          },
-        ]}
-      >
-        {strategyResult &&
-          (strategyResult === 'loading' ? (
-            <Text style={{ fontSize: 20 }}>计算中...</Text>
-          ) : (
-            <>
-              <Text>{`最少${strategyResult.minHands}手可以出完`}</Text>
-              <View>
-                {strategyResult.solutions.map((solution, solutionIndex) => (
-                  <CardDeck
-                    key={solutionIndex}
-                    hands={solution.actualHands.map(hand =>
-                      hand.map(card => parseRawCard(card, { rank, suit: 'H' })),
-                    )}
-                  />
-                ))}
-              </View>
-            </>
-          ))}
-      </ScrollView>
-      <Divider />
-      <View
-        style={[
-          styles.container,
-          {
-            height: 40,
-            justifyContent: 'center',
-            alignItems: 'center',
-          },
-        ]}
-      >
-        <RankChooser rank={rank} setRank={setRank} />
-      </View>
-      <Divider />
-      <View
-        style={[
-          styles.container,
-          {
-            flex: 1,
-            minHeight: 350,
-          },
-        ]}
-      >
-        <CardsChooser
-          cards={cards}
-          addCard={addCard}
-          clearCards={clearCards}
-          randomCards={randomCards}
-          deleteLastCard={deleteLastCard}
-        />
-      </View>
-      <Divider />
-      <View
-        style={[
-          styles.container,
-          {
-            height: 34,
-            justifyContent: 'center',
-            padding: 0,
-          },
-        ]}
-      >
-        <Button
-          title="计算策略"
-          onPress={() => {
-            setResult('loading')
+      <SolutionVisualization
+        strategyResult={strategyResult}
+        rank={rank}
+        isWindowMaxed={isResultWindowMaxed}
+        toggleWindowSize={toggleResultWindowSize}
+      />
+      {!isResultWindowMaxed && (
+        <>
+          <Divider />
+          <View
+            style={[
+              styles.container,
+              {
+                height: 40,
+                justifyContent: 'center',
+                alignItems: 'center',
+              },
+            ]}
+          >
+            <RankChooser rank={rank} setRank={setRank} />
+          </View>
+          <Divider />
+          <View
+            style={[
+              styles.container,
+              {
+                flex: 1,
+                minHeight: 350,
+              },
+            ]}
+          >
+            <CardsChooser
+              cards={cards}
+              addCard={addCard}
+              clearCards={clearCards}
+              randomCards={randomCards}
+              deleteLastCard={deleteLastCard}
+            />
+          </View>
+          <Divider />
+          <View
+            style={[
+              styles.container,
+              {
+                height: 34,
+                justifyContent: 'center',
+                padding: 0,
+              },
+            ]}
+          >
+            <Button
+              title="计算策略"
+              onPress={() => {
+                setResult('loading')
 
-            setTimeout(() => {
-              if (strategyModule != null) {
-                const cardsStr = cardsToString(cards)
-                console.log(cardsStr)
-                setResult(strategyModule.calc(cardsStr, rank))
-              }
-            }, 0)
-          }}
-        />
-      </View>
+                setTimeout(() => {
+                  if (strategyModule != null) {
+                    const cardsStr = cardsToString(cards)
+                    console.log(cardsStr)
+                    setResult(strategyModule.calc(cardsStr, rank))
+                  }
+                }, 0)
+              }}
+            />
+          </View>
+        </>
+      )}
     </ScrollView>
   )
 }

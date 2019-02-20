@@ -6,6 +6,6 @@ Now I've built a web app with react-native-web as UI for the cpp module. It is p
 
 ## Todos
 
-- [ ] [strategy output] maximize window
+- [x] [strategy output] maximize window
 - [ ] [strategy output] reduce solution duplication
 - [ ] revert last operation button
