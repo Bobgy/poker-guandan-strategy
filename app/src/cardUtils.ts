@@ -1,3 +1,5 @@
+import { TCard } from './types'
+
 export const RANKS = [
   '2',
   '3',
@@ -87,3 +89,51 @@ export const SUIT: SuiteIndex = {
 }
 export const SUITS = [SUIT.H, SUIT.S, SUIT.C, SUIT.D]
 export const SUITS_JOKER = [SUIT.B, SUIT.R]
+
+const ALL_CARDS: TCard[] = RANKS.map(rank =>
+  rank.isJoker
+    ? SUITS_JOKER.map(suit => ({
+        rank: rank.value,
+        suit: suit.value,
+      }))
+    : SUITS.map(suit => ({
+        rank: rank.value,
+        suit: suit.value,
+      })),
+).flatMap(cards => cards)
+
+/**
+ * reference: https://stackoverflow.com/a/6274381
+ * Shuffles array in place.
+ * @param {Array} a items An array containing the items.
+ */
+function shuffle<T>(a: T[]): T[] {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    const x = a[i]
+    a[i] = a[j]
+    a[j] = x
+  }
+  return a
+}
+
+function cardCompare(a: TCard, b: TCard): number {
+  const rankA = RANKS.findIndex(rank => rank.value === a.rank)
+  const rankB = RANKS.findIndex(rank => rank.value === b.rank)
+  if (rankA === -1 || rankB === -1) {
+    throw new Error('rank not found for cards, ' + a + ' ' + b)
+  }
+  if (rankA !== rankB) {
+    return rankA - rankB
+  }
+
+  return a.suit < b.suit ? -1 : a.suit === b.suit ? 0 : 1
+}
+
+function sortCards(a: TCard[]): TCard[] {
+  return a.sort(cardCompare)
+}
+
+export function generateRandomHands(): TCard[] {
+  return sortCards(shuffle([...ALL_CARDS]).slice(0, 27))
+}

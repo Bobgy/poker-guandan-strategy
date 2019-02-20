@@ -14,7 +14,7 @@ import {
   TextStyle,
   ScrollView,
 } from 'react-native'
-import { RANKS, SUITS, SUITS_JOKER } from './constants'
+import { RANKS, SUITS, SUITS_JOKER } from './cardUtils'
 import { CardState } from './types'
 import { Divider } from './Divider'
 import { CardDeck, Card } from './Card'
@@ -87,6 +87,7 @@ const MyButton: FunctionComponent<MyButtonProps> = ({
       style={[
         {
           color: disabled ? theme.disabled.text : 'white',
+          textAlign: 'center',
         },
         titleStyle,
       ]}
@@ -99,15 +100,15 @@ const MyButton: FunctionComponent<MyButtonProps> = ({
 const controlStyles = StyleSheet.create({
   incDecButton: {
     flex: 2,
-    minWidth: 100,
+    minWidth: 80,
     maxWidth: 200,
-    margin: 10,
+    margin: 6,
   },
-  clearButton: {
+  actionButton: {
     flex: 1,
-    minWidth: 100,
+    minWidth: 80,
     maxWidth: 150,
-    margin: 10,
+    margin: 6,
   },
   buttonTitle: {
     fontSize: 30,
@@ -117,6 +118,7 @@ interface ControlPanelProps {
   decRank: () => void
   incRank: () => void
   clearCards: () => void
+  randomCards: () => void
   rankID: number
   numberOfCards: number
 }
@@ -129,10 +131,17 @@ const ControlPanel: React.FunctionComponent<ControlPanelProps> = props => (
     }}
   >
     <MyButton
+      onPress={props.randomCards}
+      title="随机发牌"
+      disabled={props.numberOfCards > 0}
+      style={controlStyles.actionButton}
+      titleStyle={controlStyles.buttonTitle}
+    />
+    <MyButton
       onPress={props.clearCards}
       title="清除"
       disabled={props.numberOfCards === 0}
-      style={controlStyles.clearButton}
+      style={controlStyles.actionButton}
       titleStyle={controlStyles.buttonTitle}
     />
     <MyButton
@@ -152,7 +161,12 @@ const ControlPanel: React.FunctionComponent<ControlPanelProps> = props => (
   </View>
 )
 
-export function CardsChooser({ cards, addCard, clearCards }: CardState) {
+export function CardsChooser({
+  cards,
+  addCard,
+  clearCards,
+  randomCards,
+}: CardState) {
   const {
     value: rankID,
     increase: incRank,
@@ -188,6 +202,7 @@ export function CardsChooser({ cards, addCard, clearCards }: CardState) {
       <ControlPanel
         numberOfCards={cards.length}
         clearCards={clearCards}
+        randomCards={randomCards}
         rankID={rankID}
         incRank={incRank}
         decRank={decRank}

@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 import { View, Text, ScrollView } from 'react-native'
-import { SUIT, RANK } from './constants'
+import { SUIT, RANK } from './cardUtils'
 import { TCard } from './types'
 import { styles } from './CardsChooser'
 

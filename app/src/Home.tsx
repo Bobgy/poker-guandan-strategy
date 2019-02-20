@@ -10,7 +10,7 @@ import {
   CardRaw,
 } from './loadCppModule'
 import { Divider } from './Divider'
-import { RANK, SUIT } from './constants'
+import { RANK, SUIT } from './cardUtils'
 import { CardDeck } from './Card'
 
 let strategyModule: PortedCppModule | null = null
@@ -77,7 +77,7 @@ export function Home({ screenProps }: NavigationProps) {
       // )
     })
   }, [])
-  const { rank, setRank, cards, clearCards, addCard } = screenProps
+  const { rank, setRank, cards, clearCards, addCard, randomCards } = screenProps
   const [strategyResult, setResult]: [
     null | StrategyResult,
     (result: StrategyResult) => void
@@ -136,10 +136,16 @@ export function Home({ screenProps }: NavigationProps) {
           styles.container,
           {
             flex: 1,
+            minHeight: 350,
           },
         ]}
       >
-        <CardsChooser cards={cards} addCard={addCard} clearCards={clearCards} />
+        <CardsChooser
+          cards={cards}
+          addCard={addCard}
+          clearCards={clearCards}
+          randomCards={randomCards}
+        />
       </View>
       <Divider />
       <View

@@ -1,4 +1,16 @@
 红桃：?H | 黑桃：?S | 梅花：?C | 方块：?D | 小鬼：SJ | 大鬼：BJ | 数字10：0? | 其余和牌面相同
-Enter the number of cards:Enter the main rank:Enter the cards:Least hands: 0
-------------- ------------
-| SJ SJ BJ BJ |
+Enter the number of cards:Enter the main rank:Enter the cards:Least hands: 5
+------------- 4S ------------
+| QS || 4H 4S 5H 5S 6D 6S || 9S 0H JS QH KS || 5D 6C 7H 8H 9H || AC 2C 3S 4D 5C || AD 0D JD QD KD |
+------------- 4H ------------
+| QS || 4H 4H 5H 5S 6D 6S || 9S 0H JS QH KS || 5D 6C 7H 8H 9H || AC 2C 3S 4D 5C || AD 0D JD QD KD |
+------------- 4D ------------
+| QS || 4D 4H 5H 5S 6D 6S || 9S 0H JS QH KS || 5D 6C 7H 8H 9H || AC 2C 3S 4D 5C || AD 0D JD QD KD |
+------------- 4C ------------
+| QS || 4D 4H 5H 5S 6D 6S || 9S 0H JS QH KS || 5D 6C 7H 8H 9H || AC 2C 3S 4C 5C || AD 0D JD QD KD |
+------------- 6H ------------
+| 5D 5S 6C 6D 6S 9S QS || 9H 0H JS QH KS || AC 2C 3S 4D 5C || AD 0D JD QD KD || 4H 5H 6H 7H 8H |
+| AD 5D 5S 6C 6D 6S QD QH QS KD KS || 9H 9S 0D 0H JD JS || AC 2C 3S 4D 5C || 4H 5H 6H 7H 8H |
+| 4H 5D 5S 6C 6D 6S QS || 9S 0H JS QH KS || AC 2C 3S 4D 5C || AD 0D JD QD KD || 5H 6H 7H 8H 9H |
+------------- 0S ------------
+| 4H 5D 5H 5S 6D 6S QH || 6C 7H 8H 9H 0H || AC 2C 3S 4D 5C || AD 0D JD QD KD || 9S 0S JS QS KS |
