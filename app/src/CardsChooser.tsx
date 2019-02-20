@@ -113,51 +113,72 @@ const controlStyles = StyleSheet.create({
   buttonTitle: {
     fontSize: 30,
   },
+  buttonTitleSmall: {
+    fontSize: 18,
+  },
 })
 interface ControlPanelProps {
   decRank: () => void
   incRank: () => void
   clearCards: () => void
   randomCards: () => void
+  deleteLastCard: () => void
   rankID: number
   numberOfCards: number
 }
 const ControlPanel: React.FunctionComponent<ControlPanelProps> = props => (
-  <View
-    style={{
-      flexDirection: 'row',
-      justifyContent: 'center',
-      alignContent: 'center',
-    }}
-  >
-    <MyButton
-      onPress={props.randomCards}
-      title="随机发牌"
-      disabled={props.numberOfCards > 0}
-      style={controlStyles.actionButton}
-      titleStyle={controlStyles.buttonTitle}
-    />
-    <MyButton
-      onPress={props.clearCards}
-      title="清除"
-      disabled={props.numberOfCards === 0}
-      style={controlStyles.actionButton}
-      titleStyle={controlStyles.buttonTitle}
-    />
-    <MyButton
-      onPress={props.decRank}
-      disabled={props.rankID <= 0}
-      title="<"
-      style={controlStyles.incDecButton}
-      titleStyle={controlStyles.buttonTitle}
-    />
-    <MyButton
-      onPress={props.incRank}
-      title=">"
-      disabled={props.rankID >= RANKS.length - 1}
-      style={controlStyles.incDecButton}
-      titleStyle={controlStyles.buttonTitle}
-    />
+  <View>
+    <View
+      style={{
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignContent: 'center',
+      }}
+    >
+      <MyButton
+        onPress={props.randomCards}
+        title="随机发牌"
+        disabled={props.numberOfCards > 0}
+        style={controlStyles.actionButton}
+        titleStyle={controlStyles.buttonTitleSmall}
+      />
+      <MyButton
+        onPress={props.clearCards}
+        title="清除"
+        disabled={props.numberOfCards === 0}
+        style={controlStyles.actionButton}
+        titleStyle={controlStyles.buttonTitle}
+      />
+      <MyButton
+        onPress={props.decRank}
+        disabled={props.rankID <= 0}
+        title="<"
+        style={controlStyles.incDecButton}
+        titleStyle={controlStyles.buttonTitle}
+      />
+      <MyButton
+        onPress={props.incRank}
+        title=">"
+        disabled={props.rankID >= RANKS.length - 1}
+        style={controlStyles.incDecButton}
+        titleStyle={controlStyles.buttonTitle}
+      />
+    </View>
+    <View
+      style={{
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignContent: 'center',
+      }}
+    >
+      <MyButton
+        onPress={props.deleteLastCard}
+        title="删除最右"
+        disabled={props.numberOfCards === 0}
+        style={controlStyles.actionButton}
+        titleStyle={controlStyles.buttonTitle}
+      />
+    </View>
   </View>
 )
 
@@ -166,6 +187,7 @@ export function CardsChooser({
   addCard,
   clearCards,
   randomCards,
+  deleteLastCard,
 }: CardState) {
   const {
     value: rankID,
@@ -203,6 +225,7 @@ export function CardsChooser({
         numberOfCards={cards.length}
         clearCards={clearCards}
         randomCards={randomCards}
+        deleteLastCard={deleteLastCard}
         rankID={rankID}
         incRank={incRank}
         decRank={decRank}

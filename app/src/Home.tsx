@@ -77,7 +77,15 @@ export function Home({ screenProps }: NavigationProps) {
       // )
     })
   }, [])
-  const { rank, setRank, cards, clearCards, addCard, randomCards } = screenProps
+  const {
+    rank,
+    setRank,
+    cards,
+    clearCards,
+    addCard,
+    randomCards,
+    deleteLastCard,
+  } = screenProps
   const [strategyResult, setResult]: [
     null | StrategyResult,
     (result: StrategyResult) => void
@@ -145,6 +153,7 @@ export function Home({ screenProps }: NavigationProps) {
           addCard={addCard}
           clearCards={clearCards}
           randomCards={randomCards}
+          deleteLastCard={deleteLastCard}
         />
       </View>
       <Divider />

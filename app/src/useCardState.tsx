@@ -13,11 +13,16 @@ export function useCardState(): CardState {
   const randomCards = useCallback(() => setCards(generateRandomHands()), [
     setCards,
   ])
+  const deleteLastCard = useCallback(
+    () => setCards(cardsNow => cardsNow.slice(0, cardsNow.length - 1)),
+    [setCards],
+  )
   return {
     cards,
     clearCards,
     addCard,
     randomCards,
+    deleteLastCard,
   }
 }
 

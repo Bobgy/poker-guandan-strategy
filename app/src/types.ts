@@ -13,6 +13,7 @@ export interface CardState {
   addCard(card: TCard): void
   clearCards(): void
   randomCards(): void
+  deleteLastCard(): void
 }
 
 export type AppState = RankState & CardState
