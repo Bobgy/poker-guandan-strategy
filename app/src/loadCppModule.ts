@@ -1,4 +1,4 @@
-import { TCard } from './types'
+import { portCppModule } from './portCppModule'
 
 interface VectorString {
   size: () => number
@@ -10,12 +10,21 @@ interface OriginalStrategyResult {
   solutions: VectorString
 }
 
+export type CardRaw = string
+
+export type HandRaw = CardRaw[]
+
 export interface StrategyResult {
   minHands: number
-  solutions: string[]
+  solutionsRaw: string[]
+  solutions: {
+    wildCards: CardRaw[]
+    asHands: HandRaw[]
+    actualHands: HandRaw[]
+  }[]
 }
 
-interface CppModule {
+export interface CppModule {
   onRuntimeInitialized: () => void
   onAbort: () => void
   add: (a: number, b: number) => number
@@ -32,29 +41,13 @@ declare global {
   }
 }
 
-function vector2Array(vec: VectorString): string[] {
+export function vector2Array(vec: VectorString): string[] {
   const arr = []
   for (let i = 0; i < vec.size(); ++i) {
     arr.push(vec.get(i))
   }
 
   return arr
-}
-
-function portCppModule(cppModule: CppModule) {
-  return {
-    calc: (cards: string, mainRank: string): StrategyResult => {
-      const { minHands, solutions: originalSolutions } = cppModule.calc(
-        cards,
-        mainRank.charCodeAt(0),
-      )
-
-      return {
-        minHands,
-        solutions: vector2Array(originalSolutions),
-      }
-    },
-  }
 }
 
 export function loadCppModule(): Promise<PortedCppModule> {

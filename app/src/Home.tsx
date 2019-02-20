@@ -3,8 +3,14 @@ import { View, Text, Button, ScrollView, StyleSheet } from 'react-native'
 import { NavigationProps, TCard } from './types'
 import { CardsChooser } from './CardsChooser'
 import { RankChooser } from './useCardState'
-import { loadCppModule, PortedCppModule, StrategyResult } from './loadCppModule'
+import {
+  loadCppModule,
+  PortedCppModule,
+  StrategyResult,
+  CardRaw,
+} from './loadCppModule'
 import { Divider } from './Divider'
+import { RANK, SUIT } from './constants'
 
 let strategyModule: PortedCppModule | null = null
 
@@ -18,6 +24,33 @@ function cardsToString(cards: TCard[]) {
       return card.rank + card.suit
     })
     .join('')
+}
+
+function parseRawCard(cardRaw: CardRaw, wildCard: TCard): TCard {
+  if (cardRaw.length !== 2) {
+    throw new Error('CardRaw should have a length of 2')
+  }
+
+  if (cardRaw === 'BJ') {
+    return {
+      rank: 'X',
+      suit: 'R',
+    }
+  }
+  if (cardRaw === 'SJ') {
+    return {
+      rank: 'X',
+      suit: 'B',
+    }
+  }
+  if (cardRaw === '??') {
+    return wildCard
+  }
+
+  return {
+    rank: cardRaw[0],
+    suit: cardRaw[1],
+  }
 }
 
 const styles = StyleSheet.create({
@@ -70,7 +103,15 @@ export function Home({ screenProps }: NavigationProps) {
         {strategyResult && (
           <>
             <Text>{`最少${strategyResult.minHands}手可以出完`}</Text>
-            <Text>{strategyResult.solutions.join('\n')}</Text>
+            <Text>
+              {JSON.stringify(
+                strategyResult.solutions.map(solution => {
+                  return solution.actualHands.map(hand =>
+                    hand.map(card => parseRawCard(card, { rank, suit: 'H' })),
+                  )
+                }),
+              )}
+            </Text>
           </>
         )}
       </ScrollView>

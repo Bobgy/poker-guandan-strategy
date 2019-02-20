@@ -4,7 +4,7 @@ cpp program using dfs with _heavy_ optimization (lol) to calculate best (min han
 
 ## Todos
 
-[ ] generate random start hands as examples
 [ ] improve strategy output visualization
+[ ] generate random start hands as examples
 [ ] revert last operation button
 [ ] check card count validity

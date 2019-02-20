@@ -295,14 +295,6 @@ int TestTrumpCard(THandCards& hc, int n, int& min, TSolutions& solution, int si,
     return 0;
 }
 
-int EMSCRIPTEN_KEEPALIVE add(int a, int b) { return a + b; }
-string EMSCRIPTEN_KEEPALIVE concat(string a, string b) { return a + b; }
-vector<string> EMSCRIPTEN_KEEPALIVE makeArr(string a, string b) {
-    vector<string> arr({a, b});
-
-    return arr;
-}
-
 struct StrategyResult {
     int minHands;
     vector<string> solutions;
@@ -330,9 +322,6 @@ EMSCRIPTEN_KEEPALIVE StrategyResult calc(string cards, char mainRank) {
 
 namespace emscripten {
 EMSCRIPTEN_BINDINGS(my_module) {
-    function("add", &add);
-    function("concat", &concat);
-    function("makeArr", &makeArr);
     function("calc", &calc);
 
     register_vector<string>("vector<string>");
