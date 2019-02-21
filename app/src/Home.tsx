@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { View, Button, ScrollView } from 'react-native'
+import { View, Text } from 'react-native'
 import { NavigationProps, TCard } from './types'
 import { CardsChooser } from './CardsChooser'
 import { RankChooser } from './useCardState'
@@ -8,6 +8,7 @@ import { Divider } from './Divider'
 import { commonStyles } from './styles'
 import { cardsToString } from './cardUtils'
 import SolutionVisualization from './SolutionVisualization'
+import { MyButton } from './MyButton'
 
 let strategyModule: PortedCppModule | null = null
 
@@ -57,12 +58,8 @@ export function Home({ screenProps }: NavigationProps) {
   }, [cards, setResult, setResultWindowState])
 
   return (
-    <ScrollView
-      style={[commonStyles.borderBox, { height: '100%' }]}
-      contentContainerStyle={{
-        height: '100%',
-      }}
-    >
+    <View style={{ height: '100%' }}>
+      <Text style={{ fontSize: 14 }}>掼蛋拆牌计算器</Text>
       {isResultWindowMaxed ? (
         <SolutionVisualization
           strategyResult={strategyResult}
@@ -86,7 +83,6 @@ export function Home({ screenProps }: NavigationProps) {
           <Divider />
           <View
             style={[
-              commonStyles.container,
               {
                 flex: 1,
                 minHeight: 350,
@@ -101,22 +97,25 @@ export function Home({ screenProps }: NavigationProps) {
               deleteLastCard={deleteLastCard}
             />
           </View>
-          <Divider />
           <View
             style={[
               commonStyles.container,
               {
-                height: 34,
                 justifyContent: 'center',
-                padding: 0,
+                padding: 6,
               },
             ]}
           >
-            <Button title="计算策略" onPress={handleSolutionCalcButton} />
+            <MyButton
+              title="计算拆牌策略"
+              onPress={handleSolutionCalcButton}
+              style={{ height: 60 }}
+              titleStyle={{ fontSize: 40 }}
+            />
           </View>
         </>
       )}
-    </ScrollView>
+    </View>
   )
 }
 

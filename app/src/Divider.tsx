@@ -3,8 +3,9 @@ import { View, StyleSheet } from 'react-native'
 
 const styles = StyleSheet.create({
   divider: {
-    height: 2.1, // avoid floating error
+    height: 2, // avoid floating error
     backgroundColor: 'black',
+    marginHorizontal: 10,
   },
 })
 

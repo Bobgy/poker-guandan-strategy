@@ -1,5 +1,12 @@
 import React, { Props, memo } from 'react'
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  StyleProp,
+  ViewStyle,
+} from 'react-native'
 import { Divider } from './Divider'
 import { CardDeck } from './Card'
 import { commonStyles } from './styles'
@@ -15,20 +22,24 @@ interface SolutionVisualizationProps {
 
 interface WindowSizeToggleProps {
   toggleWindowSize: () => void
+  style: StyleProp<ViewStyle>
 }
 const WindowSizeToggle: React.FunctionComponent<
   WindowSizeToggleProps
 > = props => (
   <TouchableOpacity
-    style={{
-      width: 40,
-      flexDirection: 'row',
-      justifyContent: 'center',
-      alignItems: 'center',
-    }}
+    style={[
+      {
+        width: 40,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+      },
+      props.style,
+    ]}
     onPress={props.toggleWindowSize}
   >
-    <Close/>
+    <Close />
   </TouchableOpacity>
 )
 
@@ -112,9 +123,15 @@ const SolutionVisualization: React.FunctionComponent<
           拆牌策略计算结果
         </Text>
       </View>
-      <View style={{ width: 2, backgroundColor: 'black' }} />
+      {/* <View style={{ width: 2, backgroundColor: 'black' }} /> */}
       <WindowSizeToggle
         toggleWindowSize={toggleWindowSize}
+        style={{
+          // to the right and centered
+          position: 'absolute',
+          right: 0,
+          height: '100%',
+        }}
       />
     </View>
     <Divider />

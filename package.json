@@ -10,7 +10,8 @@
     "clean": "rm -rf a.out* a.exe app/public/res/*",
     "build:prod": "npm run build -- -O2 && cd app && npm run build",
     "predeploy": "npm run build:prod",
-    "deploy": "rm -rf docs/* && cp -r app/build/* docs"
+    "deploy": "rm -rf docs/* && cp -r app/build/* docs",
+    "deploy-and-push": "npm run deploy && git add -A && git ci -m \"[deploy]\" && git push origin HEAD"
   },
   "repository": {
     "type": "git",

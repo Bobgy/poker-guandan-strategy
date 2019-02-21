@@ -1,23 +1,16 @@
-import React, {
-  useState,
-  useCallback,
-  FunctionComponent,
-  ReactNode,
-} from 'react'
+import React, { useState, useCallback } from 'react'
 import {
   View,
-  Text,
   TouchableOpacity,
   StyleSheet,
-  TouchableOpacityProps,
-  StyleProp,
-  TextStyle,
   ScrollView,
+  Text,
 } from 'react-native'
 import { RANKS, SUITS, SUITS_JOKER, canIAddCard } from './cardUtils'
 import { CardState } from './types'
 import { Divider } from './Divider'
 import { CardDeck, Card } from './Card'
+import { MyButton } from './MyButton'
 
 const palette = {
   blue: 'rgb(33, 150, 243)',
@@ -29,7 +22,7 @@ const palette = {
   },
 }
 
-const theme = {
+export const theme = {
   disabled: {
     background: palette.grey[6],
     text: palette.grey[4],
@@ -54,48 +47,6 @@ function useIncDecState(defaultValue = 0) {
     decrease,
   }
 }
-
-interface MyButtonProps extends TouchableOpacityProps {
-  title: ReactNode
-  titleStyle?: StyleProp<TextStyle>
-}
-
-const MyButton: FunctionComponent<MyButtonProps> = ({
-  style,
-  titleStyle,
-  title,
-  disabled,
-  ...restProps
-}) => (
-  <TouchableOpacity
-    style={[
-      {
-        backgroundColor: disabled
-          ? theme.disabled.background
-          : theme.button.background,
-        borderRadius: 2,
-        padding: 4,
-        alignItems: 'center',
-        justifyContent: 'center',
-      },
-      style,
-    ]}
-    disabled={disabled}
-    {...restProps}
-  >
-    <Text
-      style={[
-        {
-          color: disabled ? theme.disabled.text : 'white',
-          textAlign: 'center',
-        },
-        titleStyle,
-      ]}
-    >
-      {title}
-    </Text>
-  </TouchableOpacity>
-)
 
 const controlStyles = StyleSheet.create({
   incDecButton: {
@@ -136,20 +87,6 @@ const ControlPanel: React.FunctionComponent<ControlPanelProps> = props => (
       }}
     >
       <MyButton
-        onPress={props.randomCards}
-        title="随机发牌"
-        disabled={props.numberOfCards > 0}
-        style={controlStyles.actionButton}
-        titleStyle={controlStyles.buttonTitleSmall}
-      />
-      <MyButton
-        onPress={props.clearCards}
-        title="清除"
-        disabled={props.numberOfCards === 0}
-        style={controlStyles.actionButton}
-        titleStyle={controlStyles.buttonTitle}
-      />
-      <MyButton
         onPress={props.decRank}
         disabled={props.rankID <= 0}
         title="<"
@@ -172,8 +109,22 @@ const ControlPanel: React.FunctionComponent<ControlPanelProps> = props => (
       }}
     >
       <MyButton
+        onPress={props.randomCards}
+        title="随机发牌"
+        disabled={props.numberOfCards > 0}
+        style={controlStyles.actionButton}
+        titleStyle={controlStyles.buttonTitleSmall}
+      />
+      <MyButton
+        onPress={props.clearCards}
+        title="清除"
+        disabled={props.numberOfCards === 0}
+        style={controlStyles.actionButton}
+        titleStyle={controlStyles.buttonTitle}
+      />
+      <MyButton
         onPress={props.deleteLastCard}
-        title="删除最右"
+        title="删除"
         disabled={props.numberOfCards === 0}
         style={controlStyles.actionButton}
         titleStyle={controlStyles.buttonTitle}
@@ -199,6 +150,7 @@ export function CardsChooser({
     <View style={{ flex: 1 }}>
       <CardDeck cards={cards} />
       <Divider />
+      <Text style={{ fontSize: 14, margin: 4 }}>点击扑克牌添加</Text>
       <ScrollView
         style={{ height: 110, flexGrow: 0 }}
         contentContainerStyle={{
@@ -220,7 +172,11 @@ export function CardsChooser({
               onPress={() => addCard(card)}
               disabled={!canIAddThisCard}
             >
-              <Card suit={suit.value} rank={RANKS[rankID].value} disabled={!canIAddThisCard}/>
+              <Card
+                suit={suit.value}
+                rank={RANKS[rankID].value}
+                disabled={!canIAddThisCard}
+              />
             </TouchableOpacity>
           )
         })}
