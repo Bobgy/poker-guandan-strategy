@@ -1,4 +1,5 @@
 import { TCard } from './types'
+import { CardRaw } from './loadCppModule';
 
 export const RANKS = [
   '2',
@@ -144,4 +145,43 @@ export function generateRandomHands(): TCard[] {
 
 export function canIAddCard(cards: TCard[], cardToAdd: TCard): boolean {
   return cards.filter(card => cardEqual(card, cardToAdd)).length < 2
+}
+
+export function cardsToString(cards: TCard[]) {
+  return cards
+    .map(card => {
+      if (card.rank === 'X') {
+        // big joker and small joker
+        return card.suit === 'R' ? 'BJ' : 'SJ'
+      }
+      return card.rank + card.suit
+    })
+    .join('')
+}
+
+export function parseRawCard(cardRaw: CardRaw, wildCard: TCard): TCard {
+  if (cardRaw.length !== 2) {
+    throw new Error('CardRaw should have a length of 2')
+  }
+
+  if (cardRaw === 'BJ') {
+    return {
+      rank: 'X',
+      suit: 'R',
+    }
+  }
+  if (cardRaw === 'SJ') {
+    return {
+      rank: 'X',
+      suit: 'B',
+    }
+  }
+  if (cardRaw === '??') {
+    return wildCard
+  }
+
+  return {
+    rank: cardRaw[0],
+    suit: cardRaw[1],
+  }
 }

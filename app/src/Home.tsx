@@ -1,11 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import {
   View,
-  Text,
   Button,
   ScrollView,
-  StyleSheet,
-  TouchableOpacity,
 } from 'react-native'
 import { NavigationProps, TCard } from './types'
 import { CardsChooser } from './CardsChooser'
@@ -14,146 +11,15 @@ import {
   loadCppModule,
   PortedCppModule,
   StrategyResult,
-  CardRaw,
 } from './loadCppModule'
 import { Divider } from './Divider'
-import { CardDeck } from './Card'
+import { commonStyles } from './styles';
+import { cardsToString } from './cardUtils';
+import { SolutionVisualization } from './SolutionVisualization';
 
 let strategyModule: PortedCppModule | null = null
 
-function cardsToString(cards: TCard[]) {
-  return cards
-    .map(card => {
-      if (card.rank === 'X') {
-        // big joker and small joker
-        return card.suit === 'R' ? 'BJ' : 'SJ'
-      }
-      return card.rank + card.suit
-    })
-    .join('')
-}
-
-function parseRawCard(cardRaw: CardRaw, wildCard: TCard): TCard {
-  if (cardRaw.length !== 2) {
-    throw new Error('CardRaw should have a length of 2')
-  }
-
-  if (cardRaw === 'BJ') {
-    return {
-      rank: 'X',
-      suit: 'R',
-    }
-  }
-  if (cardRaw === 'SJ') {
-    return {
-      rank: 'X',
-      suit: 'B',
-    }
-  }
-  if (cardRaw === '??') {
-    return wildCard
-  }
-
-  return {
-    rank: cardRaw[0],
-    suit: cardRaw[1],
-  }
-}
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 10,
-  },
-  borderBox: {
-    borderWidth: 2,
-    borderColor: 'black',
-  },
-})
-
-interface SolutionVisualizationProps {
-  strategyResult: StrategyResult | null | 'loading'
-  rank: string
-  isWindowMaxed: boolean
-  toggleWindowSize: () => void
-}
-
-const SolutionVisualization: React.FunctionComponent<
-  SolutionVisualizationProps
-> = ({ strategyResult, rank, isWindowMaxed, toggleWindowSize }) => (
-  <>
-    <View
-      style={{
-        flexDirection: 'row',
-        justifyContent: 'flex-end',
-        alignContent: 'center',
-      }}
-    >
-      <View style={{ flex: 1 }}>
-        <Text
-          style={{
-            fontSize: 20,
-            padding: 4,
-            textAlign: 'center',
-          }}
-        >
-          拆牌策略计算结果
-        </Text>
-      </View>
-      <View style={{ width: 2, backgroundColor: 'black' }} />
-      <TouchableOpacity
-        style={{
-          width: 40,
-          alignContent: 'center',
-          justifyContent: 'center',
-        }}
-        onPress={toggleWindowSize}
-      >
-        <Text style={{ textAlign: 'center' }}>{isWindowMaxed ? '🗕' : '🗖'}</Text>
-      </TouchableOpacity>
-    </View>
-    <Divider />
-    <ScrollView
-      style={[
-        styles.container,
-        {
-          flex: 2,
-        },
-      ]}
-    >
-      {strategyResult &&
-        (strategyResult === 'loading' ? (
-          <Text
-            style={{
-              fontSize: 20,
-            }}
-          >
-            计算中...
-          </Text>
-        ) : (
-          <>
-            <Text>{`最少${strategyResult.minHands}手可以出完`}</Text>
-            <View>
-              {strategyResult.solutions.map((solution, solutionIndex) => (
-                <CardDeck
-                  key={solutionIndex}
-                  hands={solution.actualHands.map(hand =>
-                    hand.map(card =>
-                      parseRawCard(card, {
-                        rank,
-                        suit: 'H',
-                      }),
-                    ),
-                  )}
-                />
-              ))}
-            </View>
-          </>
-        ))}
-    </ScrollView>
-  </>
-)
-
-type StrategyResultState = null | 'loading' | StrategyResult
+export type StrategyResultState = null | 'loading' | StrategyResult
 
 export function Home({ screenProps }: NavigationProps) {
   useEffect(() => {
@@ -187,7 +53,7 @@ export function Home({ screenProps }: NavigationProps) {
 
   return (
     <ScrollView
-      style={[styles.borderBox, { height: '100%' }]}
+      style={[commonStyles.borderBox, { height: '100%' }]}
       contentContainerStyle={{
         height: '100%',
       }}
@@ -203,7 +69,7 @@ export function Home({ screenProps }: NavigationProps) {
           <Divider />
           <View
             style={[
-              styles.container,
+              commonStyles.container,
               {
                 height: 40,
                 justifyContent: 'center',
@@ -216,7 +82,7 @@ export function Home({ screenProps }: NavigationProps) {
           <Divider />
           <View
             style={[
-              styles.container,
+              commonStyles.container,
               {
                 flex: 1,
                 minHeight: 350,
@@ -234,7 +100,7 @@ export function Home({ screenProps }: NavigationProps) {
           <Divider />
           <View
             style={[
-              styles.container,
+              commonStyles.container,
               {
                 height: 34,
                 justifyContent: 'center',
