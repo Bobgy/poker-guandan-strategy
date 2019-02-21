@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/poker-guandan-strategy/precache-manifest.10951d652b6278cd22b74d151bc69a35.js"
+  "/poker-guandan-strategy/precache-manifest.1a6186a90a659832fa5063d06481e7d1.js"
 );
 
 workbox.clientsClaim();
