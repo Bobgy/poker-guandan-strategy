@@ -245,6 +245,7 @@ export const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderColor: 'black',
     borderWidth: 2,
+    borderRadius: 4,
     margin: 3,
   },
   cardStacked: {

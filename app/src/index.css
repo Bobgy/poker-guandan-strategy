@@ -8,6 +8,16 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* by default all text should not be selectable */
+* {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
