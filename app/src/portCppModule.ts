@@ -96,7 +96,7 @@ export function parseSolutionsUnsafe(solutions: string[]) {
       })
     }
   }
-  console.log(parsedSolutions)
+  // console.log(parsedSolutions)
 
   return parsedSolutions
 }

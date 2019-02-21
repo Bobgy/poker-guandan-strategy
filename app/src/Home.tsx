@@ -42,6 +42,19 @@ export function Home({ screenProps }: NavigationProps) {
     () => setResultWindowState(prevState => !prevState),
     [setResultWindowState],
   )
+  const handleSolutionCalcButton = useCallback(() => {
+    setResult('loading')
+    setResultWindowState(true)
+
+    setTimeout(() => {
+      if (strategyModule != null) {
+        // console.log(cards)
+        const cardsStr = cardsToString(cards)
+        // console.log(cardsStr)
+        setResult(strategyModule.calc(cardsStr, rank))
+      }
+    }, 0)
+  }, [cards, setResult, setResultWindowState])
 
   return (
     <ScrollView
@@ -50,15 +63,15 @@ export function Home({ screenProps }: NavigationProps) {
         height: '100%',
       }}
     >
-      <SolutionVisualization
-        strategyResult={strategyResult}
-        rank={rank}
-        isWindowMaxed={isResultWindowMaxed}
-        toggleWindowSize={toggleResultWindowSize}
-      />
-      {!isResultWindowMaxed && (
+      {isResultWindowMaxed ? (
+        <SolutionVisualization
+          strategyResult={strategyResult}
+          rank={rank}
+          isWindowMaxed={isResultWindowMaxed}
+          toggleWindowSize={toggleResultWindowSize}
+        />
+      ) : (
         <>
-          <Divider />
           <View
             style={[
               commonStyles.container,
@@ -100,20 +113,7 @@ export function Home({ screenProps }: NavigationProps) {
               },
             ]}
           >
-            <Button
-              title="计算策略"
-              onPress={() => {
-                setResult('loading')
-
-                setTimeout(() => {
-                  if (strategyModule != null) {
-                    const cardsStr = cardsToString(cards)
-                    console.log(cardsStr)
-                    setResult(strategyModule.calc(cardsStr, rank))
-                  }
-                }, 0)
-              }}
-            />
+            <Button title="计算策略" onPress={handleSolutionCalcButton} />
           </View>
         </>
       )}

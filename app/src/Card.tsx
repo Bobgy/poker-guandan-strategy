@@ -1,8 +1,9 @@
 import React, { Fragment } from 'react'
-import { View, Text, ScrollView } from 'react-native'
+import { View, Text, ScrollView, Image } from 'react-native'
 import { SUIT, RANK } from './cardUtils'
 import { TCard } from './types'
 import { styles } from './CardsChooser'
+import nekoImg from './imgs/neko-40x40.png'
 
 export function Card({
   rank,
@@ -35,6 +36,16 @@ export function Card({
         {'\n'}
         {suitDef.label}
       </Text>
+      <Image
+        source={{ uri: nekoImg }}
+        style={{
+          position: 'absolute',
+          left: 'calc(50% - 20px)',
+          top: 'calc(50% - 20px)',
+          width: 40,
+          height: 40,
+        }}
+      />
       {disabled && (
         <View
           style={{
