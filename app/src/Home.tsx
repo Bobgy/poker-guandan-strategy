@@ -67,7 +67,6 @@ export function Home({ screenProps }: NavigationProps) {
         <SolutionVisualization
           strategyResult={strategyResult}
           rank={rank}
-          isWindowMaxed={isResultWindowMaxed}
           toggleWindowSize={toggleResultWindowSize}
         />
       ) : (

@@ -5,19 +5,16 @@ import { CardDeck } from './Card'
 import { commonStyles } from './styles'
 import { parseRawCard } from './cardUtils'
 import { StrategyResultState } from './Home'
-import { ReactComponent as Expand } from './icons/expand-more.svg'
-import { ReactComponent as Less } from './icons/expand-less.svg'
+import { ReactComponent as Close } from './icons/close.svg'
 
 interface SolutionVisualizationProps {
   strategyResult: StrategyResultState
   rank: string
-  isWindowMaxed: boolean
   toggleWindowSize: () => void
 }
 
 interface WindowSizeToggleProps {
   toggleWindowSize: () => void
-  isWindowMaxed: boolean
 }
 const WindowSizeToggle: React.FunctionComponent<
   WindowSizeToggleProps
@@ -31,7 +28,7 @@ const WindowSizeToggle: React.FunctionComponent<
     }}
     onPress={props.toggleWindowSize}
   >
-    {props.isWindowMaxed ? <Less /> : <Expand />}
+    <Close/>
   </TouchableOpacity>
 )
 
@@ -95,7 +92,7 @@ const MemoedSolutionWindow = memo(SolutionWindow)
 
 const SolutionVisualization: React.FunctionComponent<
   SolutionVisualizationProps
-> = ({ strategyResult, rank, isWindowMaxed, toggleWindowSize }) => (
+> = ({ strategyResult, rank, toggleWindowSize }) => (
   <>
     <View
       style={{
@@ -117,7 +114,6 @@ const SolutionVisualization: React.FunctionComponent<
       </View>
       <View style={{ width: 2, backgroundColor: 'black' }} />
       <WindowSizeToggle
-        isWindowMaxed={isWindowMaxed}
         toggleWindowSize={toggleWindowSize}
       />
     </View>
