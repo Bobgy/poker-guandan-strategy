@@ -15,3 +15,15 @@ serviceWorker.register({
   onSuccess: () => console.log('service worker loaded successfully'),
   onUpdate: () => console.log('service worker is updated'),
 })
+
+function removeWechatGuidance() {
+  const guidanceNode = window.document.getElementById('wechat-guidance')
+  if (guidanceNode) {
+    const parentNode = guidanceNode.parentNode
+    if (parentNode) {
+      parentNode.removeChild(guidanceNode)
+    }
+  }
+}
+
+removeWechatGuidance()

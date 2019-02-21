@@ -9,6 +9,8 @@ Now I've built a web app with react-native-web as UI for the cpp module. It is p
 - [x] [strategy output] maximize window
 - [x] PWA
 - [x] Text should not be selectable
+- [ ] [Bug] Main page is scrollable in android chrome
+- [ ] Guidance page for wechat sharing
 - [ ] Redesign UI
 - [ ] [strategy output] reduce solution duplication
 - [ ] revert last operation button
