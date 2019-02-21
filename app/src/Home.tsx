@@ -1,21 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import {
-  View,
-  Button,
-  ScrollView,
-} from 'react-native'
+import { View, Button, ScrollView } from 'react-native'
 import { NavigationProps, TCard } from './types'
 import { CardsChooser } from './CardsChooser'
 import { RankChooser } from './useCardState'
-import {
-  loadCppModule,
-  PortedCppModule,
-  StrategyResult,
-} from './loadCppModule'
+import { loadCppModule, PortedCppModule, StrategyResult } from './loadCppModule'
 import { Divider } from './Divider'
-import { commonStyles } from './styles';
-import { cardsToString } from './cardUtils';
-import { SolutionVisualization } from './SolutionVisualization';
+import { commonStyles } from './styles'
+import { cardsToString } from './cardUtils'
+import SolutionVisualization from './SolutionVisualization'
 
 let strategyModule: PortedCppModule | null = null
 
