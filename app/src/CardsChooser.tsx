@@ -7,7 +7,7 @@ import {
   Text,
 } from 'react-native'
 import { RANKS, SUITS, SUITS_JOKER, canIAddCard } from './cardUtils'
-import { CardState } from './types'
+import { CardState, TCard } from './types'
 import { Divider } from './Divider'
 import { CardDeck, Card } from './Card'
 import { MyButton } from './MyButton'
@@ -133,6 +133,37 @@ const ControlPanel: React.FunctionComponent<ControlPanelProps> = props => (
   </View>
 )
 
+interface ChosenCardsProps {
+  cards: TCard[]
+  addCard: (card: TCard) => void
+  rankID: number
+}
+const ChosenCards: React.FunctionComponent<ChosenCardsProps> = props => (
+  <>
+    {(RANKS[props.rankID].isJoker ? SUITS_JOKER : SUITS).map(suit => {
+      const card = {
+        suit: suit.value,
+        rank: RANKS[props.rankID].value,
+      }
+      const canIAddThisCard = canIAddCard(props.cards, card)
+
+      return (
+        <TouchableOpacity
+          key={suit.value}
+          onPress={() => props.addCard(card)}
+          disabled={!canIAddThisCard}
+        >
+          <Card
+            suit={suit.value}
+            rank={RANKS[props.rankID].value}
+            disabled={!canIAddThisCard}
+          />
+        </TouchableOpacity>
+      )
+    })}
+  </>
+)
+
 export function CardsChooser({
   cards,
   addCard,
@@ -150,36 +181,21 @@ export function CardsChooser({
     <View style={{ flex: 1 }}>
       <CardDeck cards={cards} />
       <Divider />
-      <Text style={{ fontSize: 14, margin: 4 }}>点击扑克牌添加</Text>
+      <Text style={{ fontSize: 14, margin: 4 }}>{`点击扑克牌添加，目前已有${
+        cards.length
+      }张牌`}</Text>
       <ScrollView
-        style={{ height: 110, flexGrow: 0 }}
+        style={{
+          height: 110,
+          flexGrow: 0,
+        }}
         contentContainerStyle={{
           flex: 1,
           justifyContent: 'center',
         }}
         horizontal
       >
-        {(RANKS[rankID].isJoker ? SUITS_JOKER : SUITS).map(suit => {
-          const card = {
-            suit: suit.value,
-            rank: RANKS[rankID].value,
-          }
-          const canIAddThisCard = canIAddCard(cards, card)
-
-          return (
-            <TouchableOpacity
-              key={suit.value}
-              onPress={() => addCard(card)}
-              disabled={!canIAddThisCard}
-            >
-              <Card
-                suit={suit.value}
-                rank={RANKS[rankID].value}
-                disabled={!canIAddThisCard}
-              />
-            </TouchableOpacity>
-          )
-        })}
+        <ChosenCards cards={cards} addCard={addCard} rankID={rankID} />
       </ScrollView>
       <ControlPanel
         numberOfCards={cards.length}
@@ -193,19 +209,3 @@ export function CardsChooser({
     </View>
   )
 }
-
-export const styles = StyleSheet.create({
-  card: {
-    width: 80,
-    height: 60 * 1.618,
-    backgroundColor: 'white',
-    borderColor: 'black',
-    borderWidth: 2,
-    borderRadius: 4,
-    margin: 3,
-  },
-  cardStacked: {
-    marginRight: -60,
-    marginBottom: -60,
-  },
-})

@@ -1,9 +1,24 @@
 import React, { Fragment } from 'react'
-import { View, Text, ScrollView, Image } from 'react-native'
+import { View, Text, ScrollView, Image, StyleSheet } from 'react-native'
 import { SUIT, RANK } from './cardUtils'
 import { TCard } from './types'
-import { styles } from './CardsChooser'
 import nekoImg from './imgs/neko-40x40.png'
+
+const styles = StyleSheet.create({
+  card: {
+    width: 80,
+    height: 60 * 1.618,
+    backgroundColor: 'white',
+    borderColor: 'black',
+    borderWidth: 2,
+    borderRadius: 4,
+    margin: 3,
+  },
+  cardStacked: {
+    marginRight: -60,
+    marginBottom: -60,
+  },
+})
 
 export function Card({
   rank,

@@ -1,5 +1,5 @@
 import { TCard } from './types'
-import { CardRaw } from './loadCppModule';
+import { CardRaw } from './loadCppModule'
 
 export const RANKS = [
   '2',
@@ -101,7 +101,10 @@ const ALL_CARDS_ONE_DECK: TCard[] = RANKS.map(rank =>
         rank: rank.value,
         suit: suit.value,
       })),
-).flatMap(cards => cards)
+).reduce((res, cards) => {
+  res.push(...cards)
+  return res
+}, [])
 
 /**
  * reference: https://stackoverflow.com/a/6274381
@@ -140,7 +143,9 @@ function sortCards(a: TCard[]): TCard[] {
 }
 
 export function generateRandomHands(): TCard[] {
-  return sortCards(shuffle([...ALL_CARDS_ONE_DECK, ...ALL_CARDS_ONE_DECK]).slice(0, 27))
+  return sortCards(
+    shuffle([...ALL_CARDS_ONE_DECK, ...ALL_CARDS_ONE_DECK]).slice(0, 27),
+  )
 }
 
 export function canIAddCard(cards: TCard[], cardToAdd: TCard): boolean {
