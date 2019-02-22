@@ -7,6 +7,7 @@ import { createBrowserApp } from '@react-navigation/web'
 import { NavigationProps } from './types'
 import { useCardState } from './useCardState'
 import { Home } from './Home'
+import { useResultState } from './useResultState'
 
 function Details(props: NavigationProps) {
   return (
@@ -33,6 +34,7 @@ const AppNavigator = createSwitchNavigator(
 function App(props: any) {
   const [rank, setRank] = useState('2')
   const cardStateProps = useCardState()
+  const resultProps = useResultState()
 
   return (
     <View
@@ -43,7 +45,7 @@ function App(props: any) {
       }}
     >
       <AppNavigator
-        screenProps={{ rank, setRank, ...cardStateProps }}
+        screenProps={{ rank, setRank, ...cardStateProps, ...resultProps }}
         {...props}
       />
     </View>

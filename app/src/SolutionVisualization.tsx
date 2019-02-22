@@ -11,7 +11,7 @@ import { Divider } from './Divider'
 import { CardDeck } from './Card'
 import { commonStyles } from './styles'
 import { parseRawCard } from './cardUtils'
-import { StrategyResultState } from './Home'
+import { StrategyResultState } from './useResultState'
 import { ReactComponent as Close } from './icons/close.svg'
 
 interface SolutionVisualizationProps {

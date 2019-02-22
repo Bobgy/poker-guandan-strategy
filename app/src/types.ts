@@ -1,3 +1,5 @@
+import { ResultProps } from './useResultState'
+
 export interface RankState {
   rank: string
   setRank: (rank: string) => void
@@ -16,7 +18,7 @@ export interface CardState {
   deleteLastCard(): void
 }
 
-export type AppState = RankState & CardState
+export type AppState = RankState & CardState & ResultProps
 
 export interface NavigationProps {
   navigation: {

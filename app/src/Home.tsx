@@ -2,17 +2,15 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { View, Text } from 'react-native'
 import { NavigationProps, TCard } from './types'
 import { CardsChooser } from './CardsChooser'
-import { RankChooser } from './useCardState'
-import { loadCppModule, PortedCppModule, StrategyResult } from './loadCppModule'
+import { loadCppModule, PortedCppModule } from './loadCppModule'
 import { Divider } from './Divider'
 import { commonStyles } from './styles'
 import { cardsToString } from './cardUtils'
 import SolutionVisualization from './SolutionVisualization'
 import { MyButton } from './MyButton'
+import { RankChooser } from './RankChooser'
 
 let strategyModule: PortedCppModule | null = null
-
-export type StrategyResultState = null | 'loading' | StrategyResult
 
 export function Home({ screenProps }: NavigationProps) {
   useEffect(() => {
@@ -36,8 +34,9 @@ export function Home({ screenProps }: NavigationProps) {
     addCard,
     randomCards,
     deleteLastCard,
+    strategyResult,
+    setResult,
   } = screenProps
-  const [strategyResult, setResult] = useState<StrategyResultState>(null)
   const [isResultWindowMaxed, setResultWindowState] = useState<boolean>(false)
   const toggleResultWindowSize = useCallback(
     () => setResultWindowState(prevState => !prevState),
