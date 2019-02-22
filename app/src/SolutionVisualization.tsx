@@ -63,7 +63,7 @@ const SolutionWindow: React.FunctionComponent<SolutionWindowProps> = props => (
             fontSize: 20,
           }}
         >
-          计算中...
+          {/* 计算中... */}
         </Text>
       ) : (
         <>

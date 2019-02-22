@@ -49,8 +49,8 @@ export function Home({ screenProps, navigation }: NavigationProps) {
 
         // set a minimum extra delay to avoid UI flashing too quickly
         setTimeout(() => {
-          setResult(result)
           navigation.navigate('Result')
+          setResult(result)
         }, 300)
       }
     }, 0)

@@ -145,7 +145,7 @@ const AppNavigator: FunctionComponent<AppNavigatorProps> = ({
   )
 }
 
-function App(props: any) {
+function App() {
   const [rank, setRank] = useState('2')
   const cardStateProps = useCardState()
   const resultProps = useResultState()
