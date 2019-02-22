@@ -45,8 +45,13 @@ export function Home({ screenProps, navigation }: NavigationProps) {
         // console.log(cards)
         const cardsStr = cardsToString(cards)
         // console.log(cardsStr)
-        setResult(strategyModule.calc(cardsStr, rank))
-        navigation.navigate('Result')
+        const result = strategyModule.calc(cardsStr, rank)
+
+        // set a minimum extra delay to avoid UI flashing too quickly
+        setTimeout(() => {
+          setResult(result)
+          navigation.navigate('Result')
+        }, 300)
       }
     }, 0)
   }, [cards, setResult, navigation])

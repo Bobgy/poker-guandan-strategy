@@ -1,4 +1,5 @@
 import { ResultProps } from './useResultState'
+import { StyleProp, ViewStyle } from 'react-native'
 
 export interface RankState {
   rank: string

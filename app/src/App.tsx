@@ -7,7 +7,14 @@ import React, {
   useMemo,
   useEffect,
 } from 'react'
-import { View, Text, Animated, StyleProp, ViewStyle } from 'react-native'
+import {
+  StyleSheet,
+  View,
+  Text,
+  Animated,
+  StyleProp,
+  ViewStyle,
+} from 'react-native'
 import { NavigationProps, AppState } from './types'
 import { useCardState } from './useCardState'
 import { Home } from './Home'
@@ -30,29 +37,62 @@ function ResultPage({ screenProps, navigation }: NavigationProps) {
 }
 
 interface FadeProps {
+  in: boolean
   style?: StyleProp<ViewStyle>
+  timeout: number
 }
-const Fade: FunctionComponent<FadeProps> = ({ children, style }) => {
+const Fade: FunctionComponent<FadeProps> = ({
+  children,
+  in: show,
+  style,
+  timeout,
+}) => {
   const [fadeAnim, _] = useState(new Animated.Value(0))
+  const [mounted, updateMount] = useState(show)
   useEffect(() => {
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 1000,
-    }).start()
-  }, [])
+    if (show) {
+      // mount immediately if it is shown
+      if (!mounted) {
+        updateMount(true)
+      }
 
-  return (
-    <Animated.View
-      style={[
-        {
-          opacity: fadeAnim,
-        },
-        style,
-      ]}
-    >
-      {children}
-    </Animated.View>
-  )
+      const timeoutID = setTimeout(() => {
+        Animated.timing(fadeAnim, {
+          toValue: 1,
+          duration: timeout,
+        }).start()
+      }, 0)
+
+      return () => clearTimeout(timeoutID)
+    } else {
+      Animated.timing(fadeAnim, {
+        toValue: 0,
+        duration: timeout,
+      }).start()
+
+      // unmount after the duration times out
+      const timeoutID = setTimeout(() => void updateMount(false), timeout + 1)
+
+      return () => clearTimeout(timeoutID)
+    }
+  }, [show])
+
+  if (mounted) {
+    return (
+      <Animated.View
+        style={[
+          {
+            opacity: fadeAnim,
+          },
+          style,
+        ]}
+      >
+        {children}
+      </Animated.View>
+    )
+  } else {
+    return null
+  }
 }
 
 interface AppNavigatorProps {
@@ -61,18 +101,21 @@ interface AppNavigatorProps {
   screenProps: AppState
   style?: StyleProp<ViewStyle>
 }
+const styles = StyleSheet.create({
+  absoluteChild: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    right: 0,
+    bottom: 0,
+  },
+})
 const AppNavigator: FunctionComponent<AppNavigatorProps> = ({
   route,
   navigate,
   screenProps,
   style,
 }) => {
-  let ChosenScreen = null
-  if (route === 'Home') {
-    ChosenScreen = Home
-  } else if (route === 'Result') {
-    ChosenScreen = ResultPage
-  }
   const navigation = useMemo(
     () => ({
       navigate,
@@ -80,15 +123,26 @@ const AppNavigator: FunctionComponent<AppNavigatorProps> = ({
     [navigate],
   )
 
-  if (ChosenScreen) {
-    return (
-      <Fade key={route} style={style}>
-        <ChosenScreen screenProps={screenProps} navigation={navigation} />
+  return (
+    <>
+      <Fade
+        key="Home"
+        style={[styles.absoluteChild, style]}
+        in={route === 'Home'}
+        timeout={300}
+      >
+        <Home screenProps={screenProps} navigation={navigation} />
       </Fade>
-    )
-  } else {
-    return <Text>ERROR: Route not found!</Text>
-  }
+      <Fade
+        key="Result"
+        style={[styles.absoluteChild, style]}
+        in={route === 'Result'}
+        timeout={300}
+      >
+        <ResultPage screenProps={screenProps} navigation={navigation} />
+      </Fade>
+    </>
+  )
 }
 
 function App(props: any) {
@@ -107,14 +161,16 @@ function App(props: any) {
     >
       <View style={{ height: '100%' }}>
         <Text style={{ fontSize: 14 }}>掼蛋拆牌计算器</Text>
-        <AppNavigator
-          route={route}
-          screenProps={{ rank, setRank, ...cardStateProps, ...resultProps }}
-          navigate={navigate}
-          style={{
-            flex: 1,
-          }}
-        />
+        <View style={{ flex: 1 }}>
+          <AppNavigator
+            route={route}
+            screenProps={{ rank, setRank, ...cardStateProps, ...resultProps }}
+            navigate={navigate}
+            style={{
+              flex: 1,
+            }}
+          />
+        </View>
       </View>
     </View>
   )
