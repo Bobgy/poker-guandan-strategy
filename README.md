@@ -1,16 +1,20 @@
 # poker-guandan-strategy
 
-This was started as a cpp program using dfs with _heavy_ optimization (lol) to calculate best (min hands) strategy for a variant of poker called guandan.
+## About Guan-Dan
 
-Now I've built a web app with react-native-web as UI for the cpp module. It is published in https://bobgy.github.io/poker-guandan-strategy/.
+Guan4 Dan4 is a Chinese card game whose name means throwing eggs. It originated in Huaian, Jiangsu Province and is probably the most popular climbing game in Jiangsu, Anhui and other provinces nearby.
+
+For detailed rules in English, refer to https://www.pagat.com/climbing/guan_dan.html
+
+## About this repo
+
+This was started as a cpp program using dfs with _heavy_ pruning optimization (lol) to calculate best (min hands) strategy for the card game, Guan Dan.
+
+Now I've recently built a mobile friendly web app with react-native-web using the cpp module to calculate strategy. The app is published as a PWA in https://bobgy.github.io/poker-guandan-strategy/.
 
 ## Todos
 
-- [x] [strategy output] maximize window
-- [x] PWA
-- [x] Text should not be selectable
-- [ ] [Bug] Main page is scrollable in android chrome
 - [ ] Guidance page for wechat sharing
-- [ ] Redesign UI
 - [ ] [strategy output] reduce solution duplication
-- [ ] revert last operation button
+- [ ] show clear hand shape information besides each solution
+- [ ] route transition animation
