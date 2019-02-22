@@ -6,13 +6,12 @@ import { loadCppModule, PortedCppModule } from './loadCppModule'
 import { Divider } from './Divider'
 import { commonStyles } from './styles'
 import { cardsToString } from './cardUtils'
-import SolutionVisualization from './SolutionVisualization'
 import { MyButton } from './MyButton'
 import { RankChooser } from './RankChooser'
 
 let strategyModule: PortedCppModule | null = null
 
-export function Home({ screenProps }: NavigationProps) {
+export function Home({ screenProps, navigation }: NavigationProps) {
   useEffect(() => {
     loadCppModule().then(cppModule => {
       strategyModule = cppModule
@@ -34,17 +33,11 @@ export function Home({ screenProps }: NavigationProps) {
     addCard,
     randomCards,
     deleteLastCard,
-    strategyResult,
     setResult,
   } = screenProps
-  const [isResultWindowMaxed, setResultWindowState] = useState<boolean>(false)
-  const toggleResultWindowSize = useCallback(
-    () => setResultWindowState(prevState => !prevState),
-    [setResultWindowState],
-  )
   const handleSolutionCalcButton = useCallback(() => {
     setResult('loading')
-    setResultWindowState(true)
+    navigation.navigate('Result')
 
     setTimeout(() => {
       if (strategyModule != null) {
@@ -54,67 +47,52 @@ export function Home({ screenProps }: NavigationProps) {
         setResult(strategyModule.calc(cardsStr, rank))
       }
     }, 0)
-  }, [cards, setResult, setResultWindowState])
+  }, [cards, setResult, navigation])
 
   return (
-    <View style={{ height: '100%' }}>
-      <Text style={{ fontSize: 14 }}>掼蛋拆牌计算器</Text>
-      {isResultWindowMaxed ? (
-        <SolutionVisualization
-          strategyResult={strategyResult}
-          rank={rank}
-          toggleWindowSize={toggleResultWindowSize}
+    <>
+      <View
+        style={[
+          commonStyles.container,
+          {
+            height: 40,
+            justifyContent: 'center',
+            alignItems: 'center',
+          },
+        ]}
+      >
+        <RankChooser rank={rank} setRank={setRank} />
+      </View>
+      <Divider />
+      <View
+        style={{
+          flex: 1,
+        }}
+      >
+        <CardsChooser
+          cards={cards}
+          addCard={addCard}
+          clearCards={clearCards}
+          randomCards={randomCards}
+          deleteLastCard={deleteLastCard}
         />
-      ) : (
-        <>
-          <View
-            style={[
-              commonStyles.container,
-              {
-                height: 40,
-                justifyContent: 'center',
-                alignItems: 'center',
-              },
-            ]}
-          >
-            <RankChooser rank={rank} setRank={setRank} />
-          </View>
-          <Divider />
-          <View
-            style={{
-              flex: 1,
-            }}
-          >
-            <CardsChooser
-              cards={cards}
-              addCard={addCard}
-              clearCards={clearCards}
-              randomCards={randomCards}
-              deleteLastCard={deleteLastCard}
-            />
-          </View>
-          <View
-            style={[
-              commonStyles.container,
-              {
-                justifyContent: 'center',
-                padding: 6,
-              },
-            ]}
-          >
-            <MyButton
-              title="计算拆牌策略"
-              onPress={handleSolutionCalcButton}
-              style={{ height: 60 }}
-              titleStyle={{ fontSize: 28 }}
-            />
-          </View>
-        </>
-      )}
-    </View>
+      </View>
+      <View
+        style={[
+          commonStyles.container,
+          {
+            justifyContent: 'center',
+            padding: 6,
+          },
+        ]}
+      >
+        <MyButton
+          title="开始拆牌"
+          onPress={handleSolutionCalcButton}
+          style={{ height: 60 }}
+          titleStyle={{ fontSize: 28 }}
+        />
+      </View>
+    </>
   )
-}
-
-Home.navigationOptions = {
-  title: '掼蛋策略计算',
 }

@@ -1,33 +1,44 @@
 /// <reference path="lib.d.ts"/>
 
-import React, { useState } from 'react'
-import { View, Text, Button } from 'react-native'
+import React, { useState, useCallback } from 'react'
+import { View, Text } from 'react-native'
 import { createSwitchNavigator } from '@react-navigation/core'
 import { createBrowserApp } from '@react-navigation/web'
 import { NavigationProps } from './types'
 import { useCardState } from './useCardState'
 import { Home } from './Home'
 import { useResultState } from './useResultState'
+import SolutionVisualization from './SolutionVisualization'
 
-function Details(props: NavigationProps) {
+function ResultPage({ screenProps, navigation }: NavigationProps) {
+  const { strategyResult, rank } = screenProps
+  const closeResultPage = useCallback(() => {
+    navigation.navigate('Home')
+  }, [navigation])
+
   return (
-    <View>
-      <Text>Details</Text>
-      <Button
-        title="Go to Home"
-        onPress={() => props.navigation.navigate('Home')}
-      />
-    </View>
+    <SolutionVisualization
+      strategyResult={strategyResult}
+      rank={rank}
+      onClose={closeResultPage}
+    />
   )
 }
 
 const AppNavigator = createSwitchNavigator(
   {
     Home,
-    Details,
+    Result: ResultPage,
   },
   {
     initialRouteName: 'Home',
+    defaultNavigationOptions: {
+      title: '掼蛋拆牌计算器',
+    },
+    paths: {
+      Home: '',
+      Result: 'result',
+    },
   },
 )
 
@@ -44,10 +55,13 @@ function App(props: any) {
         height: '100%',
       }}
     >
-      <AppNavigator
-        screenProps={{ rank, setRank, ...cardStateProps, ...resultProps }}
-        {...props}
-      />
+      <View style={{ height: '100%' }}>
+        <Text style={{ fontSize: 14 }}>掼蛋拆牌计算器</Text>
+        <AppNavigator
+          screenProps={{ rank, setRank, ...cardStateProps, ...resultProps }}
+          {...props}
+        />
+      </View>
     </View>
   )
 }

@@ -1,4 +1,4 @@
-import React, { Props, memo } from 'react'
+import React, { memo } from 'react'
 import {
   View,
   Text,
@@ -17,7 +17,7 @@ import { ReactComponent as Close } from './icons/close.svg'
 interface SolutionVisualizationProps {
   strategyResult: StrategyResultState
   rank: string
-  toggleWindowSize: () => void
+  onClose: () => void
 }
 
 interface WindowSizeToggleProps {
@@ -106,7 +106,7 @@ const MemoedSolutionWindow = memo(SolutionWindow)
 
 const SolutionVisualization: React.FunctionComponent<
   SolutionVisualizationProps
-> = ({ strategyResult, rank, toggleWindowSize }) => (
+> = ({ strategyResult, rank, onClose }) => (
   <>
     <View
       style={{
@@ -128,7 +128,7 @@ const SolutionVisualization: React.FunctionComponent<
       </View>
       {/* <View style={{ width: 2, backgroundColor: 'black' }} /> */}
       <WindowSizeToggle
-        toggleWindowSize={toggleWindowSize}
+        toggleWindowSize={onClose}
         style={{
           // to the right and centered
           position: 'absolute',
