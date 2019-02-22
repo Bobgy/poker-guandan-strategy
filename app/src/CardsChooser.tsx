@@ -62,10 +62,10 @@ const controlStyles = StyleSheet.create({
     margin: 6,
   },
   buttonTitle: {
-    fontSize: 30,
+    fontSize: 20,
   },
   buttonTitleSmall: {
-    fontSize: 18,
+    fontSize: 20,
   },
 })
 interface ControlPanelProps {
@@ -133,12 +133,12 @@ const ControlPanel: React.FunctionComponent<ControlPanelProps> = props => (
   </View>
 )
 
-interface ChosenCardsProps {
+interface AddCardPanelProps {
   cards: TCard[]
   addCard: (card: TCard) => void
   rankID: number
 }
-const ChosenCards: React.FunctionComponent<ChosenCardsProps> = props => (
+const AddCardPanel: React.FunctionComponent<AddCardPanelProps> = props => (
   <>
     {(RANKS[props.rankID].isJoker ? SUITS_JOKER : SUITS).map(suit => {
       const card = {
@@ -157,6 +157,7 @@ const ChosenCards: React.FunctionComponent<ChosenCardsProps> = props => (
             suit={suit.value}
             rank={RANKS[props.rankID].value}
             disabled={!canIAddThisCard}
+            style={{ margin: 3 }}
           />
         </TouchableOpacity>
       )
@@ -179,7 +180,15 @@ export function CardsChooser({
 
   return (
     <View style={{ flex: 1 }}>
-      <CardDeck cards={cards} />
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <CardDeck
+          cards={cards}
+          style={{
+            height: 60,
+            padding: 6,
+          }}
+        />
+      </View>
       <Divider />
       <Text style={{ fontSize: 14, margin: 4 }}>{`点击扑克牌添加，目前已有${
         cards.length
@@ -195,7 +204,7 @@ export function CardsChooser({
         }}
         horizontal
       >
-        <ChosenCards cards={cards} addCard={addCard} rankID={rankID} />
+        <AddCardPanel cards={cards} addCard={addCard} rankID={rankID} />
       </ScrollView>
       <ControlPanel
         numberOfCards={cards.length}

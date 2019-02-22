@@ -82,12 +82,9 @@ export function Home({ screenProps }: NavigationProps) {
           </View>
           <Divider />
           <View
-            style={[
-              {
-                flex: 1,
-                minHeight: 350,
-              },
-            ]}
+            style={{
+              flex: 1,
+            }}
           >
             <CardsChooser
               cards={cards}
@@ -110,7 +107,7 @@ export function Home({ screenProps }: NavigationProps) {
               title="计算拆牌策略"
               onPress={handleSolutionCalcButton}
               style={{ height: 60 }}
-              titleStyle={{ fontSize: 40 }}
+              titleStyle={{ fontSize: 28 }}
             />
           </View>
         </>

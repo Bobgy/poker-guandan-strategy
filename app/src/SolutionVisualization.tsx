@@ -87,6 +87,9 @@ const SolutionWindow: React.FunctionComponent<SolutionWindowProps> = props => (
                             }),
                           ),
                         )}
+                        style={{
+                          margin: 6,
+                        }}
                       />
                     ))}
                   {hiddenMoreSolutions > 0 &&

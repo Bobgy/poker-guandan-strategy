@@ -1,22 +1,31 @@
 import React, { Fragment } from 'react'
-import { View, Text, ScrollView, Image, StyleSheet } from 'react-native'
+import {
+  View,
+  Text,
+  ScrollView,
+  Image,
+  StyleSheet,
+  StyleProp,
+  ViewStyle,
+} from 'react-native'
 import { SUIT, RANK } from './cardUtils'
 import { TCard } from './types'
 import nekoImg from './imgs/neko-40x40.png'
 
+const STACKED_CARD_MARGIN = 52
+
 const styles = StyleSheet.create({
   card: {
-    width: 80,
-    height: 60 * 1.618,
+    width: 74,
+    height: 100,
     backgroundColor: 'white',
     borderColor: 'black',
     borderWidth: 2,
     borderRadius: 4,
-    margin: 3,
   },
   cardStacked: {
-    marginRight: -60,
-    marginBottom: -60,
+    marginRight: -STACKED_CARD_MARGIN,
+    marginBottom: -STACKED_CARD_MARGIN,
   },
 })
 
@@ -25,14 +34,16 @@ export function Card({
   suit,
   isStacked,
   disabled,
+  style,
 }: TCard & {
   isStacked?: boolean
   disabled?: boolean
+  style?: StyleProp<ViewStyle>
 }) {
   const rankDef = RANK[rank]
   const suitDef = SUIT[suit]
   return (
-    <View style={[styles.card, isStacked && styles.cardStacked]}>
+    <View style={[styles.card, isStacked && styles.cardStacked, style]}>
       <Text
         style={{
           fontFamily: 'monospace',
@@ -77,27 +88,28 @@ export function Card({
   )
 }
 
+const HAND_MARGIN = 13
+const CONTAINER_PADDING = 0
+
 interface CardDeckProps {
   cards?: TCard[]
   hands?: TCard[][]
+  style?: StyleProp<ViewStyle>
 }
-
 export const CardDeck: React.FunctionComponent<CardDeckProps> = ({
   cards,
   hands,
+  style,
 }) => {
   return (
     <ScrollView
-      style={{
-        flex: 1,
-        minHeight: 60,
-      }}
+      style={style}
       contentContainerStyle={{
         flexWrap: 'wrap',
         flexDirection: 'row',
-        paddingRight: 60,
-        paddingBottom: 60,
-        overflow: 'hidden',
+        padding: CONTAINER_PADDING,
+        paddingRight: STACKED_CARD_MARGIN + CONTAINER_PADDING, // cancel margin of hands
+        paddingBottom: STACKED_CARD_MARGIN + CONTAINER_PADDING,
       }}
     >
       {!!cards &&
@@ -111,17 +123,34 @@ export const CardDeck: React.FunctionComponent<CardDeckProps> = ({
           ))
 
           if (handID > 0) {
-            // add separator
+            // no wrapping
             return (
-              <Fragment key={handID}>
-                <View style={{ width: 16 }} />
-                <View style={{ flexDirection: 'row', flexWrap: 'nowrap' }}>
-                  {handNode}
-                </View>
-              </Fragment>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  flexWrap: 'nowrap',
+                  marginRight: HAND_MARGIN,
+                }}
+                key={handID}
+              >
+                {handNode}
+              </View>
             )
           } else {
-            return handNode
+            // initial hand can be long, allow wrapping as normal
+            return (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  flexWrap: 'wrap',
+                  marginRight: HAND_MARGIN,
+                  maxWidth: '100%', // set max width to enable wrapping
+                }}
+                key={handID}
+              >
+                {handNode}
+              </View>
+            )
           }
         })}
     </ScrollView>

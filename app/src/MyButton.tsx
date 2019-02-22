@@ -27,7 +27,8 @@ export const MyButton: FunctionComponent<MyButtonProps> = ({
           ? theme.disabled.background
           : theme.button.background,
         borderRadius: 2,
-        padding: 4,
+        paddingVertical: 8,
+        paddingHorizontal: 4,
         alignItems: 'center',
         justifyContent: 'center',
       },
