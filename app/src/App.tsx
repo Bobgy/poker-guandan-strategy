@@ -1,10 +1,8 @@
 /// <reference path="lib.d.ts"/>
 
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, FunctionComponent, useMemo } from 'react'
 import { View, Text } from 'react-native'
-import { createSwitchNavigator } from '@react-navigation/core'
-import { createBrowserApp } from '@react-navigation/web'
-import { NavigationProps } from './types'
+import { NavigationProps, AppState } from './types'
 import { useCardState } from './useCardState'
 import { Home } from './Home'
 import { useResultState } from './useResultState'
@@ -25,27 +23,42 @@ function ResultPage({ screenProps, navigation }: NavigationProps) {
   )
 }
 
-const AppNavigator = createSwitchNavigator(
-  {
-    Home,
-    Result: ResultPage,
-  },
-  {
-    initialRouteName: 'Home',
-    defaultNavigationOptions: {
-      title: '掼蛋拆牌计算器',
-    },
-    paths: {
-      Home: '',
-      Result: 'result',
-    },
-  },
-)
+interface AppNavigatorProps {
+  route: string
+  navigate: (newRoute: string) => void
+  screenProps: AppState
+}
+
+const AppNavigator: FunctionComponent<AppNavigatorProps> = ({
+  route,
+  navigate,
+  screenProps,
+}) => {
+  let ChosenScreen = null
+  if (route === 'Home') {
+    ChosenScreen = Home
+  } else if (route === 'Result') {
+    ChosenScreen = ResultPage
+  }
+  const navigation = useMemo(
+    () => ({
+      navigate,
+    }),
+    [navigate],
+  )
+
+  if (ChosenScreen) {
+    return <ChosenScreen screenProps={screenProps} navigation={navigation} />
+  } else {
+    return <Text>ERROR: Route not found!</Text>
+  }
+}
 
 function App(props: any) {
   const [rank, setRank] = useState('2')
   const cardStateProps = useCardState()
   const resultProps = useResultState()
+  const [route, navigate] = useState('Home')
 
   return (
     <View
@@ -58,13 +71,13 @@ function App(props: any) {
       <View style={{ height: '100%' }}>
         <Text style={{ fontSize: 14 }}>掼蛋拆牌计算器</Text>
         <AppNavigator
+          route={route}
           screenProps={{ rank, setRank, ...cardStateProps, ...resultProps }}
-          {...props}
+          navigate={navigate}
         />
       </View>
     </View>
   )
 }
-App.router = AppNavigator.router
 
-export default createBrowserApp(App)
+export default App
