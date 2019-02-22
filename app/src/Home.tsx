@@ -33,11 +33,12 @@ export function Home({ screenProps, navigation }: NavigationProps) {
     addCard,
     randomCards,
     deleteLastCard,
+    strategyResult,
     setResult,
   } = screenProps
+
   const handleSolutionCalcButton = useCallback(() => {
     setResult('loading')
-    navigation.navigate('Result')
 
     setTimeout(() => {
       if (strategyModule != null) {
@@ -45,6 +46,7 @@ export function Home({ screenProps, navigation }: NavigationProps) {
         const cardsStr = cardsToString(cards)
         // console.log(cardsStr)
         setResult(strategyModule.calc(cardsStr, rank))
+        navigation.navigate('Result')
       }
     }, 0)
   }, [cards, setResult, navigation])
@@ -86,12 +88,18 @@ export function Home({ screenProps, navigation }: NavigationProps) {
           },
         ]}
       >
-        <MyButton
-          title="开始拆牌"
-          onPress={handleSolutionCalcButton}
-          style={{ height: 60 }}
-          titleStyle={{ fontSize: 28 }}
-        />
+        {(() => {
+          const isReady = strategyResult !== 'loading'
+          return (
+            <MyButton
+              title={isReady ? '开始拆牌' : '拆牌中...'}
+              disabled={!isReady}
+              onPress={handleSolutionCalcButton}
+              style={{ height: 60 }}
+              titleStyle={{ fontSize: 28 }}
+            />
+          )
+        })()}
       </View>
     </>
   )

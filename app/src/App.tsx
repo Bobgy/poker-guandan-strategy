@@ -1,7 +1,13 @@
 /// <reference path="lib.d.ts"/>
 
-import React, { useState, useCallback, FunctionComponent, useMemo } from 'react'
-import { View, Text } from 'react-native'
+import React, {
+  useState,
+  useCallback,
+  FunctionComponent,
+  useMemo,
+  useEffect,
+} from 'react'
+import { View, Text, Animated, StyleProp, ViewStyle } from 'react-native'
 import { NavigationProps, AppState } from './types'
 import { useCardState } from './useCardState'
 import { Home } from './Home'
@@ -23,16 +29,43 @@ function ResultPage({ screenProps, navigation }: NavigationProps) {
   )
 }
 
+interface FadeProps {
+  style?: StyleProp<ViewStyle>
+}
+const Fade: FunctionComponent<FadeProps> = ({ children, style }) => {
+  const [fadeAnim, _] = useState(new Animated.Value(0))
+  useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 1000,
+    }).start()
+  }, [])
+
+  return (
+    <Animated.View
+      style={[
+        {
+          opacity: fadeAnim,
+        },
+        style,
+      ]}
+    >
+      {children}
+    </Animated.View>
+  )
+}
+
 interface AppNavigatorProps {
   route: string
   navigate: (newRoute: string) => void
   screenProps: AppState
+  style?: StyleProp<ViewStyle>
 }
-
 const AppNavigator: FunctionComponent<AppNavigatorProps> = ({
   route,
   navigate,
   screenProps,
+  style,
 }) => {
   let ChosenScreen = null
   if (route === 'Home') {
@@ -48,7 +81,11 @@ const AppNavigator: FunctionComponent<AppNavigatorProps> = ({
   )
 
   if (ChosenScreen) {
-    return <ChosenScreen screenProps={screenProps} navigation={navigation} />
+    return (
+      <Fade key={route} style={style}>
+        <ChosenScreen screenProps={screenProps} navigation={navigation} />
+      </Fade>
+    )
   } else {
     return <Text>ERROR: Route not found!</Text>
   }
@@ -74,6 +111,9 @@ function App(props: any) {
           route={route}
           screenProps={{ rank, setRank, ...cardStateProps, ...resultProps }}
           navigate={navigate}
+          style={{
+            flex: 1,
+          }}
         />
       </View>
     </View>
