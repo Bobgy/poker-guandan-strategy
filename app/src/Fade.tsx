@@ -1,56 +1,51 @@
-import React, { useState, FunctionComponent, useLayoutEffect } from 'react'
+import React, { useState, FunctionComponent } from 'react'
 import { Animated, StyleProp, ViewStyle } from 'react-native'
+import { Transition } from 'react-transition-group'
+import { TransitionProps } from 'react-transition-group/Transition'
 
-interface FadeProps {
-  in: boolean
+interface FadeProps extends TransitionProps {
   style?: StyleProp<ViewStyle>
   timeout: number
 }
 
-function delay(func: () => void, timeout: number = 0) {
-  const timeoutID = setTimeout(func, 0)
-
-  return () => clearTimeout(timeoutID)
+function delay(fn: () => void) {
+  return requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      fn()
+    })
+  })
 }
 
-// extra time to wait until unmount
-const UNMOUNT_DELAY = 100
+const EXTRA_TIMEOUT = 100
 
 export const Fade: FunctionComponent<FadeProps> = ({
   children,
-  in: show,
   style,
   timeout,
+  ...restProps
 }) => {
   const [fadeAnim, _] = useState(new Animated.Value(0))
-  const [mounted, updateMount] = useState(show)
 
-  useLayoutEffect(() => {
-    if (show) {
-      // mount immediately if it is shown
-      if (!mounted) {
-        updateMount(true)
-      }
-      // then animate fading in
-      return delay(() => {
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: timeout,
-        }).start()
-      })
-    } else {
-      // animate fading out immediately
-      Animated.timing(fadeAnim, {
-        toValue: 0,
-        duration: timeout,
-      }).start()
-      // unmount after fading out
-      return delay(() => void updateMount(false), timeout + UNMOUNT_DELAY)
-    }
-  }, [show])
-
-  if (mounted) {
-    return (
+  return (
+    <Transition
+      timeout={timeout + EXTRA_TIMEOUT}
+      onEntering={() => {
+        // start fading in from the next frame (react is rendering in current frame, so animation would be laggy if started immediately)
+        delay(() => {
+          Animated.timing(fadeAnim, { toValue: 1, duration: timeout }).start()
+        })
+      }}
+      onExiting={() => {
+        // start fading out after a delay
+        delay(() => {
+          Animated.timing(fadeAnim, {
+            toValue: 0,
+            duration: timeout,
+          }).start()
+        })
+      }}
+      {...restProps}
+    >
       <Animated.View
         style={[
           {
@@ -61,8 +56,12 @@ export const Fade: FunctionComponent<FadeProps> = ({
       >
         {children}
       </Animated.View>
-    )
-  } else {
-    return null
-  }
+    </Transition>
+  )
+}
+Fade.defaultProps = {
+  appear: true,
+  enter: true,
+  mountOnEnter: true,
+  unmountOnExit: true,
 }

@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useEffect, useCallback, Fragment } from 'react'
 import { View, Text } from 'react-native'
-import { NavigationProps, TCard } from './types'
+import { NavigationProps, TCard, AppState } from './types'
 import { CardsChooser } from './CardsChooser'
 import { loadCppModule, PortedCppModule } from './loadCppModule'
 import { Divider } from './Divider'
@@ -11,7 +11,32 @@ import { RankChooser } from './RankChooser'
 
 let strategyModule: PortedCppModule | null = null
 
-export function Home({ screenProps, navigation }: NavigationProps) {
+interface StatelessHomePageProps
+  extends Pick<
+      AppState,
+      | 'rank'
+      | 'setRank'
+      | 'cards'
+      | 'clearCards'
+      | 'addCard'
+      | 'randomCards'
+      | 'deleteLastCard'
+      | 'strategyResult'
+      | 'setResult'
+    >,
+    Pick<NavigationProps, 'navigation'> {}
+const HomePage: React.FunctionComponent<StatelessHomePageProps> = ({
+  rank,
+  setRank,
+  cards,
+  clearCards,
+  addCard,
+  randomCards,
+  deleteLastCard,
+  strategyResult,
+  setResult,
+  navigation,
+}) => {
   useEffect(() => {
     loadCppModule().then(cppModule => {
       strategyModule = cppModule
@@ -24,18 +49,6 @@ export function Home({ screenProps, navigation }: NavigationProps) {
       // )
     })
   }, [])
-
-  const {
-    rank,
-    setRank,
-    cards,
-    clearCards,
-    addCard,
-    randomCards,
-    deleteLastCard,
-    strategyResult,
-    setResult,
-  } = screenProps
 
   const handleSolutionCalcButton = useCallback(() => {
     setResult('loading')
@@ -52,12 +65,14 @@ export function Home({ screenProps, navigation }: NavigationProps) {
           navigation.navigate('Result')
           setResult(result)
         }, 300)
+      } else {
+        throw new Error('strategy module is null')
       }
     }, 0)
   }, [cards, setResult, navigation])
 
   return (
-    <>
+    <Fragment>
       <View
         style={[
           commonStyles.container,
@@ -100,12 +115,24 @@ export function Home({ screenProps, navigation }: NavigationProps) {
               title={isReady ? '开始拆牌' : '拆牌中...'}
               disabled={!isReady}
               onPress={handleSolutionCalcButton}
-              style={{ height: 60 }}
-              titleStyle={{ fontSize: 28 }}
+              style={{
+                height: 60,
+              }}
+              titleStyle={{
+                fontSize: 28,
+              }}
             />
           )
         })()}
       </View>
-    </>
+    </Fragment>
   )
 }
+
+const MemoedHomePage = React.memo(HomePage)
+
+function HomePageWrapper({ screenProps, navigation }: NavigationProps) {
+  return <MemoedHomePage {...screenProps} navigation={navigation} />
+}
+
+export default HomePageWrapper

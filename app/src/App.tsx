@@ -1,28 +1,14 @@
 /// <reference path="lib.d.ts"/>
 
-import React, { useState, useCallback, FunctionComponent, useMemo } from 'react'
+import React, { useState, FunctionComponent, useMemo } from 'react'
 import { StyleSheet, View, Text, StyleProp, ViewStyle } from 'react-native'
-import { NavigationProps, AppState } from './types'
+import { AppState } from './types'
 import { useCardState } from './useCardState'
-import { Home } from './Home'
+import Home from './Home'
+import ResultPage from './ResultPage'
 import { useResultState } from './useResultState'
-import SolutionVisualization from './SolutionVisualization'
 import { Fade } from './Fade'
-
-function ResultPage({ screenProps, navigation }: NavigationProps) {
-  const { strategyResult, rank } = screenProps
-  const closeResultPage = useCallback(() => {
-    navigation.navigate('Home')
-  }, [navigation])
-
-  return (
-    <SolutionVisualization
-      strategyResult={strategyResult}
-      rank={rank}
-      onClose={closeResultPage}
-    />
-  )
-}
+import { TransitionGroup } from 'react-transition-group'
 
 interface AppNavigatorProps {
   route: string
@@ -39,8 +25,13 @@ const styles = StyleSheet.create({
     bottom: 0,
   },
 })
+
+const routes = {
+  Home,
+  Result: ResultPage,
+}
 const AppNavigator: FunctionComponent<AppNavigatorProps> = ({
-  route,
+  route: currentRoute,
   navigate,
   screenProps,
   style,
@@ -54,22 +45,24 @@ const AppNavigator: FunctionComponent<AppNavigatorProps> = ({
 
   return (
     <>
-      <Fade
-        key="Home"
-        style={[styles.absoluteChild, style]}
-        in={route === 'Home'}
-        timeout={300}
-      >
-        <Home screenProps={screenProps} navigation={navigation} />
-      </Fade>
-      <Fade
-        key="Result"
-        style={[styles.absoluteChild, style]}
-        in={route === 'Result'}
-        timeout={300}
-      >
-        <ResultPage screenProps={screenProps} navigation={navigation} />
-      </Fade>
+      <TransitionGroup>
+        {Object.entries(routes).map(([route, RouteComponent]) => {
+          if (route !== currentRoute) return null
+
+          return (
+            <Fade
+              key={route}
+              style={[styles.absoluteChild, style]}
+              timeout={300}
+            >
+              <RouteComponent
+                screenProps={screenProps}
+                navigation={navigation}
+              />
+            </Fade>
+          )
+        })}
+      </TransitionGroup>
     </>
   )
 }
