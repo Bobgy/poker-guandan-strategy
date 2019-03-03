@@ -1,25 +1,13 @@
 /// <reference path="lib.d.ts"/>
 
-import React, {
-  useState,
-  useCallback,
-  FunctionComponent,
-  useMemo,
-  useEffect,
-} from 'react'
-import {
-  StyleSheet,
-  View,
-  Text,
-  Animated,
-  StyleProp,
-  ViewStyle,
-} from 'react-native'
+import React, { useState, useCallback, FunctionComponent, useMemo } from 'react'
+import { StyleSheet, View, Text, StyleProp, ViewStyle } from 'react-native'
 import { NavigationProps, AppState } from './types'
 import { useCardState } from './useCardState'
 import { Home } from './Home'
 import { useResultState } from './useResultState'
 import SolutionVisualization from './SolutionVisualization'
+import { Fade } from './Fade'
 
 function ResultPage({ screenProps, navigation }: NavigationProps) {
   const { strategyResult, rank } = screenProps
@@ -34,65 +22,6 @@ function ResultPage({ screenProps, navigation }: NavigationProps) {
       onClose={closeResultPage}
     />
   )
-}
-
-interface FadeProps {
-  in: boolean
-  style?: StyleProp<ViewStyle>
-  timeout: number
-}
-const Fade: FunctionComponent<FadeProps> = ({
-  children,
-  in: show,
-  style,
-  timeout,
-}) => {
-  const [fadeAnim, _] = useState(new Animated.Value(0))
-  const [mounted, updateMount] = useState(show)
-  useEffect(() => {
-    if (show) {
-      // mount immediately if it is shown
-      if (!mounted) {
-        updateMount(true)
-      }
-
-      const timeoutID = setTimeout(() => {
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: timeout,
-        }).start()
-      }, 0)
-
-      return () => clearTimeout(timeoutID)
-    } else {
-      Animated.timing(fadeAnim, {
-        toValue: 0,
-        duration: timeout,
-      }).start()
-
-      // unmount after the duration times out
-      const timeoutID = setTimeout(() => void updateMount(false), timeout + 1)
-
-      return () => clearTimeout(timeoutID)
-    }
-  }, [show])
-
-  if (mounted) {
-    return (
-      <Animated.View
-        style={[
-          {
-            opacity: fadeAnim,
-          },
-          style,
-        ]}
-      >
-        {children}
-      </Animated.View>
-    )
-  } else {
-    return null
-  }
 }
 
 interface AppNavigatorProps {
