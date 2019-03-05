@@ -10,13 +10,20 @@ interface FadeProps extends TransitionProps {
 
 function delay(fn: () => void) {
   return requestAnimationFrame(() => {
+    // current frame
     requestAnimationFrame(() => {
-      fn()
+      // next frame, react updated dom
+      requestAnimationFrame(() => {
+        // the third frame, start animation in the first idle frame
+        fn()
+      })
     })
   })
 }
 
-const EXTRA_TIMEOUT = 100
+// animation may be delayed by react rendering
+// keep components mounted for some extra time to ensure animation finishes before components are unmounted
+const EXTRA_TIMEOUT = 300
 
 export const Fade: FunctionComponent<FadeProps> = ({
   children,
