@@ -154,13 +154,7 @@ export function canIAddCard(cards: TCard[], cardToAdd: TCard): boolean {
 
 export function cardsToString(cards: TCard[]) {
   return cards
-    .map(card => {
-      if (card.rank === 'X') {
-        // big joker and small joker
-        return card.suit === 'R' ? 'BJ' : 'SJ'
-      }
-      return card.rank + card.suit
-    })
+    .map(card => card.rank + card.suit)
     .join('')
 }
 
@@ -169,18 +163,6 @@ export function parseRawCard(cardRaw: CardRaw, wildCard: TCard): TCard {
     throw new Error('CardRaw should have a length of 2')
   }
 
-  if (cardRaw === 'BJ') {
-    return {
-      rank: 'X',
-      suit: 'R',
-    }
-  }
-  if (cardRaw === 'SJ') {
-    return {
-      rank: 'X',
-      suit: 'B',
-    }
-  }
   if (cardRaw === '??') {
     return wildCard
   }

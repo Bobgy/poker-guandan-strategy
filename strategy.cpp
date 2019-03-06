@@ -1,5 +1,14 @@
+#ifdef __EMSCRIPTEN__
+
 #include <emscripten/bind.h>
 #include <emscripten/emscripten.h>
+
+#else
+
+// remove this token when not in emscripten context
+#define EMSCRIPTEN_KEEPALIVE
+
+#endif
 
 #include <cmath>
 #include <list>
@@ -56,10 +65,12 @@ void AddCard(THandCards& hc, char ch1, char ch2) {
         tmp.first = 12;
     } else if (ch1 == '0') {
         tmp.first = 10;
-    } else if (ch1 == 'B') {
-        tmp.first = JOKER + 1;
-    } else if (ch1 == 'S') {
-        tmp.first = JOKER;
+    } else if (ch1 == 'X') {
+        if (ch2 == 'R') {
+            tmp.first = JOKER + 1;
+        } else if (ch2 == 'B') {
+            tmp.first = JOKER;
+        }
     }
     hc[tmp.first].insert(tmp.second);
 }
@@ -78,12 +89,15 @@ string CardToStr(int num, char suit) {
         str += "Q";
     } else if (num == 10) {
         str += "0";
-    } else if (num == JOKER + 1) {
-        str += "B";
-    } else if (num == JOKER) {
-        str += "S";
     }
-    str += suit;
+    
+    if (num == JOKER + 1) {
+        str += "XR";
+    } else if (num == JOKER) {
+        str += "XB";
+    } else {
+        str += suit;
+    }
     return str;
 }
 
@@ -311,7 +325,7 @@ struct StrategyResult {
 };
 
 // cards: cards represented in string
-// 红桃：?H | 黑桃：?S | 梅花：?C | 方块：?D | 小鬼：SJ | 大鬼：BJ | 数字10：0 ?
+// 红桃：?H | 黑桃：?S | 梅花：?C | 方块：?D | 小鬼：XB | 大鬼：XR | 数字10：0 ?
 // | 其余和牌面相同 mainRank: main rank, starting from 2
 EMSCRIPTEN_KEEPALIVE StrategyResult calc(string cards, char mainRank) {
     THandCards hc, UsedAs;
@@ -330,6 +344,8 @@ EMSCRIPTEN_KEEPALIVE StrategyResult calc(string cards, char mainRank) {
         {min, vector<string>(solution.begin(), solution.end())});
 }
 
+#ifdef __EMSCRIPTEN__
+
 namespace emscripten {
 EMSCRIPTEN_BINDINGS(my_module) {
     function("calc", &calc);
@@ -340,3 +356,5 @@ EMSCRIPTEN_BINDINGS(my_module) {
         .field("solutions", &StrategyResult::solutions);
 }
 }  // namespace emscripten
+
+#endif

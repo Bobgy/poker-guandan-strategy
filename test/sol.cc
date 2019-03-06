@@ -21,18 +21,8 @@ int count(THandCards hc)
     THandCards::iterator it;
     int cnt[5];
     for(int i=1; i<=4; i++)cnt[i]=0;
-
-    // special handling for joker bomb
-    bool hasJokerBomb = false;
-    if (hc[JOKER].size() == 2 && hc[JOKER + 1].size() == 2) {
-        hasJokerBomb = true;
-    }
-
     for(it=hc.begin(); it!=hc.end(); it++)
     {
-        if (hasJokerBomb && (*it).first >= JOKER) {
-            continue; // skip jokers if it is a bomb
-        }
         if((*it).second.size()<=3)cnt[(*it).second.size()]++;
         else cnt[4]++;
     }
@@ -68,13 +58,15 @@ void AddCard(THandCards& hc, char ch1, char ch2)
     {
         tmp.first=10;
     }
-    else if(ch1=='B')
+    else if(ch1=='X')
     {
-        tmp.first=JOKER+1;
-    }
-    else if(ch1=='S')
-    {
-        tmp.first=JOKER;
+        if (ch2=='R') {
+            tmp.first=JOKER+1;
+        } else if (ch2=='B') {
+            tmp.first=JOKER;
+        } else {
+            // malformed data
+        }
     }
     hc[tmp.first].insert(tmp.second);
 }
@@ -106,15 +98,14 @@ string CardToStr(int num, char suit)
     {
         str+="0";
     }
-    else if(num==JOKER+1)
-    {
-        str+="B";
+
+    if (num==JOKER+1) {
+        str+="XR";
+    } else if (num==JOKER) {
+        str+="XB";
+    } else {
+        str+=suit;
     }
-    else if(num==JOKER)
-    {
-        str+="S";
-    }
-    str+=suit;
     return str;
 }
 
@@ -367,34 +358,41 @@ int TestTrumpCard(THandCards & hc, int n, int & min, TSolutions & solution, int 
 
 int main()
 {
-    freopen("input.txt","r",stdin);
-    freopen("output.txt","w",stdout);
-    THandCards hc,UsedAs;
-    list<string> solution;
-    cout<<"红桃：?H | 黑桃：?S | 梅花：?C | 方块：?D | 小鬼：SJ | 大鬼：BJ | 数字10：0? | 其余和牌面相同"<<endl;
-    int N;
-    cout<<"Enter the number of cards:";
-    cin>>N;
-    cout<<"Enter the main rank:";
-    int n=0;
-    char mainRank;
-    cin>>mainRank;
-    cout<<"Enter the cards:";
-    for(int i=0; i<N; i++)
-    {
-        char ch1,ch2;
-        cin>>ch1>>ch2;
-        if(ch1==mainRank&&ch2=='H')n++;
-        else AddCard(hc,ch1,ch2);
-        //cout<<ch1<<ch2<<' '<<tmp.first<<' '<<tmp.second<<endl;
-    }
-    int min=10000;
-    TestTrumpCard(hc, n, min, solution,1,0,UsedAs);
-    cout<<"Least hands: "<<min<<endl;
-    TSolutions::iterator it;
-    for(it=solution.begin(); it!=solution.end(); it++)
-    {
-        cout<<*it<<endl;
+    int T;
+    cin>>T;
+    while(T--){
+        //freopen("input.txt","r",stdin);
+        //freopen("output.txt","w",stdout);
+        THandCards hc,UsedAs;
+        list<string> solution;
+
+        //cout<<"红桃：?H | 黑桃：?S | 梅花：?C | 方块：?D | 小鬼：XB | 大鬼：XR | 数字10：0? | 其余和牌面相同"<<endl;
+        int N=27;
+        //cout<<"Enter the number of cards:";
+        //cin>>N;
+        //cout<<"Enter the main rank:";
+        int n=0;
+        char mainRank;
+        cin>>mainRank;
+        //cout<<"Enter the cards:";
+        for(int i=0; i<N; i++)
+        {
+            char ch1,ch2;
+            cin>>ch1>>ch2;
+            if(ch1==mainRank&&ch2=='H')n++;
+            else AddCard(hc,ch1,ch2);
+            //cout<<ch1<<ch2<<' '<<tmp.first<<' '<<tmp.second<<endl;
+        }
+        int min=10000;
+        TestTrumpCard(hc, n, min, solution,1,0,UsedAs);
+        cout<<min<<endl;
+        //cout<<"Least hands: "<<min<<endl;
+        /*
+        TSolutions::iterator it;
+        for(it=solution.begin(); it!=solution.end(); it++){
+            cout<<*it<<endl;
+        }
+        */
     }
     return 0;
 }
