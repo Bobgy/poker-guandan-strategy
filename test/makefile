@@ -13,10 +13,14 @@ gen.exe: gen.cc
 wrapper.exe: wrapper.cc ../strategy.cpp
     g++ wrapper.cc -std=c++11 -O2 -o wrapper
 
-test: sol.exe input.txt wrapper.exe
-    ./sol < input.txt > output.txt
-    ./wrapper < input.txt > output2.txt
-    diff output.txt output2.txt
+test: std_output.txt curr_output.txt
+    diff std_output.txt curr_output.txt
+
+std_output.txt: sol.exe input.txt
+    ./sol < input.txt > std_output.txt
+
+curr_output.txt: wrapper.exe input.txt
+    ./wrapper < input.txt > curr_output.txt
 
 fixture fixture.txt: input.txt sol.exe
     ./sol < input.txt > fixture.txt
@@ -25,4 +29,4 @@ input.txt: gen.exe
     ./gen > input.txt
 
 clean:
-    rm -f *.exe output.txt output2.txt
+    rm -f *.exe curr_output.txt
