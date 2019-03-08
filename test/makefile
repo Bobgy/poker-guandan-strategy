@@ -1,4 +1,4 @@
-all: test
+all: test_sample test
 
 # not sure why this isn't working
 # %.exe: %.cc
@@ -11,7 +11,11 @@ gen.exe: gen.cc
     g++ gen.cc -std=c++11 -O2 -o gen
 
 wrapper.exe: wrapper.cc ../strategy.cpp
-    g++ wrapper.cc -std=c++11 -o wrapper
+    g++ wrapper.cc -std=c++11 -O2 -o wrapper
+
+test_sample: sample.in sample.out wrapper.exe
+    ./wrapper < sample.in > my_sample.out
+    diff sample.out my_sample.out
 
 test: std_output.txt curr_output.txt
     diff std_output.txt curr_output.txt

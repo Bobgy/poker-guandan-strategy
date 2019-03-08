@@ -10,6 +10,8 @@
 
 #endif
 
+// #define __DEBUG__
+
 #include <cassert>
 #include <cmath>
 #include <list>
@@ -41,7 +43,7 @@ const int INF = 100000;
  */
 int calculateMinHandsSimple(
     int cnt1, int cnt2, int cnt3, int cnt4plus, int wildCards) {
-    if (wildCards == 0) {
+    if (wildCards <= 0) {
         return cnt1 + max(cnt2, cnt3);
     } else {
         int minHandsPossible = INF;
@@ -57,7 +59,7 @@ int calculateMinHandsSimple(
             minHandsPossible =
                 min(minHandsPossible,
                     calculateMinHandsSimple(cnt1, cnt2 - 1, cnt3 + 1, cnt4plus,
-                                            wildCards - 2));
+                                            wildCards - 1));
         }
         if (cnt3 > 0) {
             // use one wildcard to play a *triple* as a *bomb*
@@ -116,6 +118,20 @@ int count(THandCards hc, int wildCards) {
     return calculateMinHandsSimple(cnt[1], cnt[2], cnt[3], cnt[4], wildCards);
 }
 
+#ifdef __DEBUG__
+void debug(THandCards& hc) {
+    for(auto entry: hc) {
+        if (entry.second.size() == 0) continue;
+        cerr << "(" << entry.first << " :";
+        for (auto suite: entry.second) {
+            cerr << suite << " ";
+        }
+        cerr << ")";
+    }
+    cerr << endl;
+}
+#endif
+
 void AddCard(THandCards& hc, char ch1, char ch2) {
     TCard tmp;
     tmp.second = ch2;
@@ -137,6 +153,8 @@ void AddCard(THandCards& hc, char ch1, char ch2) {
         } else if (ch2 == 'B') {
             tmp.first = JOKER;
         }
+    } else {
+        assert("invalid card" && false);
     }
     hc[tmp.first].insert(tmp.second);
 }
@@ -179,12 +197,23 @@ bool ExistShunZi(THandCards& hc,
                 char Suit,
                 THandCards& oneHand,
                 int& wildCardsToUse) {
+
+    // assert the sequence is valid
+    assert(StartingNumber + Length - 1 <= 14);
     oneHand.clear();
     if (Suit == 'A') {
         int cardsLacking = 0;
+        #ifdef __DEBUG__
+        debug(hc);
+        cerr << "exist shunzi " << StartingNumber << " " << Length << " " << HandNum << " " << endl;
+        #endif
         for (int k = StartingNumber; k < StartingNumber + Length; k++) {
+            // cerr << " #" << k << " " << hc[getActualRank(k)].size() << "# ";
             cardsLacking += max(0, HandNum - (int)hc[getActualRank(k)].size());
         }
+        #ifdef __DEBUG__
+        cerr << cardsLacking << " " << wildCards << endl;
+        #endif
 
         if (cardsLacking > wildCards) return false;
 
@@ -207,7 +236,7 @@ bool ExistShunZi(THandCards& hc,
 
         wildCardsToUse = cardsLacking;
         for (int k = StartingNumber; k < StartingNumber + Length; k++) {
-            for (int j = 0; j < HandNum; j++) {
+            for (int j = 0; j < min(HandNum, (int)hc[getActualRank(k)].count(Suit)); j++) {
                 oneHand[getActualRank(k)].insert(Suit);
             }
         }
@@ -286,14 +315,17 @@ void tryExtractOneHand(char NowSuit,
         return;
     else if (CurrentTypePosition < TypePosition)
         CurrentStartingNumPosition = 0;
-    for (auto it = hc.begin(); it != hc.end(); it++) {
-        int StartingNumber = (*it).first;
-        if (StartingNumber < CurrentStartingNumPosition) continue;
+    for (int StartingNumber = CurrentStartingNumPosition; StartingNumber + seriesCount - 1 <= 14; ++StartingNumber) {
         THandCards oneHand;
         int outWildCardsToUse = 0;
         bool exists = ExistShunZi(hc, wildCardsLeft, StartingNumber, seriesCount, cardCount,
                                  NowSuit, oneHand, outWildCardsToUse);
         if (exists) {
+            #ifdef __DEBUG__
+            cerr << wildCardsLeft << " Found: ";
+            debug(oneHand);
+            #endif
+
             Chu(hc, oneHand);
             list<string> tmpSolution;
             int remainingHands =
@@ -323,6 +355,11 @@ int check(THandCards& hc,
           int wildCardsLeft,
           int CurrentTypePosition,
           int CurrentStartingNumPosition) {
+    #ifdef __DEBUG__
+    cerr << wildCardsLeft << " ";
+    debug(hc);
+    #endif
+
     THandCards::iterator it;
     int TypePosition = 0;
     int min = count(hc, wildCardsLeft);
@@ -351,7 +388,7 @@ struct StrategyResult {
 // 红桃：?H | 黑桃：?S | 梅花：?C | 方块：?D | 小鬼：XB | 大鬼：XR | 数字10：0 ?
 // | 其余和牌面相同 mainRank: main rank, starting from 2
 EMSCRIPTEN_KEEPALIVE StrategyResult calc(string cards, char mainRank) {
-    THandCards hc, UsedAs;
+    THandCards hc;
     list<string> solution;
     int wildCards = 0;
     for (int i = 0; i < cards.length() / 2; i++) {
@@ -361,7 +398,7 @@ EMSCRIPTEN_KEEPALIVE StrategyResult calc(string cards, char mainRank) {
         else
             AddCard(hc, ch1, ch2);
     }
-    int min = check(hc, solution, wildCards, 0, 0);
+    int min = check(hc, solution, wildCards);
     return StrategyResult(
         {min, vector<string>(solution.begin(), solution.end())});
 }
