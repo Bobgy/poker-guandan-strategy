@@ -171,47 +171,48 @@ string CardToStr(int num, char suit) {
 int getActualRank(int rank) { return rank == 14 ? 1 : rank; }
 
 // Suit: S-Spade C-Club D-Diamond H-Heart A-All
-int ExistShunZi(THandCards& hc,
+bool ExistShunZi(THandCards& hc,
+                int wildCards,
                 int StartingNumber,
                 int Length,
                 int HandNum,
                 char Suit,
-                THandCards& oneHand) {
+                THandCards& oneHand,
+                int& wildCardsToUse) {
     oneHand.clear();
     if (Suit == 'A') {
-        bool f = true;
+        int cardsLacking = 0;
         for (int k = StartingNumber; k < StartingNumber + Length; k++) {
-            if (hc[getActualRank(k)].size() < HandNum) {
-                f = false;
-                break;
-            }
+            cardsLacking += max(0, HandNum - (int)hc[getActualRank(k)].size());
         }
-        if (!f) return false;
+
+        if (cardsLacking > wildCards) return false;
+
+        wildCardsToUse = cardsLacking;
         for (int k = StartingNumber; k < StartingNumber + Length; k++) {
             int i = getActualRank(k);
             multiset<char>::iterator it;
             int j;
-            for (j = 0, it = hc[i].begin(); j < HandNum; j++, it++) {
-                assert(it != hc[i].end());
+            for (j = 0, it = hc[i].begin(); j < HandNum && it != hc[i].end(); j++, it++) {
                 oneHand[i].insert(*it);
             }
         }
     } else {
-        bool f = true;
+        int cardsLacking = 0;
         for (int k = StartingNumber; k < StartingNumber + Length; k++) {
-            if (hc[getActualRank(k)].count(Suit) < HandNum) {
-                f = false;
-                break;
-            }
+            cardsLacking += max(0, HandNum - (int)hc[getActualRank(k)].count(Suit));
         }
-        if (!f) return 0;
+
+        if (cardsLacking > wildCards) return false;
+
+        wildCardsToUse = cardsLacking;
         for (int k = StartingNumber; k < StartingNumber + Length; k++) {
             for (int j = 0; j < HandNum; j++) {
                 oneHand[getActualRank(k)].insert(Suit);
             }
         }
     }
-    return 1;
+    return true;
 }
 
 int Chu(THandCards& hc, THandCards& oneHand) {
@@ -243,7 +244,15 @@ int Mo(THandCards& hc, THandCards& oneHand) {
     return 0;
 }
 
-string handToStr(THandCards hc) {
+string wildCardsToStr(int wildCards) {
+    string str = "";
+    for (int i = 0; i < wildCards; ++i) {
+        str += "WC "; // wild card
+    }
+    return str;
+}
+
+string handToStr(THandCards hc, int wildCards = 0) {
     string str = "";
     THandCards::iterator it;
     for (it = hc.begin(); it != hc.end(); it++) {
@@ -252,14 +261,15 @@ string handToStr(THandCards hc) {
             str += CardToStr((*it).first, *it2) + ' ';
         }
     }
+    str += wildCardsToStr(wildCards);
     return str;
 }
 
 int check(THandCards& hc,
           list<string>& ASolution,
           int wildCardsLeft,
-          int CurrentTypePosition,
-          int CurrentStartingNumPosition);
+          int CurrentTypePosition = 0,
+          int CurrentStartingNumPosition = 0);
 
 void tryExtractOneHand(char NowSuit,
                        int seriesCount,
@@ -280,13 +290,14 @@ void tryExtractOneHand(char NowSuit,
         int StartingNumber = (*it).first;
         if (StartingNumber < CurrentStartingNumPosition) continue;
         THandCards oneHand;
-        int status = ExistShunZi(hc, StartingNumber, seriesCount, cardCount,
-                                 NowSuit, oneHand);
-        if (status > 0) {
+        int outWildCardsToUse = 0;
+        bool exists = ExistShunZi(hc, wildCardsLeft, StartingNumber, seriesCount, cardCount,
+                                 NowSuit, oneHand, outWildCardsToUse);
+        if (exists) {
             Chu(hc, oneHand);
             list<string> tmpSolution;
             int remainingHands =
-                check(hc, tmpSolution, wildCardsLeft, TypePosition,
+                check(hc, tmpSolution, wildCardsLeft - outWildCardsToUse, TypePosition,
                       StartingNumber) +
                 // straight flush (5 consecutive cards with the same suit) is a
                 // bomb
@@ -297,7 +308,7 @@ void tryExtractOneHand(char NowSuit,
                 min = remainingHands;
                 for (TSolutions::iterator it = tmpSolution.begin();
                      it != tmpSolution.end(); it++) {
-                    (*it) += "| " + handToStr(oneHand) + "|";
+                    (*it) += "| " + handToStr(oneHand, outWildCardsToUse) + "|";
                 }
                 ASolution.splice(ASolution.end(), tmpSolution,
                                  tmpSolution.begin(), tmpSolution.end());
@@ -331,43 +342,6 @@ int check(THandCards& hc,
     return min;
 }
 
-int TestTrumpCard(THandCards& hc,
-                  int n,
-                  int& min,
-                  TSolutions& solution,
-                  int si,
-                  int sj,
-                  THandCards& UsedAs) {
-    if (n <= 0) {
-        TSolutions ASolution;
-        int t = check(hc, ASolution, 0, 0, 0);
-        if (t <= min) {
-            if (t < min) solution.clear();
-            min = t;
-            solution.push_back("------------- " + handToStr(UsedAs) +
-                               "------------");
-            solution.splice(solution.end(), ASolution, ASolution.begin(),
-                            ASolution.end());
-        }
-        return 0;
-    }
-    for (int i = si; i <= 13; i++) {
-        for (int j = 0; j < 4; j++) {
-            if (i == si) {
-                if (j < sj) continue;
-            }
-            THandCards oneHand;
-            oneHand[i].insert(SUITS[j]);
-            Mo(hc, oneHand);
-            Mo(UsedAs, oneHand);
-            TestTrumpCard(hc, n - 1, min, solution, i, j, UsedAs);
-            Chu(hc, oneHand);
-            Chu(UsedAs, oneHand);
-        }
-    }
-    return 0;
-}
-
 struct StrategyResult {
     int minHands;
     vector<string> solutions;
@@ -379,16 +353,15 @@ struct StrategyResult {
 EMSCRIPTEN_KEEPALIVE StrategyResult calc(string cards, char mainRank) {
     THandCards hc, UsedAs;
     list<string> solution;
-    int n = 0;
+    int wildCards = 0;
     for (int i = 0; i < cards.length() / 2; i++) {
         char ch1 = cards[i * 2], ch2 = cards[i * 2 + 1];
         if (ch1 == mainRank && ch2 == 'H')
-            n++;
+            wildCards++;
         else
             AddCard(hc, ch1, ch2);
     }
-    int min = 10000;
-    TestTrumpCard(hc, n, min, solution, 1, 0, UsedAs);
+    int min = check(hc, solution, wildCards, 0, 0);
     return StrategyResult(
         {min, vector<string>(solution.begin(), solution.end())});
 }

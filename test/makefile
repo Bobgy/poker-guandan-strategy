@@ -11,7 +11,7 @@ gen.exe: gen.cc
     g++ gen.cc -std=c++11 -O2 -o gen
 
 wrapper.exe: wrapper.cc ../strategy.cpp
-    g++ wrapper.cc -std=c++11 -O2 -o wrapper
+    g++ wrapper.cc -std=c++11 -o wrapper
 
 test: std_output.txt curr_output.txt
     diff std_output.txt curr_output.txt
