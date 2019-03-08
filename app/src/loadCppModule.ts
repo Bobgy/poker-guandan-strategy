@@ -18,9 +18,7 @@ export interface StrategyResult {
   minHands: number
   solutionsRaw: string[]
   solutions: {
-    wildCards: CardRaw[]
     asHands: HandRaw[]
-    actualHands: HandRaw[]
   }[]
 }
 

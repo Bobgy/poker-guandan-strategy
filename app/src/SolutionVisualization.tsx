@@ -79,7 +79,7 @@ const SolutionWindow: React.FunctionComponent<SolutionWindowProps> = props => (
                     .map((solution, solutionIndex) => (
                       <CardDeck
                         key={solutionIndex}
-                        hands={solution.actualHands.map(hand =>
+                        hands={solution.asHands.map(hand =>
                           hand.map(card =>
                             parseRawCard(card, {
                               rank: props.rank,

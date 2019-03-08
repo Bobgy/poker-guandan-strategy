@@ -163,7 +163,7 @@ export function parseRawCard(cardRaw: CardRaw, wildCard: TCard): TCard {
     throw new Error('CardRaw should have a length of 2')
   }
 
-  if (cardRaw === '??') {
+  if (cardRaw === 'WC') {
     return wildCard
   }
 

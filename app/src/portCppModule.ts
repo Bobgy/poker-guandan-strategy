@@ -1,4 +1,10 @@
-import { CppModule, StrategyResult, vector2Array } from './loadCppModule'
+import {
+  CppModule,
+  StrategyResult,
+  vector2Array,
+  HandRaw,
+  CardRaw,
+} from './loadCppModule'
 
 export function portCppModule(cppModule: CppModule) {
   return {
@@ -61,40 +67,24 @@ export function parseSolutions(solutions: string[]) {
   }
 }
 
-export function parseSolutionsUnsafe(solutions: string[]) {
+export function parseSolutionsUnsafe(
+  solutions: string[],
+): { asHands: HandRaw[] }[] {
   const parsedSolutions = []
-  let wildCards: null | string[] = null
-
   for (let i = 0; i < solutions.length; ++i) {
     if (solutions[i].length === 0) {
       throw new Error("solutions shouldn't have empty line: #" + i)
     }
 
-    if (solutions[i][0] === '-') {
-      // section of wild cards
-      const wildCardsRawStr = solutions[i]
-      wildCards = wildCardsRawStr.split(' ').filter(str => str.match(cardRegex))
-    } else {
-      // section of a solution
-      if (wildCards == null) {
-        throw new Error(
-          'wildcard definition should be before solution definition',
-        )
-      }
-
-      const handsRawStr = solutions[i]
-      const asHands = handsRawStr
-        .split('|')
-        .map(hand => hand.split(' ').filter(str => str.match(cardRegex)))
-        .filter(foundCards => foundCards.length > 0)
-      const actualHands = restoreWildCards(asHands, wildCards, '??')
-
-      parsedSolutions.push({
-        wildCards,
-        actualHands,
-        asHands,
-      })
-    }
+    // section of a solution
+    const handsRawStr = solutions[i]
+    const asHands = handsRawStr
+      .split('|')
+      .map(hand => hand.split(' ').filter(str => str.match(cardRegex)))
+      .filter(foundCards => foundCards.length > 0)
+    parsedSolutions.push({
+      asHands,
+    })
   }
   // console.log(parsedSolutions)
 
