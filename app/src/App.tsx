@@ -61,10 +61,11 @@ const AppNavigator: FunctionComponent<AppNavigatorProps> = ({
 }
 
 const routesConfig = {
+  base: process.env.REACT_APP_BASE_URL || '',
   defaultRoute: 'Home',
   routes: {
     Home: {
-      path: '/',
+      path: '',
       title: '掼蛋拆牌计算器',
     },
     Result: {
