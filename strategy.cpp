@@ -85,8 +85,11 @@ int calculateMinHandsSimple(
 }
 
 /**
- * calculates min number of hands needed using just hand patterns of 1s, 2s, 3s,
- *full houses and bombs
+ * Calculates min number of hands needed using just hand patterns of 1s, 2s, 3s,
+ * full houses and bombs.
+ * Hand definition, some cards combination that can be played at a single round.
+ * Bomb and jokers can almost always be played, so they count as 0 hands. Others
+ * count as one, e.g. 33322
  *
  ** hc: a full hand of cards definition
  ** wildCards: number of wildcards available, belong to range [0, 2] in a valid
@@ -99,15 +102,9 @@ int count(THandCards hc, int wildCards) {
     int cnt[5];
     for (int i = 1; i <= 4; i++) cnt[i] = 0;
 
-    // special handling for joker bomb
-    bool hasJokerBomb = false;
-    if (hc[JOKER].size() == 2 && hc[JOKER + 1].size() == 2) {
-        hasJokerBomb = true;
-    }
-
     for (it = hc.begin(); it != hc.end(); it++) {
-        if (hasJokerBomb && (*it).first >= JOKER) {
-            continue;  // skip jokers if it is a bomb
+        if ((*it).first >= JOKER) {
+            continue;  // skip jokers completely
         }
         if ((*it).second.size() <= 3)
             cnt[(*it).second.size()]++;
@@ -363,7 +360,7 @@ int check(THandCards& hc,
     THandCards::iterator it;
     int TypePosition = 0;
     int min = count(hc, wildCardsLeft);
-    ASolution.push_back("| " + handToStr(hc) + "|");
+    ASolution.push_back("| " + handToStr(hc, wildCardsLeft) + "|");
     // try flushes -> straight flush
     for (int tt = 0; tt < 5; tt++) {
         tryExtractOneHand(SUITS[tt], 5, 1, TypePosition, CurrentTypePosition,

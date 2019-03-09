@@ -23,6 +23,9 @@ int count(THandCards hc)
     for(int i=1; i<=4; i++)cnt[i]=0;
     for(it=hc.begin(); it!=hc.end(); it++)
     {
+        // jokers count something you can play for free, 0 hands
+        if ((*it).first >= JOKER) continue;
+        // other cards need to be calculated
         if((*it).second.size()<=3)cnt[(*it).second.size()]++;
         else cnt[4]++;
     }
