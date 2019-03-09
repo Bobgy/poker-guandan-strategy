@@ -9,7 +9,8 @@ import ResultPage from './ResultPage'
 import { useResultState } from './useResultState'
 import { Fade } from './Fade'
 import { TransitionGroup } from 'react-transition-group'
-import { useRouterState } from './useRouterState'
+import { createBrowserRouterHook } from './useRouterState'
+import createHistory from 'history/createBrowserHistory'
 
 interface AppNavigatorProps extends NavigationProps {
   route: string
@@ -59,11 +60,28 @@ const AppNavigator: FunctionComponent<AppNavigatorProps> = ({
   )
 }
 
+const routesConfig = {
+  defaultRoute: 'Home',
+  routes: {
+    Home: {
+      path: '/',
+      title: '掼蛋拆牌计算器',
+    },
+    Result: {
+      path: '/result',
+      title: '掼蛋拆牌计算器',
+    },
+  },
+}
+const history = createHistory()
+
+const useRouterState = createBrowserRouterHook(routesConfig, history)
+
 function App() {
   const [rank, setRank] = useState('2')
   const cardStateProps = useCardState()
   const resultProps = useResultState()
-  const { route, navigation } = useRouterState('Home')
+  const { route, navigation } = useRouterState()
 
   return (
     <View

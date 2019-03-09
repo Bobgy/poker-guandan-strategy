@@ -24,6 +24,7 @@ export type AppState = RankState & CardState & ResultProps
 export interface NavigationProps {
   navigation: {
     navigate(page: string): void
+    goBack(): void
   }
   screenProps: AppState
 }
