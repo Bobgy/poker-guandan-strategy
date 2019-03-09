@@ -12,19 +12,19 @@ self.__precacheManifest = [
     "url": "/poker-guandan-strategy/static/js/runtime~main.860f92ab.js"
   },
   {
-    "revision": "d84005d34229c2ab9336",
-    "url": "/poker-guandan-strategy/static/js/main.d84005d3.chunk.js"
+    "revision": "884f921803100991deec",
+    "url": "/poker-guandan-strategy/static/js/main.884f9218.chunk.js"
   },
   {
-    "revision": "c3640bcb338035029afa",
-    "url": "/poker-guandan-strategy/static/js/2.c3640bcb.chunk.js"
+    "revision": "9ee3adeb8bef2f584627",
+    "url": "/poker-guandan-strategy/static/js/2.9ee3adeb.chunk.js"
   },
   {
-    "revision": "d84005d34229c2ab9336",
+    "revision": "884f921803100991deec",
     "url": "/poker-guandan-strategy/static/css/main.309da9cb.chunk.css"
   },
   {
-    "revision": "ad25ac3611b95b695bea1fb1210e59fd",
+    "revision": "85fcbf8ef899d36238a8f90706ed4884",
     "url": "/poker-guandan-strategy/index.html"
   }
 ];
