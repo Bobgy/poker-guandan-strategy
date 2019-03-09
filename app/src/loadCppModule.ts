@@ -14,12 +14,14 @@ export type CardRaw = string
 
 export type HandRaw = CardRaw[]
 
+export interface Solution {
+  actualHands: HandRaw[]
+}
+
 export interface StrategyResult {
   minHands: number
   solutionsRaw: string[]
-  solutions: {
-    asHands: HandRaw[]
-  }[]
+  solutions: Solution[]
 }
 
 export interface CppModule {

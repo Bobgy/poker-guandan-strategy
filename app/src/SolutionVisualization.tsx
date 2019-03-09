@@ -13,6 +13,7 @@ import { commonStyles } from './styles'
 import { parseRawCard } from './cardUtils'
 import { StrategyResultState } from './useResultState'
 import { ReactComponent as Close } from './icons/close.svg'
+import { ReactComponent as Info } from './icons/info.svg'
 
 interface SolutionVisualizationProps {
   strategyResult: StrategyResultState
@@ -67,7 +68,21 @@ const SolutionWindow: React.FunctionComponent<SolutionWindowProps> = props => (
         </Text>
       ) : (
         <>
-          <Text>{`最少${props.strategyResult.minHands}手可以出完`}</Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+            <Text
+              style={{ fontSize: 18, flexShrink: 0, marginRight: 20 }}
+            >{`最少${props.strategyResult.minHands}手牌`}</Text>
+            <Text style={{ textAlignVertical: 'center' }}>
+              <Info style={{ width: 19, height: 19, verticalAlign: 'top' }} />
+              大小王、炸弹算0手，其他牌型算1手
+            </Text>
+          </View>
           <View>
             {(() => {
               const solutionsCount = props.strategyResult.solutions.length
@@ -79,7 +94,7 @@ const SolutionWindow: React.FunctionComponent<SolutionWindowProps> = props => (
                     .map((solution, solutionIndex) => (
                       <CardDeck
                         key={solutionIndex}
-                        hands={solution.asHands.map(hand =>
+                        hands={solution.actualHands.map(hand =>
                           hand.map(card =>
                             parseRawCard(card, {
                               rank: props.rank,

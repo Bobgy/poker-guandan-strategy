@@ -4,6 +4,7 @@ import {
   vector2Array,
   HandRaw,
   CardRaw,
+  Solution,
 } from './loadCppModule'
 
 export function portCppModule(cppModule: CppModule) {
@@ -58,7 +59,7 @@ export function restoreWildCards(
   return restoredHands
 }
 
-export function parseSolutions(solutions: string[]) {
+export function parseSolutions(solutions: string[]): Solution[] {
   try {
     return parseSolutionsUnsafe(solutions)
   } catch (e) {
@@ -67,9 +68,7 @@ export function parseSolutions(solutions: string[]) {
   }
 }
 
-export function parseSolutionsUnsafe(
-  solutions: string[],
-): { asHands: HandRaw[] }[] {
+export function parseSolutionsUnsafe(solutions: string[]): Solution[] {
   const parsedSolutions = []
   for (let i = 0; i < solutions.length; ++i) {
     if (solutions[i].length === 0) {
@@ -78,12 +77,12 @@ export function parseSolutionsUnsafe(
 
     // section of a solution
     const handsRawStr = solutions[i]
-    const asHands = handsRawStr
+    const actualHands = handsRawStr
       .split('|')
       .map(hand => hand.split(' ').filter(str => str.match(cardRegex)))
       .filter(foundCards => foundCards.length > 0)
     parsedSolutions.push({
-      asHands,
+      actualHands,
     })
   }
   // console.log(parsedSolutions)
