@@ -1,19 +1,18 @@
 /// <reference path="lib.d.ts"/>
 
-import React, { useState, FunctionComponent, useMemo } from 'react'
+import React, { useState, FunctionComponent } from 'react'
 import { StyleSheet, View, Text, StyleProp, ViewStyle } from 'react-native'
-import { AppState } from './types'
+import { AppState, NavigationProps } from './types'
 import { useCardState } from './useCardState'
 import Home from './Home'
 import ResultPage from './ResultPage'
 import { useResultState } from './useResultState'
 import { Fade } from './Fade'
 import { TransitionGroup } from 'react-transition-group'
+import { useRouterState } from './useRouterState'
 
-interface AppNavigatorProps {
+interface AppNavigatorProps extends NavigationProps {
   route: string
-  navigate: (newRoute: string) => void
-  screenProps: AppState
   style?: StyleProp<ViewStyle>
 }
 const styles = StyleSheet.create({
@@ -32,17 +31,10 @@ const routes = {
 }
 const AppNavigator: FunctionComponent<AppNavigatorProps> = ({
   route: currentRoute,
-  navigate,
+  navigation,
   screenProps,
   style,
 }) => {
-  const navigation = useMemo(
-    () => ({
-      navigate,
-    }),
-    [navigate],
-  )
-
   return (
     <>
       <TransitionGroup>
@@ -71,7 +63,7 @@ function App() {
   const [rank, setRank] = useState('2')
   const cardStateProps = useCardState()
   const resultProps = useResultState()
-  const [route, navigate] = useState('Home')
+  const { route, navigation } = useRouterState('Home')
 
   return (
     <View
@@ -87,7 +79,7 @@ function App() {
           <AppNavigator
             route={route}
             screenProps={{ rank, setRank, ...cardStateProps, ...resultProps }}
-            navigate={navigate}
+            navigation={navigation}
             style={{
               flex: 1,
             }}
