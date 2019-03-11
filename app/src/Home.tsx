@@ -9,8 +9,6 @@ import { cardsToString } from './cardUtils'
 import { MyButton } from './MyButton'
 import { RankChooser } from './RankChooser'
 
-let strategyModule: PortedCppModule | null = null
-
 interface StatelessHomePageProps
   extends Pick<
       AppState,
@@ -24,7 +22,9 @@ interface StatelessHomePageProps
       | 'strategyResult'
       | 'setResult'
     >,
-    Pick<NavigationProps, 'navigation'> {}
+    Pick<NavigationProps, 'navigation'> {
+  strategyModule: PortedCppModule | null
+}
 const HomePage: React.FunctionComponent<StatelessHomePageProps> = ({
   rank,
   setRank,
@@ -36,20 +36,8 @@ const HomePage: React.FunctionComponent<StatelessHomePageProps> = ({
   strategyResult,
   setResult,
   navigation,
+  strategyModule,
 }) => {
-  useEffect(() => {
-    loadCppModule().then(cppModule => {
-      strategyModule = cppModule
-      // uncomment the following to test the module
-      // console.log(
-      //   strategyModule.calc(
-      //     'BJADKDJH0S0C0CAH8D7S7H4H4D4H3D3C2H9C7CAH6C5CKSQSJS0S9S',
-      //     'A',
-      //   ),
-      // )
-    })
-  }, [])
-
   const handleSolutionCalcButton = useCallback(() => {
     setResult('loading')
 

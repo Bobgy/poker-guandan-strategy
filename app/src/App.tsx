@@ -1,6 +1,6 @@
 /// <reference path="lib.d.ts"/>
 
-import React, { useState, FunctionComponent } from 'react'
+import React, { useState, FunctionComponent, useEffect } from 'react'
 import { StyleSheet, View, Text, StyleProp, ViewStyle } from 'react-native'
 import { NavigationProps } from './types'
 import { useCardState } from './useCardState'
@@ -11,6 +11,7 @@ import { Fade } from './Fade'
 import { TransitionGroup } from 'react-transition-group'
 import { createBrowserRouterHook } from './useRouterState'
 import createHistory from 'history/createBrowserHistory'
+import { PortedCppModule, loadCppModule } from './loadCppModule'
 
 interface AppNavigatorProps extends NavigationProps {
   route: string
@@ -78,11 +79,26 @@ const history = createHistory()
 
 const useRouterState = createBrowserRouterHook(routesConfig, history)
 
+let strategyModule: PortedCppModule | null = null
 function App() {
   const [rank, setRank] = useState('2')
   const cardStateProps = useCardState()
   const resultProps = useResultState()
   const { route, navigation } = useRouterState()
+  useEffect(() => {
+    loadCppModule()
+      .then(cppModule => {
+        strategyModule = cppModule
+        // uncomment the following to test the module
+        // console.log(
+        //   strategyModule.calc(
+        //     'BJADKDJH0S0C0CAH8D7S7H4H4D4H3D3C2H9C7CAH6C5CKSQSJS0S9S',
+        //     'A',
+        //   ),
+        // )
+      })
+      .catch()
+  }, [])
 
   return (
     <View
