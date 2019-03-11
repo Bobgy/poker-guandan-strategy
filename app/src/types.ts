@@ -1,4 +1,5 @@
 import { ResultProps } from './useResultState'
+import { PortedCppModule } from './loadCppModule'
 
 export interface RankState {
   rank: string
@@ -18,7 +19,11 @@ export interface CardState {
   deleteLastCard(): void
 }
 
-export type AppState = RankState & CardState & ResultProps
+export interface CppModuleState {
+  strategyModule: null | 'error' | PortedCppModule
+}
+
+export type AppState = RankState & CardState & ResultProps & CppModuleState
 
 export interface NavigationProps {
   navigation: {

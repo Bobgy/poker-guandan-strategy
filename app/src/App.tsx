@@ -79,25 +79,22 @@ const history = createHistory()
 
 const useRouterState = createBrowserRouterHook(routesConfig, history)
 
-let strategyModule: PortedCppModule | null = null
 function App() {
   const [rank, setRank] = useState('2')
   const cardStateProps = useCardState()
   const resultProps = useResultState()
   const { route, navigation } = useRouterState()
+  const [strategyModule, setModule] = useState<
+    PortedCppModule | null | 'error'
+  >(null)
   useEffect(() => {
     loadCppModule()
       .then(cppModule => {
-        strategyModule = cppModule
-        // uncomment the following to test the module
-        // console.log(
-        //   strategyModule.calc(
-        //     'BJADKDJH0S0C0CAH8D7S7H4H4D4H3D3C2H9C7CAH6C5CKSQSJS0S9S',
-        //     'A',
-        //   ),
-        // )
+        setModule(cppModule)
       })
-      .catch()
+      .catch(() => {
+        setModule('error')
+      })
   }, [])
 
   return (
@@ -113,7 +110,13 @@ function App() {
         <View style={{ flex: 1 }}>
           <AppNavigator
             route={route}
-            screenProps={{ rank, setRank, ...cardStateProps, ...resultProps }}
+            screenProps={{
+              rank,
+              setRank,
+              ...cardStateProps,
+              ...resultProps,
+              strategyModule,
+            }}
             navigation={navigation}
             style={{
               flex: 1,

@@ -1,8 +1,7 @@
-import React, { useEffect, useCallback, Fragment } from 'react'
-import { View } from 'react-native'
+import React, { useCallback, Fragment } from 'react'
+import { View, Text } from 'react-native'
 import { NavigationProps, AppState } from './types'
 import { CardsChooser } from './CardsChooser'
-import { loadCppModule, PortedCppModule } from './loadCppModule'
 import { Divider } from './Divider'
 import { commonStyles } from './styles'
 import { cardsToString } from './cardUtils'
@@ -21,10 +20,9 @@ interface StatelessHomePageProps
       | 'deleteLastCard'
       | 'strategyResult'
       | 'setResult'
+      | 'strategyModule'
     >,
-    Pick<NavigationProps, 'navigation'> {
-  strategyModule: PortedCppModule | null
-}
+    Pick<NavigationProps, 'navigation'> {}
 const HomePage: React.FunctionComponent<StatelessHomePageProps> = ({
   rank,
   setRank,
@@ -42,7 +40,7 @@ const HomePage: React.FunctionComponent<StatelessHomePageProps> = ({
     setResult('loading')
 
     setTimeout(() => {
-      if (strategyModule != null) {
+      if (strategyModule != null && strategyModule !== 'error') {
         // console.log(cards)
         const cardsStr = cardsToString(cards)
         // console.log(cardsStr)
@@ -58,6 +56,10 @@ const HomePage: React.FunctionComponent<StatelessHomePageProps> = ({
       }
     }, 0)
   }, [cards, setResult, navigation])
+
+  if (strategyModule === 'error') {
+    return <Text>{'strategy module failed to load'}</Text>
+  }
 
   return (
     <Fragment>
