@@ -50,24 +50,34 @@ export function vector2Array(vec: VectorString): string[] {
   return arr
 }
 
-export function loadCppModule(): Promise<PortedCppModule> {
+function loadScript(src: string): Promise<void> {
   return new Promise((resolve, reject) => {
-    if (window.Module) {
-      return resolve(portCppModule(window.Module))
-    } else {
-      const s = document.createElement('script')
-      s.src = 'res/strategy.js'
-      s.onload = () => {
-        const cppModule = window.Module
-        cppModule.onRuntimeInitialized = () => {
-          resolve(portCppModule(window.Module))
-        }
-        cppModule.onAbort = () => {
-          reject('wasm module aborted during loading')
-        }
-      }
-      s.onerror = () => reject('wasm module failed to load')
-      document.body.appendChild(s)
-    }
+    const s = document.createElement('script')
+    s.src = src
+    s.onload = () => resolve()
+    s.onerror = () => reject(`${src} had some errors when loading`)
+    document.body.appendChild(s)
   })
+}
+
+export function loadCppModule(): Promise<PortedCppModule> {
+  if (window.Module) {
+    return Promise.resolve(portCppModule(window.Module))
+  } else {
+    const modulePromise = new Promise<PortedCppModule>((resolve, reject) => {
+      ;(window.Module as any) = {
+        onRuntimeInitialized() {
+          resolve(portCppModule(window.Module))
+        },
+        onAbort() {
+          reject('wasm module aborted during loading')
+        },
+      }
+    })
+    return loadScript('res/strategy.js')
+      .then(() => modulePromise)
+      .catch(() => {
+        return Promise.reject('wasm module failed to load')
+      })
+  }
 }

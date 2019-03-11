@@ -7,8 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "prebuild": "npm run clean && mkdir -p app/public/res",
     "build": "em++ strategy.cpp -o app/public/res/strategy.js -s EXTRA_EXPORTED_RUNTIME_METHODS='[\"cwrap\", \"ccall\"]' --bind",
+    "build:asm": "em++ strategy.cpp -o app/public/res/strategy.js -s WASM=0 -s EXTRA_EXPORTED_RUNTIME_METHODS='[\"cwrap\", \"ccall\"]' --bind",
     "clean": "rm -rf a.out* a.exe app/public/res/*",
-    "build:prod": "npm run build -- -O2 && cd app && npm run build",
+    "build:prod": "npm run build:asm -- -O2 && cd app && npm run build",
     "predeploy": "npm run build:prod",
     "deploy": "rm -rf docs/* && cp -r app/build/* docs",
     "deploy-and-push": "npm run deploy && git add -A && git ci -m \"[deploy]\" && git push origin HEAD"
