@@ -2,8 +2,6 @@ import {
   CppModule,
   StrategyResult,
   vector2Array,
-  HandRaw,
-  CardRaw,
   Solution,
 } from './loadCppModule'
 

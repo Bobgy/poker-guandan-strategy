@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import { NavigationProps } from './types'
 import SolutionVisualization from './SolutionVisualization'
 

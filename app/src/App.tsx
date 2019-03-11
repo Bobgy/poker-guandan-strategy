@@ -2,7 +2,7 @@
 
 import React, { useState, FunctionComponent } from 'react'
 import { StyleSheet, View, Text, StyleProp, ViewStyle } from 'react-native'
-import { AppState, NavigationProps } from './types'
+import { NavigationProps } from './types'
 import { useCardState } from './useCardState'
 import Home from './Home'
 import ResultPage from './ResultPage'

@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback, Fragment } from 'react'
-import { View, Text } from 'react-native'
-import { NavigationProps, TCard, AppState } from './types'
+import { View } from 'react-native'
+import { NavigationProps, AppState } from './types'
 import { CardsChooser } from './CardsChooser'
 import { loadCppModule, PortedCppModule } from './loadCppModule'
 import { Divider } from './Divider'
