@@ -15,6 +15,4 @@ Now I've recently built a mobile friendly web app with react-native-web using th
 ## Todos
 
 - [ ] Guidance page for wechat sharing
-- [ ] [strategy output] reduce solution duplication
 - [ ] show clear hand shape information besides each solution
-- [ ] route transition animation
