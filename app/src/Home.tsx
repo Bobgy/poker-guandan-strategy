@@ -21,6 +21,7 @@ interface StatelessHomePageProps
       | 'strategyResult'
       | 'setResult'
       | 'strategyModule'
+      | 'windowSize'
     >,
     Pick<NavigationProps, 'navigation'> {}
 const HomePage: React.FunctionComponent<StatelessHomePageProps> = ({
@@ -35,6 +36,7 @@ const HomePage: React.FunctionComponent<StatelessHomePageProps> = ({
   setResult,
   navigation,
   strategyModule,
+  windowSize,
 }) => {
   const handleSolutionCalcButton = useCallback(() => {
     setResult('loading')
@@ -87,6 +89,7 @@ const HomePage: React.FunctionComponent<StatelessHomePageProps> = ({
           clearCards={clearCards}
           randomCards={randomCards}
           deleteLastCard={deleteLastCard}
+          windowSize={windowSize}
         />
       </View>
       <View

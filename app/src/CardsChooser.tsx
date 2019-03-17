@@ -11,6 +11,7 @@ import { CardState, TCard } from './types'
 import { Divider } from './Divider'
 import { CardDeck, Card } from './Card'
 import { MyButton } from './MyButton'
+import { WindowSize } from './useWindowSize'
 
 const palette = {
   blue: 'rgb(33, 150, 243)',
@@ -137,6 +138,7 @@ interface AddCardPanelProps {
   cards: TCard[]
   addCard: (card: TCard) => void
   rankID: number
+  large?: boolean
 }
 const AddCardPanel: React.FunctionComponent<AddCardPanelProps> = props => (
   <>
@@ -158,6 +160,7 @@ const AddCardPanel: React.FunctionComponent<AddCardPanelProps> = props => (
             rank={RANKS[props.rankID].value}
             disabled={!canIAddThisCard}
             style={{ margin: 3 }}
+            large={props.large}
           />
         </TouchableOpacity>
       )
@@ -171,7 +174,10 @@ export function CardsChooser({
   clearCards,
   randomCards,
   deleteLastCard,
-}: CardState) {
+  windowSize,
+}: CardState & {
+  windowSize: WindowSize
+}) {
   const {
     value: rankID,
     increase: incRank,
@@ -187,6 +193,7 @@ export function CardsChooser({
             height: 60,
             padding: 6,
           }}
+          large={windowSize === 'BIG'}
         />
       </View>
       <Divider />
@@ -195,7 +202,7 @@ export function CardsChooser({
       }张牌`}</Text>
       <ScrollView
         style={{
-          height: 110,
+          height: windowSize === 'SMALL' ? 110 : 150,
           flexGrow: 0,
         }}
         contentContainerStyle={{
@@ -204,7 +211,12 @@ export function CardsChooser({
         }}
         horizontal
       >
-        <AddCardPanel cards={cards} addCard={addCard} rankID={rankID} />
+        <AddCardPanel
+          cards={cards}
+          addCard={addCard}
+          rankID={rankID}
+          large={windowSize === 'BIG'}
+        />
       </ScrollView>
       <ControlPanel
         numberOfCards={cards.length}

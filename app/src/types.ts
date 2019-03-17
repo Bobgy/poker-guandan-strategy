@@ -1,5 +1,6 @@
 import { ResultProps } from './useResultState'
 import { PortedCppModule } from './loadCppModule'
+import { WindowSize } from './useWindowSize'
 
 export interface RankState {
   rank: string
@@ -23,7 +24,10 @@ export interface CppModuleState {
   strategyModule: null | 'error' | PortedCppModule
 }
 
-export type AppState = RankState & CardState & ResultProps & CppModuleState
+export type AppState = RankState &
+  CardState &
+  ResultProps &
+  CppModuleState & { windowSize: WindowSize }
 
 export interface NavigationProps {
   navigation: {

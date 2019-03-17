@@ -12,6 +12,7 @@ import { TransitionGroup } from 'react-transition-group'
 import { createBrowserRouterHook } from './useRouterState'
 import createHistory from 'history/createBrowserHistory'
 import { PortedCppModule, loadCppModule } from './loadCppModule'
+import { useWindowSize } from './useWindowSize'
 
 interface AppNavigatorProps extends NavigationProps {
   route: string
@@ -96,6 +97,7 @@ function App() {
         setModule('error')
       })
   }, [])
+  const windowSize = useWindowSize()
 
   return (
     <View
@@ -116,6 +118,7 @@ function App() {
               ...cardStateProps,
               ...resultProps,
               strategyModule,
+              windowSize,
             }}
             navigation={navigation}
             style={{

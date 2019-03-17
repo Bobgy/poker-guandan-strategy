@@ -14,18 +14,20 @@ import { parseRawCard } from './cardUtils'
 import { StrategyResultState } from './useResultState'
 import { ReactComponent as Close } from './icons/close.svg'
 import { ReactComponent as Info } from './icons/info.svg'
+import { WindowSize } from './useWindowSize'
 
 interface SolutionVisualizationProps {
   strategyResult: StrategyResultState
   rank: string
+  windowSize: WindowSize
   onClose: () => void
 }
 
 interface WindowSizeToggleProps {
-  toggleWindowSize: () => void
+  onClose: () => void
   style: StyleProp<ViewStyle>
 }
-const WindowSizeToggle: React.FunctionComponent<
+const CloseWindowButton: React.FunctionComponent<
   WindowSizeToggleProps
 > = props => (
   <TouchableOpacity
@@ -38,7 +40,7 @@ const WindowSizeToggle: React.FunctionComponent<
       },
       props.style,
     ]}
-    onPress={props.toggleWindowSize}
+    onPress={props.onClose}
   >
     <Close />
   </TouchableOpacity>
@@ -47,8 +49,13 @@ const WindowSizeToggle: React.FunctionComponent<
 interface SolutionWindowProps {
   rank: string
   strategyResult: StrategyResultState
+  windowSize: WindowSize
 }
-const SolutionWindow: React.FunctionComponent<SolutionWindowProps> = props => (
+const SolutionWindow: React.FunctionComponent<SolutionWindowProps> = ({
+  strategyResult,
+  rank,
+  windowSize,
+}) => (
   <ScrollView
     style={[
       commonStyles.container,
@@ -57,8 +64,8 @@ const SolutionWindow: React.FunctionComponent<SolutionWindowProps> = props => (
       },
     ]}
   >
-    {props.strategyResult &&
-      (props.strategyResult === 'loading' ? (
+    {strategyResult &&
+      (strategyResult === 'loading' ? (
         <Text
           style={{
             fontSize: 20,
@@ -77,7 +84,7 @@ const SolutionWindow: React.FunctionComponent<SolutionWindowProps> = props => (
           >
             <Text
               style={{ fontSize: 18, flexShrink: 0, marginRight: 20 }}
-            >{`最少${props.strategyResult.minHands}手牌`}</Text>
+            >{`最少${strategyResult.minHands}手牌`}</Text>
             <Text style={{ textAlignVertical: 'center' }}>
               <Info style={{ width: 19, height: 19, verticalAlign: 'top' }} />
               大小王、炸弹算0手，其他牌型算1手
@@ -85,11 +92,11 @@ const SolutionWindow: React.FunctionComponent<SolutionWindowProps> = props => (
           </View>
           <View>
             {(() => {
-              const solutionsCount = props.strategyResult.solutions.length
+              const solutionsCount = strategyResult.solutions.length
               const hiddenMoreSolutions = solutionsCount - 10
               return (
                 <>
-                  {props.strategyResult.solutions
+                  {strategyResult.solutions
                     .slice(0, 10)
                     .map((solution, solutionIndex) => (
                       <CardDeck
@@ -97,7 +104,7 @@ const SolutionWindow: React.FunctionComponent<SolutionWindowProps> = props => (
                         hands={solution.actualHands.map(hand =>
                           hand.map(card =>
                             parseRawCard(card, {
-                              rank: props.rank,
+                              rank: rank,
                               suit: 'H',
                             }),
                           ),
@@ -105,6 +112,7 @@ const SolutionWindow: React.FunctionComponent<SolutionWindowProps> = props => (
                         style={{
                           margin: 6,
                         }}
+                        large={windowSize === 'BIG'}
                       />
                     ))}
                   {hiddenMoreSolutions > 0 &&
@@ -121,7 +129,7 @@ const MemoedSolutionWindow = memo(SolutionWindow)
 
 const SolutionVisualization: React.FunctionComponent<
   SolutionVisualizationProps
-> = ({ strategyResult, rank, onClose }) => (
+> = ({ strategyResult, rank, onClose, windowSize }) => (
   <>
     <View
       style={{
@@ -142,8 +150,8 @@ const SolutionVisualization: React.FunctionComponent<
         </Text>
       </View>
       {/* <View style={{ width: 2, backgroundColor: 'black' }} /> */}
-      <WindowSizeToggle
-        toggleWindowSize={onClose}
+      <CloseWindowButton
+        onClose={onClose}
         style={{
           // to the right and centered
           position: 'absolute',
@@ -153,7 +161,11 @@ const SolutionVisualization: React.FunctionComponent<
       />
     </View>
     <Divider />
-    <MemoedSolutionWindow strategyResult={strategyResult} rank={rank} />
+    <MemoedSolutionWindow
+      strategyResult={strategyResult}
+      rank={rank}
+      windowSize={windowSize}
+    />
   </>
 )
 
