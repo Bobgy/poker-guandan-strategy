@@ -39,10 +39,10 @@ const HomePage: React.FunctionComponent<StatelessHomePageProps> = ({
   windowSize,
 }) => {
   const handleSolutionCalcButton = useCallback(() => {
-    setResult('loading')
+    if (strategyModule != null && strategyModule !== 'error') {
+      setResult('loading')
 
-    setTimeout(() => {
-      if (strategyModule != null && strategyModule !== 'error') {
+      setTimeout(() => {
         // console.log(cards)
         const cardsStr = cardsToString(cards)
         // console.log(cardsStr)
@@ -53,11 +53,9 @@ const HomePage: React.FunctionComponent<StatelessHomePageProps> = ({
           navigation.navigate('Result')
           setResult(result)
         }, 300)
-      } else {
-        throw new Error('strategy module is null')
-      }
-    }, 0)
-  }, [cards, setResult, navigation])
+      }, 0)
+    }
+  }, [cards, setResult, navigation, strategyModule])
 
   if (strategyModule === 'error') {
     return <Text>{'strategy module failed to load'}</Text>

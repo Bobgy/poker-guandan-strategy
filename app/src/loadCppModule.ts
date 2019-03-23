@@ -60,9 +60,9 @@ function loadScript(src: string): Promise<void> {
   })
 }
 
-export function loadCppModule(): Promise<PortedCppModule> {
+export async function loadCppModule(): Promise<PortedCppModule> {
   if (window.Module) {
-    return Promise.resolve(portCppModule(window.Module))
+    return portCppModule(window.Module)
   } else {
     const modulePromise = new Promise<PortedCppModule>((resolve, reject) => {
       ;(window.Module as any) = {
@@ -74,10 +74,9 @@ export function loadCppModule(): Promise<PortedCppModule> {
         },
       }
     })
-    return loadScript('res/strategy.js')
-      .then(() => modulePromise)
-      .catch(() => {
-        return Promise.reject('wasm module failed to load')
-      })
+
+    await loadScript('res/strategy.js')
+
+    return await modulePromise
   }
 }
