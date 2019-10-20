@@ -4,3 +4,4 @@ a.out*
 *.o
 bin
 lib
+node_modules
