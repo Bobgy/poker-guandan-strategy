@@ -15,7 +15,7 @@ int main(int argc, char * argv[]) {
         string cards;
         cin>>cards;
         StrategyResult result = calc(cards, mainRank);
-        cout<<result.minHands<<endl;
+        cout<<result.cost<<endl;
     }
     return 0;
 }

@@ -16,6 +16,7 @@
 #include <cmath>
 #include <list>
 #include <map>
+#include <memory>
 #include <set>
 #include <string>
 #include <utility>
@@ -27,8 +28,51 @@ typedef pair<int, char> TCard;
 typedef map<int, multiset<char>> THandCards;
 typedef list<string> TSolutions;
 const int JOKER = 100000;
+const int BLACK_JOKER = JOKER;
+const int RED_JOKER = BLACK_JOKER + 1;
 const string SUITS = "SHDCA";
 const int INF = 100000;
+
+enum PlayType {
+    UNKNOWN,
+    SINGLE,
+    PAIR,
+    TRIPLE,
+    FULL_HOUSE,  // like 333,22
+    STRAIGHT,    // like 12345
+    TUBE,        // like 33,44,55
+    PLATE,       // like 333,444
+    // === The following is a bomb ===
+    STRAIGHT_FLUSH,  // like 34567 all hearts
+    BOMB_NORMAL,     // like 4444
+    FOUR_JOKER
+};
+// Represents a card play's rank information
+struct PlayRank {
+    PlayType type;
+    int rank;
+    int count;  // only used in a normal bomb
+};
+PlayRank makePlayRank(PlayType type, int rank) {
+    return PlayRank({type, rank, 0});
+}
+PlayRank makeBomb(int rank, int count) {
+    return PlayRank({PlayType::BOMB_NORMAL, rank, count});
+}
+PlayRank makeFourJoker() { return PlayRank({PlayType::FOUR_JOKER, 0, 0}); }
+
+struct GameContext {
+    // Which rank is largest in current game play.
+    int mainRank;
+};
+class CostEstimator {
+   public:
+    virtual double estimate(PlayRank playRank) const = 0;
+    virtual double estimateCards(const THandCards& hc, int wildCards) const = 0;
+
+   protected:
+    GameContext context;
+};
 
 /**
  * calculates min number of hands needed using just hand patterns of 1s, 2s, 3s,
@@ -41,7 +85,7 @@ const int INF = 100000;
  *
  ** returns min hands needed
  */
-int calculateMinHandsSimple(
+int calculateMinHandsImp(
     int cnt1, int cnt2, int cnt3, int cnt4plus, int wildCards) {
     if (wildCards <= 0) {
         return cnt1 + max(cnt2, cnt3);
@@ -51,34 +95,34 @@ int calculateMinHandsSimple(
             // use one wildcard to play a *single* as a *pair*
             minHandsPossible =
                 min(minHandsPossible,
-                    calculateMinHandsSimple(cnt1 - 1, cnt2 + 1, cnt3, cnt4plus,
-                                            wildCards - 1));
+                    calculateMinHandsImp(cnt1 - 1, cnt2 + 1, cnt3, cnt4plus,
+                                         wildCards - 1));
         }
         if (cnt2 > 0) {
             // use one wildcard to play a *pair* as a *triple*
             minHandsPossible =
                 min(minHandsPossible,
-                    calculateMinHandsSimple(cnt1, cnt2 - 1, cnt3 + 1, cnt4plus,
-                                            wildCards - 1));
+                    calculateMinHandsImp(cnt1, cnt2 - 1, cnt3 + 1, cnt4plus,
+                                         wildCards - 1));
         }
         if (cnt3 > 0) {
             // use one wildcard to play a *triple* as a *bomb*
             minHandsPossible =
                 min(minHandsPossible,
-                    calculateMinHandsSimple(cnt1, cnt2, cnt3 - 1, cnt4plus + 1,
-                                            wildCards - 1));
+                    calculateMinHandsImp(cnt1, cnt2, cnt3 - 1, cnt4plus + 1,
+                                         wildCards - 1));
         }
         if (cnt4plus > 0) {
             // use one wildcard to play a *bomb* as a larger *bomb*
             minHandsPossible =
                 min(minHandsPossible,
-                    calculateMinHandsSimple(cnt1, cnt2, cnt3, cnt4plus,
-                                            wildCards - 1));
+                    calculateMinHandsImp(cnt1, cnt2, cnt3, cnt4plus,
+                                         wildCards - 1));
         }
         // use one wildcard as a *single*
-        minHandsPossible = min(
-            minHandsPossible, calculateMinHandsSimple(cnt1 + 1, cnt2, cnt3,
-                                                      cnt4plus, wildCards - 1));
+        minHandsPossible = min(minHandsPossible,
+                               calculateMinHandsImp(cnt1 + 1, cnt2, cnt3,
+                                                    cnt4plus, wildCards - 1));
 
         return minHandsPossible;
     }
@@ -97,13 +141,13 @@ int calculateMinHandsSimple(
  *
  ** returns min hands needed
  */
-int count(THandCards hc, int wildCards) {
+int calculateMinHands(THandCards hc, int wildCards) {
     THandCards::iterator it;
     int cnt[5];
     for (int i = 1; i <= 4; i++) cnt[i] = 0;
 
     for (it = hc.begin(); it != hc.end(); it++) {
-        if ((*it).first >= JOKER) {
+        if ((*it).first >= BLACK_JOKER) {
             continue;  // skip jokers completely
         }
         if ((*it).second.size() <= 3)
@@ -112,15 +156,47 @@ int count(THandCards hc, int wildCards) {
             cnt[4]++;
     }
 
-    return calculateMinHandsSimple(cnt[1], cnt[2], cnt[3], cnt[4], wildCards);
+    return calculateMinHandsImp(cnt[1], cnt[2], cnt[3], cnt[4], wildCards);
 }
+
+class MinPlaysCostEstimator : public CostEstimator {
+   public:
+    MinPlaysCostEstimator(GameContext argContext) { context = argContext; }
+    double estimate(PlayRank playRank) const {
+        switch (playRank.type) {
+            case BOMB_NORMAL:
+            case STRAIGHT_FLUSH:
+            case FOUR_JOKER:
+                return 0.0;  // 0 plays, because you can play them any time
+            default:
+                return 1.0;  // 1 play
+        }
+    }
+    double estimateCards(const THandCards& hc, int wildCards) const {
+        return (double)calculateMinHands(hc, wildCards);
+    }
+};
+
+class OverallValueCostEstimator : public CostEstimator {
+   public:
+    OverallValueCostEstimator(GameContext argContext) { context = argContext; }
+    // {@returns cost} cost is a real number. [-2, 2]
+    // -2 means stopping opponent from playing a card and plays a small card.
+    // 2 means playing a small card and let opponent play a small card.
+    double estimate(PlayRank playRank) const {
+        return 1.0;  // not yet implemented
+    }
+    double estimateCards(const THandCards& hc, int wildCards) const {
+        return hc.size();  // not yet implemented
+    }
+};
 
 #ifdef __DEBUG__
 void debug(THandCards& hc) {
-    for(auto entry: hc) {
+    for (auto entry : hc) {
         if (entry.second.size() == 0) continue;
         cerr << "(" << entry.first << " :";
-        for (auto suite: entry.second) {
+        for (auto suite : entry.second) {
             cerr << suite << " ";
         }
         cerr << ")";
@@ -129,29 +205,38 @@ void debug(THandCards& hc) {
 }
 #endif
 
+int parseRankFromChar(char rank) {
+    if (rank >= '2' && rank <= '9') {
+        return rank - '0';
+    } else if (rank == 'A') {
+        return 1;
+    } else if (rank == 'J') {
+        return 11;
+    } else if (rank == 'Q') {
+        return 12;
+    } else if (rank == 'K') {
+        return 13;
+    } else if (rank == '0') {
+        return 10;
+    } else if (rank == 'X') {
+        return BLACK_JOKER;
+    }
+
+    assert("invalid card" && false);
+}
+
 void AddCard(THandCards& hc, char ch1, char ch2) {
+    int rank = parseRankFromChar(ch1);
     TCard tmp;
+    tmp.first = rank;
     tmp.second = ch2;
-    if (ch1 - '0' <= 9 && ch1 - '0' >= 2) {
-        tmp.first = ch1 - '0';
-    } else if (ch1 == 'A') {
-        tmp.first = 1;
-    } else if (ch1 == 'J') {
-        tmp.first = 11;
-    } else if (ch1 == 'K') {
-        tmp.first = 13;
-    } else if (ch1 == 'Q') {
-        tmp.first = 12;
-    } else if (ch1 == '0') {
-        tmp.first = 10;
-    } else if (ch1 == 'X') {
+    if (rank == JOKER) {
+        // First character cannot distinguish red joker and black joker.
         if (ch2 == 'R') {
-            tmp.first = JOKER + 1;
+            tmp.first = RED_JOKER;
         } else if (ch2 == 'B') {
-            tmp.first = JOKER;
+            tmp.first = BLACK_JOKER;
         }
-    } else {
-        assert("invalid card" && false);
     }
     hc[tmp.first].insert(tmp.second);
 }
@@ -187,30 +272,30 @@ int getActualRank(int rank) { return rank == 14 ? 1 : rank; }
 
 // Suit: S-Spade C-Club D-Diamond H-Heart A-All
 bool ExistShunZi(THandCards& hc,
-                int wildCards,
-                int StartingNumber,
-                int Length,
-                int HandNum,
-                char Suit,
-                THandCards& oneHand,
-                int& wildCardsToUse) {
-
+                 int wildCards,
+                 int StartingNumber,
+                 int Length,
+                 int HandNum,
+                 char Suit,
+                 THandCards& oneHand,
+                 int& wildCardsToUse) {
     // assert the sequence is valid
     assert(StartingNumber + Length - 1 <= 14);
     oneHand.clear();
     if (Suit == 'A') {
         int cardsLacking = 0;
-        #ifdef __DEBUG__
+#ifdef __DEBUG__
         debug(hc);
-        cerr << "exist shunzi " << StartingNumber << " " << Length << " " << HandNum << " " << endl;
-        #endif
+        cerr << "exist shunzi " << StartingNumber << " " << Length << " "
+             << HandNum << " " << endl;
+#endif
         for (int k = StartingNumber; k < StartingNumber + Length; k++) {
             // cerr << " #" << k << " " << hc[getActualRank(k)].size() << "# ";
             cardsLacking += max(0, HandNum - (int)hc[getActualRank(k)].size());
         }
-        #ifdef __DEBUG__
+#ifdef __DEBUG__
         cerr << cardsLacking << " " << wildCards << endl;
-        #endif
+#endif
 
         if (cardsLacking > wildCards) return false;
 
@@ -219,21 +304,24 @@ bool ExistShunZi(THandCards& hc,
             int i = getActualRank(k);
             multiset<char>::iterator it;
             int j;
-            for (j = 0, it = hc[i].begin(); j < HandNum && it != hc[i].end(); j++, it++) {
+            for (j = 0, it = hc[i].begin(); j < HandNum && it != hc[i].end();
+                 j++, it++) {
                 oneHand[i].insert(*it);
             }
         }
     } else {
         int cardsLacking = 0;
         for (int k = StartingNumber; k < StartingNumber + Length; k++) {
-            cardsLacking += max(0, HandNum - (int)hc[getActualRank(k)].count(Suit));
+            cardsLacking +=
+                max(0, HandNum - (int)hc[getActualRank(k)].count(Suit));
         }
 
         if (cardsLacking > wildCards) return false;
 
         wildCardsToUse = cardsLacking;
         for (int k = StartingNumber; k < StartingNumber + Length; k++) {
-            for (int j = 0; j < min(HandNum, (int)hc[getActualRank(k)].count(Suit)); j++) {
+            for (int j = 0;
+                 j < min(HandNum, (int)hc[getActualRank(k)].count(Suit)); j++) {
                 oneHand[getActualRank(k)].insert(Suit);
             }
         }
@@ -273,7 +361,7 @@ int Mo(THandCards& hc, THandCards& oneHand) {
 string wildCardsToStr(int wildCards) {
     string str = "";
     for (int i = 0; i < wildCards; ++i) {
-        str += "WC "; // wild card
+        str += "WC ";  // wild card
     }
     return str;
 }
@@ -294,6 +382,7 @@ string handToStr(THandCards hc, int wildCards = 0) {
 int check(THandCards& hc,
           list<string>& ASolution,
           int wildCardsLeft,
+          const CostEstimator& costEstimator,
           int CurrentTypePosition = 0,
           int CurrentStartingNumPosition = 0);
 
@@ -305,36 +394,50 @@ void tryExtractOneHand(char NowSuit,
                        int& CurrentStartingNumPosition,
                        THandCards& hc,
                        int wildCardsLeft,
+                       const CostEstimator& costEstimator,
                        TSolutions& ASolution,
-                       int& min) {
+                       double& min) {
     TypePosition++;
     if (CurrentTypePosition > TypePosition)
         return;
     else if (CurrentTypePosition < TypePosition)
         CurrentStartingNumPosition = 0;
-    for (int StartingNumber = CurrentStartingNumPosition; StartingNumber + seriesCount - 1 <= 14; ++StartingNumber) {
+    for (int StartingNumber = CurrentStartingNumPosition;
+         StartingNumber + seriesCount - 1 <= 14; ++StartingNumber) {
         THandCards oneHand;
         int outWildCardsToUse = 0;
-        bool exists = ExistShunZi(hc, wildCardsLeft, StartingNumber, seriesCount, cardCount,
-                                 NowSuit, oneHand, outWildCardsToUse);
+        bool exists =
+            ExistShunZi(hc, wildCardsLeft, StartingNumber, seriesCount,
+                        cardCount, NowSuit, oneHand, outWildCardsToUse);
         if (exists) {
-            #ifdef __DEBUG__
+#ifdef __DEBUG__
             cerr << wildCardsLeft << " Found: ";
             debug(oneHand);
-            #endif
+#endif
 
             Chu(hc, oneHand);
             list<string> tmpSolution;
-            int remainingHands =
-                check(hc, tmpSolution, wildCardsLeft - outWildCardsToUse, TypePosition,
-                      StartingNumber) +
-                // straight flush (5 consecutive cards with the same suit) is a
-                // bomb
-                ((NowSuit != 'A' && seriesCount == 5 && cardCount == 1) ? 0
-                                                                        : 1);
-            if (remainingHands <= min) {
-                if (remainingHands < min) ASolution.clear();
-                min = remainingHands;
+            // Current chosen play's rank
+            int endRank = StartingNumber + seriesCount - 1;
+            PlayRank playRank(
+                (seriesCount == 5 && cardCount == 1)
+                    ? makePlayRank(NowSuit != 'A' ? STRAIGHT_FLUSH : STRAIGHT,
+                                   endRank)
+                    : (seriesCount == 3 && cardCount == 2)
+                          ? makePlayRank(TUBE, endRank)
+                          : (seriesCount == 2 && cardCount == 3)
+                                ? makePlayRank(PLATE, endRank)
+                                : makePlayRank(
+                                      UNKNOWN,
+                                      endRank)  // should never hit here
+            );
+            double remainingCost =
+                check(hc, tmpSolution, wildCardsLeft - outWildCardsToUse,
+                      costEstimator, TypePosition, StartingNumber) +
+                costEstimator.estimate(playRank);
+            if (remainingCost <= min) {
+                if (remainingCost < min) ASolution.clear();
+                min = remainingCost;
                 for (TSolutions::iterator it = tmpSolution.begin();
                      it != tmpSolution.end(); it++) {
                     (*it) += "| " + handToStr(oneHand, outWildCardsToUse) + "|";
@@ -350,34 +453,35 @@ void tryExtractOneHand(char NowSuit,
 int check(THandCards& hc,
           list<string>& ASolution,
           int wildCardsLeft,
+          const CostEstimator& costEstimator,
           int CurrentTypePosition,
           int CurrentStartingNumPosition) {
-    #ifdef __DEBUG__
+#ifdef __DEBUG__
     cerr << wildCardsLeft << " ";
     debug(hc);
-    #endif
+#endif
 
     THandCards::iterator it;
     int TypePosition = 0;
-    int min = count(hc, wildCardsLeft);
+    double min = costEstimator.estimateCards(hc, wildCardsLeft);
     ASolution.push_back("| " + handToStr(hc, wildCardsLeft) + "|");
     // try flushes -> straight flush
     for (int tt = 0; tt < 5; tt++) {
         tryExtractOneHand(SUITS[tt], 5, 1, TypePosition, CurrentTypePosition,
                           CurrentStartingNumPosition, hc, wildCardsLeft,
-                          ASolution, min);
+                          costEstimator, ASolution, min);
     }
     tryExtractOneHand('A', 3, 2, TypePosition, CurrentTypePosition,
-                      CurrentStartingNumPosition, hc, wildCardsLeft, ASolution,
-                      min);
+                      CurrentStartingNumPosition, hc, wildCardsLeft,
+                      costEstimator, ASolution, min);
     tryExtractOneHand('A', 2, 3, TypePosition, CurrentTypePosition,
-                      CurrentStartingNumPosition, hc, wildCardsLeft, ASolution,
-                      min);
+                      CurrentStartingNumPosition, hc, wildCardsLeft,
+                      costEstimator, ASolution, min);
     return min;
 }
 
 struct StrategyResult {
-    int minHands;
+    double cost;
     vector<string> solutions;
 };
 
@@ -395,9 +499,11 @@ EMSCRIPTEN_KEEPALIVE StrategyResult calc(string cards, char mainRank) {
         else
             AddCard(hc, ch1, ch2);
     }
-    int min = check(hc, solution, wildCards);
+    const unique_ptr<CostEstimator> costEstimator(
+        new MinPlaysCostEstimator(GameContext({parseRankFromChar(mainRank)})));
+    double minCost = check(hc, solution, wildCards, *costEstimator);
     return StrategyResult(
-        {min, vector<string>(solution.begin(), solution.end())});
+        {minCost, vector<string>(solution.begin(), solution.end())});
 }
 
 #ifdef __EMSCRIPTEN__
@@ -408,7 +514,7 @@ EMSCRIPTEN_BINDINGS(my_module) {
 
     register_vector<string>("vector<string>");
     value_object<StrategyResult>("StrategyResult")
-        .field("minHands", &StrategyResult::minHands)
+        .field("minHands", &StrategyResult::cost)
         .field("solutions", &StrategyResult::solutions);
 }
 }  // namespace emscripten
