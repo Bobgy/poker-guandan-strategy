@@ -14,7 +14,7 @@ int main(int argc, char * argv[]) {
         cin>>mainRank;
         string cards;
         cin>>cards;
-        StrategyResult result = calc(cards, mainRank);
+        StrategyResult result = calcForTest(cards, mainRank, false);
         cout<<result.cost<<endl;
     }
     return 0;

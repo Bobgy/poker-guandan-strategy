@@ -187,7 +187,7 @@ class OverallValueCostEstimator : public CostEstimator {
         return 1.0;  // not yet implemented
     }
     double estimateCards(const THandCards& hc, int wildCards) const {
-        return hc.size();  // not yet implemented
+        return (double)calculateMinHands(hc, wildCards);
     }
 };
 
@@ -485,23 +485,52 @@ struct StrategyResult {
     vector<string> solutions;
 };
 
+struct CardState {
+    THandCards hc;
+    int wildCards;
+};
+
+CardState parseCardState(string cards, char mainRank) {
+    CardState state{};
+    for (int i = 0; i < cards.length() / 2; i++) {
+        char ch1 = cards[i * 2], ch2 = cards[i * 2 + 1];
+        if (ch1 == mainRank && ch2 == 'H')
+            state.wildCards++;
+        else
+            AddCard(state.hc, ch1, ch2);
+    }
+    return state;
+}
+
 // cards: cards represented in string
 // 红桃：?H | 黑桃：?S | 梅花：?C | 方块：?D | 小鬼：XB | 大鬼：XR | 数字10：0 ?
 // | 其余和牌面相同 mainRank: main rank, starting from 2
 EMSCRIPTEN_KEEPALIVE StrategyResult calc(string cards, char mainRank) {
-    THandCards hc;
-    list<string> solution;
-    int wildCards = 0;
-    for (int i = 0; i < cards.length() / 2; i++) {
-        char ch1 = cards[i * 2], ch2 = cards[i * 2 + 1];
-        if (ch1 == mainRank && ch2 == 'H')
-            wildCards++;
-        else
-            AddCard(hc, ch1, ch2);
-    }
+    CardState state = parseCardState(cards, mainRank);
     const unique_ptr<CostEstimator> costEstimator(
         new MinPlaysCostEstimator(GameContext({parseRankFromChar(mainRank)})));
-    double minCost = check(hc, solution, wildCards, *costEstimator);
+
+    list<string> solution;
+    double minCost = check(state.hc, solution, state.wildCards, *costEstimator);
+    return StrategyResult(
+        {minCost, vector<string>(solution.begin(), solution.end())});
+}
+
+// cards: cards represented in string
+// 红桃：?H | 黑桃：?S | 梅花：?C | 方块：?D | 小鬼：XB | 大鬼：XR | 数字10：0 ?
+// | 其余和牌面相同 mainRank: main rank, starting from 2
+StrategyResult calcForTest(string cards, char mainRank, bool useOverallValueEstimator) {
+    CardState state = parseCardState(cards, mainRank);
+    int rank = parseRankFromChar(mainRank);
+    GameContext context{rank};
+    const unique_ptr<CostEstimator> costEstimator(
+        useOverallValueEstimator
+        ? (CostEstimator*) new OverallValueCostEstimator(context)
+        : (CostEstimator*) new MinPlaysCostEstimator(context)
+        );
+
+    list<string> solution;
+    double minCost = check(state.hc, solution, state.wildCards, *costEstimator);
     return StrategyResult(
         {minCost, vector<string>(solution.begin(), solution.end())});
 }
