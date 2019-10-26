@@ -184,7 +184,7 @@ class OverallValueCostEstimator : public CostEstimator {
     // -2 means stopping opponent from playing a card and plays a small card.
     // 2 means playing a small card and let opponent play a small card.
     double estimate(PlayRank playRank) const {
-        return 1.0;  // not yet implemented
+        return 100.0;  // not yet implemented
     }
     double estimateCards(const THandCards& hc, int wildCards) const {
         return (double)calculateMinHands(hc, wildCards);
