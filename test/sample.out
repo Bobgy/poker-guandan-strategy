@@ -5,6 +5,7 @@ cost=1
 solutions=[
   '| XR XR WC WC |',
 ]
+
 cards=AD3D8H6HKCKS4DJC3H3C9H2C5H9SJD3CKH7CKCAH5H2C4C3SXRAC5S
 mainRank=3
 costMinPlays=5
@@ -12,6 +13,7 @@ cost=6
 solutions=[
   '| AC AD AH 2C 2C 3C 3C 3D 3S 4C 4D 5H 5H 5S 6H 7C 8H 9H 9S JC JD KC KC KH KS XR WC |',
 ]
+
 cards=KC0D4HKD6DJCKC2S8HADJD4D9C7SJH3SXBXR2DQH5H8S9D5S0S2D5C
 mainRank=6
 costMinPlays=7
@@ -19,3 +21,4 @@ cost=9
 solutions=[
   '| AD 2D 2D 2S 3S 4D 4H 5C 5H 5S 6D 7S 8H 8S 9C 9D 0D 0S JC JD JH QH KC KC KD XB XR |',
 ]
+

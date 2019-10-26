@@ -29,6 +29,7 @@ int main(int argc, char* argv[]) {
         cout << "costMinPlays=" << resultMinPlays.cost << endl;
         StrategyResult resultOverallValue = calcForTest(cards, mainRank, true);
         printStrategyResult(resultOverallValue);
+        cout << endl;
     }
     return 0;
 }
