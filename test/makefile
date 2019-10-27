@@ -5,14 +5,12 @@ all: test_sample test
 test_sample: sample.out my_sample.out
     diff sample.out my_sample.out
 
-update_fixture_sample: my_sample.out
-    cp my_sample.out sample.out
-
 test: std_output.txt curr_output.txt
     diff std_output.txt curr_output.txt
 
-update_fixture: curr_output.txt
+update_fixture: curr_output.txt my_sample.out
     cp curr_output.txt std_output.txt
+    cp my_sample.out sample.out
 
 clean:
     rm -f *.exe curr_output.txt
