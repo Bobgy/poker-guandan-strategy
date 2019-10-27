@@ -61,9 +61,36 @@ PlayRank makeBomb(int rank, int count) {
 }
 PlayRank makeFourJoker() { return PlayRank({PlayType::FOUR_JOKER, 0, 0}); }
 
+// rank 14 -> A -> should be found at rank 1
+int getActualRank(int rank) { return rank == 14 ? 1 : rank; }
+// in ordinal rank, A should be found at rank 14
+int getOrdinalRank(int rank) { return rank == 1 ? 14 : rank; }
+
 struct GameContext {
     // Which rank is largest in current game play.
     int mainRank;
+
+    /**
+     * Returns range[0, 14], order of the rank in this gameplay.
+     * The smallest is 0. The largest (red joker) is 14.
+     */
+    int getOrder(int rank) const {
+        if (rank == RED_JOKER) {
+            return 14;
+        } else if (rank == BLACK_JOKER) {
+            return 13;
+        } else if (rank == mainRank) {
+            return 12;
+        } else {
+            rank = getOrdinalRank(rank);
+            int ordinalMainRank = getOrdinalRank(mainRank);
+            if (rank > ordinalMainRank) {
+                return rank - 3; // 10 becomes 7, ...
+            } else {
+                return rank - 2; // 2 becomes 0, 3 becomes 1, ...
+            }
+        }
+    }
 };
 class CostEstimator {
    public:
@@ -177,6 +204,10 @@ class MinPlaysCostEstimator : public CostEstimator {
     }
 };
 
+double linear(double l, double r, double valueL, double valueR, double x) {
+    return (x-l) * (valueR - valueL) / (r-l) + valueL;
+}
+
 class OverallValueCostEstimator : public CostEstimator {
    public:
     OverallValueCostEstimator(GameContext argContext) { context = argContext; }
@@ -184,7 +215,48 @@ class OverallValueCostEstimator : public CostEstimator {
     // -2 means stopping opponent from playing a card and plays a small card.
     // 2 means playing a small card and let opponent play a small card.
     double estimate(PlayRank playRank) const {
-        return 100.0;  // not yet implemented
+        const int rank = playRank.rank;
+        const int ordinalRank = getOrdinalRank(rank);
+        const int order = context.getOrder(rank);
+        switch (playRank.type) {
+            case SINGLE:
+                return order == 14 // red joker
+                    ? -1.0
+                    : order == 13 // black joker
+                    ? -0.2
+                    : order == 12 // main rank
+                    ? -0.1
+                    : linear(0, 11, 1.3, 0.0, order);
+            case PAIR:
+                return order == 14 // red joker
+                    ? -1.0
+                    : order == 13 // black joker
+                    ? -0.9
+                    : order == 12 // main rank
+                    ? -0.8
+                    : order == 11
+                    ? -0.5
+                    : linear(0, 10, 1.0, -0.1, order);
+            // WIP
+            // case TRIPLE:
+            //     assert(order <= 12); // joker cannot be triples
+            //     return order == 12
+            //         ? 
+            case BOMB_NORMAL:
+                return playRank.count >= 6
+                    ? -1.9
+                    : playRank.count == 5
+                    ? linear(0, 12, -1.5, -1.7, order)
+                    : linear(0, 12, -1.0, -1.3, order);
+            case STRAIGHT_FLUSH:
+                // 5 to 14 means
+                // 1,2,3,4,5 to 10,J,Q,K,A
+                return linear(5, 14, -1.3, -1.5, ordinalRank);
+            case FOUR_JOKER:
+                return -2.0;
+            default:
+                return 1.0;
+        }
     }
     double estimateCards(const THandCards& hc, int wildCards) const {
         return (double)calculateMinHands(hc, wildCards);
@@ -266,9 +338,6 @@ string CardToStr(int num, char suit) {
     }
     return str;
 }
-
-// rank 14 -> A -> should be found at rank 1
-int getActualRank(int rank) { return rank == 14 ? 1 : rank; }
 
 // Suit: S-Spade C-Club D-Diamond H-Heart A-All
 bool ExistShunZi(THandCards& hc,
