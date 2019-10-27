@@ -2,8 +2,7 @@
 
 all: test_sample test
 
-test_sample: sample.in sample.out wrapper.exe
-    ./wrapper < sample.in > my_sample.out
+test_sample: sample.out my_sample.out
     diff sample.out my_sample.out
 
 update_fixture_sample: my_sample.out
