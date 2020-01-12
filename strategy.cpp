@@ -86,9 +86,9 @@ struct GameContext {
             rank = getOrdinalRank(rank);
             int ordinalMainRank = getOrdinalRank(mainRank);
             if (rank > ordinalMainRank) {
-                return rank - 3; // 10 becomes 7, ...
+                return rank - 3;  // 10 becomes 7, ...
             } else {
-                return rank - 2; // 2 becomes 0, 3 becomes 1, ...
+                return rank - 2;  // 2 becomes 0, 3 becomes 1, ...
             }
         }
     }
@@ -206,7 +206,7 @@ class MinPlaysCostEstimator : public CostEstimator {
 };
 
 double linear(double l, double r, double valueL, double valueR, double x) {
-    return (x-l) * (valueR - valueL) / (r-l) + valueL;
+    return (x - l) * (valueR - valueL) / (r - l) + valueL;
 }
 
 class OverallValueCostEstimator : public CostEstimator {
@@ -221,49 +221,64 @@ class OverallValueCostEstimator : public CostEstimator {
         const int order = context.getOrder(rank);
         switch (playRank.type) {
             case SINGLE:
-                return order == 14 // red joker
-                    ? -1.0
-                    : order == 13 // black joker
-                    ? -0.2
-                    : order == 12 // main rank
-                    ? -0.1
-                    : linear(0, 11, 1.3, 0.0, order);
+                switch (order) {
+                    case 14:  // red joker
+                        return -1.0;
+                    case 13:  // black joker
+                        return -0.2;
+                    case 12:  // main rank
+                        return -0.1;
+                    default:
+                        return linear(0, 11, 1.3, 0.0, order);
+                }
             case PAIR:
-                return order == 14 // red joker
-                    ? -1.0
-                    : order == 13 // black joker
-                    ? -0.9
-                    : order == 12 // main rank
-                    ? -0.8
-                    : order == 11
-                    ? -0.5
-                    : linear(0, 10, 1.0, -0.1, order);
+                switch (order) {
+                    case 14:  // red joker
+                        return -1.0;
+                    case 13:  // black joker
+                        return -0.9;
+                    case 12:  // main rank
+                        return -0.8;
+                    case 11:
+                        return -0.5;
+                    default:
+                        return linear(0, 10, 1.0, -0.1, order);
+                }
             case TRIPLE:
-                assert(order <= 12); // joker cannot be triples
-                return order == 12
-                    ? -0.9
-                    : order == 11
-                    ? -0.8
-                    : order == 10
-                    ? -0.6
-                    : linear(0, 9, 1.0, -0.3, order);
+                assert(order <= 12);  // joker cannot be triples
+                switch (order) {
+                    case 12:
+                        return -0.9;
+                    case 11:
+                        return -0.8;
+                    case 10:
+                        return -0.6;
+                    default:
+                        return linear(0, 9, 1.0, -0.3, order);
+                }
             case STRAIGHT:
-                assert(actualRank >= 1 && actualRank <= 10); // largest valid straight is 10,J,Q,K,A
+                assert(actualRank >= 1 &&
+                       actualRank <=
+                           10);  // largest valid straight is 10,J,Q,K,A
                 return 0.6 * linear(1, 10, 1.0, -1.0, actualRank);
             case TUBE:
-                assert(actualRank >= 1 && actualRank <= 12); // largest valid tube is QQKKAA
+                assert(actualRank >= 1 &&
+                       actualRank <= 12);  // largest valid tube is QQKKAA
                 return 0.4 * linear(1, 12, 1.0, -1.0, actualRank);
             case PLATE:
-                assert(actualRank >= 1 && actualRank <= 13); // largest valid plate is KKKAAA
+                assert(actualRank >= 1 &&
+                       actualRank <= 13);  // largest valid plate is KKKAAA
                 return 0.3 * linear(1, 13, 1.0, -1.0, actualRank);
             case BOMB_NORMAL:
                 return playRank.count >= 6
-                    ? -1.9
-                    : playRank.count == 5
-                    ? linear(0, 12, -1.5, -1.7, order)
-                    : linear(0, 12, -1.0, -1.3, order);
+                           ? -1.9
+                           : playRank.count == 5
+                                 ? linear(0, 12, -1.5, -1.7, order)
+                                 : linear(0, 12, -1.0, -1.3, order);
             case STRAIGHT_FLUSH:
-                assert(actualRank >= 1 && actualRank <= 10); // largest valid straight is 10,J,Q,K,A
+                assert(actualRank >= 1 &&
+                       actualRank <=
+                           10);  // largest valid straight is 10,J,Q,K,A
                 // 5 to 14 means
                 // 1,2,3,4,5 to 10,J,Q,K,A
                 return linear(5, 14, -1.3, -1.5, actualRank);
@@ -603,15 +618,16 @@ EMSCRIPTEN_KEEPALIVE StrategyResult calc(string cards, char mainRank) {
 // cards: cards represented in string
 // 红桃：?H | 黑桃：?S | 梅花：?C | 方块：?D | 小鬼：XB | 大鬼：XR | 数字10：0 ?
 // | 其余和牌面相同 mainRank: main rank, starting from 2
-StrategyResult calcForTest(string cards, char mainRank, bool useOverallValueEstimator) {
+StrategyResult calcForTest(string cards,
+                           char mainRank,
+                           bool useOverallValueEstimator) {
     CardState state = parseCardState(cards, mainRank);
     int rank = parseRankFromChar(mainRank);
     GameContext context{rank};
     const unique_ptr<CostEstimator> costEstimator(
         useOverallValueEstimator
-        ? (CostEstimator*) new OverallValueCostEstimator(context)
-        : (CostEstimator*) new MinPlaysCostEstimator(context)
-        );
+            ? (CostEstimator*)new OverallValueCostEstimator(context)
+            : (CostEstimator*)new MinPlaysCostEstimator(context));
 
     list<string> solution;
     double minCost = check(state.hc, solution, state.wildCards, *costEstimator);
