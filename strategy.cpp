@@ -82,6 +82,7 @@ struct GameContext {
         } else if (rank == mainRank) {
             return 12;
         } else {
+            assert(rank >= 1 && rank <= 14);
             rank = getOrdinalRank(rank);
             int ordinalMainRank = getOrdinalRank(mainRank);
             if (rank > ordinalMainRank) {
@@ -216,7 +217,7 @@ class OverallValueCostEstimator : public CostEstimator {
     // 2 means playing a small card and let opponent play a small card.
     double estimate(PlayRank playRank) const {
         const int rank = playRank.rank;
-        const int ordinalRank = getOrdinalRank(rank);
+        const int actualRank = getActualRank(rank);
         const int order = context.getOrder(rank);
         switch (playRank.type) {
             case SINGLE:
@@ -237,11 +238,24 @@ class OverallValueCostEstimator : public CostEstimator {
                     : order == 11
                     ? -0.5
                     : linear(0, 10, 1.0, -0.1, order);
-            // WIP
-            // case TRIPLE:
-            //     assert(order <= 12); // joker cannot be triples
-            //     return order == 12
-            //         ? 
+            case TRIPLE:
+                assert(order <= 12); // joker cannot be triples
+                return order == 12
+                    ? -0.9
+                    : order == 11
+                    ? -0.8
+                    : order == 10
+                    ? -0.6
+                    : linear(0, 9, 1.0, -0.3, order);
+            case STRAIGHT:
+                assert(actualRank >= 1 && actualRank <= 10); // largest valid straight is 10,J,Q,K,A
+                return 0.6 * linear(1, 10, 1.0, -1.0, actualRank);
+            case TUBE:
+                assert(actualRank >= 1 && actualRank <= 12); // largest valid tube is QQKKAA
+                return 0.4 * linear(1, 12, 1.0, -1.0, actualRank);
+            case PLATE:
+                assert(actualRank >= 1 && actualRank <= 13); // largest valid plate is KKKAAA
+                return 0.3 * linear(1, 13, 1.0, -1.0, actualRank);
             case BOMB_NORMAL:
                 return playRank.count >= 6
                     ? -1.9
@@ -249,13 +263,14 @@ class OverallValueCostEstimator : public CostEstimator {
                     ? linear(0, 12, -1.5, -1.7, order)
                     : linear(0, 12, -1.0, -1.3, order);
             case STRAIGHT_FLUSH:
+                assert(actualRank >= 1 && actualRank <= 10); // largest valid straight is 10,J,Q,K,A
                 // 5 to 14 means
                 // 1,2,3,4,5 to 10,J,Q,K,A
-                return linear(5, 14, -1.3, -1.5, ordinalRank);
+                return linear(5, 14, -1.3, -1.5, actualRank);
             case FOUR_JOKER:
                 return -2.0;
             default:
-                return 1.0;
+                throw invalid_argument("playRank.type has unknown type");
         }
     }
     double estimateCards(const THandCards& hc, int wildCards) const {
