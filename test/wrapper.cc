@@ -1,8 +1,8 @@
 #include <iostream>
 #include "../strategy.cpp"
 
-void printStrategyResult(const StrategyResult &result) {
-    cout << "cost=" << result.cost << endl;
+void printStrategyResult(const StrategyResult &result, const char* prefix) {
+    cout << prefix << "cost=" << result.cost << endl;
     cout << "solutions=[" << endl;
     for (auto solution: result.solutions) {
         cout << "  '" << solution << "'," << endl;
@@ -23,12 +23,12 @@ int main(int argc, char* argv[]) {
         cin >> mainRank;
         string cards;
         cin >> cards;
-        StrategyResult resultMinPlays = calcForTest(cards, mainRank, false);
         cout << "cards=" << cards << endl;
         cout << "mainRank=" << mainRank << endl;
-        cout << "costMinPlays=" << resultMinPlays.cost << endl;
+        StrategyResult resultMinPlays = calcForTest(cards, mainRank, false);
+        printStrategyResult(resultMinPlays, "min_plays_");
         StrategyResult resultOverallValue = calcForTest(cards, mainRank, true);
-        printStrategyResult(resultOverallValue);
+        printStrategyResult(resultOverallValue, "overall_value_");
         cout << endl;
     }
     return 0;

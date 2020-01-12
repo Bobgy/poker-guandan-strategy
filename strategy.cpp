@@ -216,6 +216,14 @@ class OverallValueCostEstimator : public CostEstimator {
     // -2 means stopping opponent from playing a card and plays a small card.
     // 2 means playing a small card and let opponent play a small card.
     double estimate(PlayRank playRank) const {
+        switch (playRank.type) {
+            case BOMB_NORMAL:
+            case STRAIGHT_FLUSH:
+            case FOUR_JOKER:
+                return 0.0;  // 0 plays, because you can play them any time
+            default:
+                return 1.0;  // 1 play
+        }
         const int rank = playRank.rank;
         const int actualRank = getActualRank(rank);
         const int order = context.getOrder(rank);
@@ -321,7 +329,7 @@ int parseRankFromChar(char rank) {
     } else if (rank == '0') {
         return 10;
     } else if (rank == 'X') {
-        return BLACK_JOKER;
+        return JOKER;
     }
 
     assert("invalid card" && false);
@@ -329,6 +337,7 @@ int parseRankFromChar(char rank) {
 
 void AddCard(THandCards& hc, char ch1, char ch2) {
     int rank = parseRankFromChar(ch1);
+    assert(rank >= 1 && rank <= JOKER);
     TCard tmp;
     tmp.first = rank;
     tmp.second = ch2;
@@ -379,6 +388,7 @@ bool ExistShunZi(THandCards& hc,
                  THandCards& oneHand,
                  int& wildCardsToUse) {
     // assert the sequence is valid
+    assert(StartingNumber >= 1);
     assert(StartingNumber + Length - 1 <= 14);
     oneHand.clear();
     if (Suit == 'A') {
@@ -483,7 +493,7 @@ int check(THandCards& hc,
           int wildCardsLeft,
           const CostEstimator& costEstimator,
           int CurrentTypePosition = 0,
-          int CurrentStartingNumPosition = 0);
+          int CurrentStartingNumPosition = 1);
 
 void tryExtractOneHand(char NowSuit,
                        int seriesCount,
@@ -500,7 +510,7 @@ void tryExtractOneHand(char NowSuit,
     if (CurrentTypePosition > TypePosition)
         return;
     else if (CurrentTypePosition < TypePosition)
-        CurrentStartingNumPosition = 0;
+        CurrentStartingNumPosition = 1;
     for (int StartingNumber = CurrentStartingNumPosition;
          StartingNumber + seriesCount - 1 <= 14; ++StartingNumber) {
         THandCards oneHand;
@@ -516,19 +526,17 @@ void tryExtractOneHand(char NowSuit,
 
             Chu(hc, oneHand);
             list<string> tmpSolution;
-            // Current chosen play's rank
-            int endRank = StartingNumber + seriesCount - 1;
             PlayRank playRank(
                 (seriesCount == 5 && cardCount == 1)
                     ? makePlayRank(NowSuit != 'A' ? STRAIGHT_FLUSH : STRAIGHT,
-                                   endRank)
+                                   StartingNumber)
                     : (seriesCount == 3 && cardCount == 2)
-                          ? makePlayRank(TUBE, endRank)
+                          ? makePlayRank(TUBE, StartingNumber)
                           : (seriesCount == 2 && cardCount == 3)
-                                ? makePlayRank(PLATE, endRank)
+                                ? makePlayRank(PLATE, StartingNumber)
                                 : makePlayRank(
                                       UNKNOWN,
-                                      endRank)  // should never hit here
+                                      StartingNumber)  // should never hit here
             );
             double remainingCost =
                 check(hc, tmpSolution, wildCardsLeft - outWildCardsToUse,

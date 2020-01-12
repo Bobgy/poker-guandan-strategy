@@ -3,10 +3,10 @@
 all: test_sample test
 
 test_sample: sample.out my_sample.out
-	diff sample.out my_sample.out
+	diff sample.out my_sample.out -u
 
 test: std_output.txt curr_output.txt
-	diff std_output.txt curr_output.txt
+	diff std_output.txt curr_output.txt -u
 
 update_fixture: curr_output.txt my_sample.out
 	cp curr_output.txt std_output.txt
