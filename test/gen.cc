@@ -1,4 +1,7 @@
-#include <bits/stdc++.h>
+#include <vector>
+#include <string>
+#include <algorithm>
+
 using namespace std;
 #define REP(i,n) for(int i=0;i<int(n);++i)
 #define pb push_back

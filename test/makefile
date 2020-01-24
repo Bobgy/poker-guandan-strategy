@@ -21,17 +21,17 @@ clean:
 # %.exe: %.cc
 #     g++ $< -std=c++11 -O2 -o $@
 gen.exe: gen.cc
-	g++ gen.cc -std=c++11 -O2 -o gen
+	g++ gen.cc -std=c++11 -O2 -o gen.exe
 
 wrapper.exe: wrapper.cc ../strategy.cpp
-	g++ wrapper.cc -std=c++11 -O2 -o wrapper
+	g++ wrapper.cc -std=c++11 -O2 -o wrapper.exe
 
 # == generate output ==
 curr_output.txt: wrapper.exe input.txt
-	./wrapper < input.txt > curr_output.txt
+	./wrapper.exe < input.txt > curr_output.txt
 
 my_sample.out: wrapper.exe sample.in
-	./wrapper < sample.in > my_sample.out
+	./wrapper.exe < sample.in > my_sample.out
 
 input.txt: gen.exe
-	./gen > input.txt
+	./gen.exe > input.txt
