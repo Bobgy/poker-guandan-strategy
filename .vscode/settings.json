@@ -1,0 +1,12 @@
+{
+  "files.associations": {
+    "*.jinja": "jinja",
+    "*.jinja.schema": "yaml",
+    "*.gss": "css",
+    "BUILD": "bazel",
+    "METADATA": "bazel",
+    "WORKSPACE": "bazel",
+    "algorithm": "cpp"
+  },
+  "C_Cpp.clang_format_style": "Chromium"
+}

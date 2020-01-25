@@ -1,6 +1,5 @@
 a.exe
 a.out*
-.vscode
 *.o
 bin
 lib
