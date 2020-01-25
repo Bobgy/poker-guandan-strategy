@@ -11,9 +11,11 @@
 #endif
 
 // #define __DEBUG__
+// #define __INFO__
 
 #include <cassert>
 #include <cmath>
+#include <iostream>
 #include <list>
 #include <map>
 #include <memory>
@@ -108,6 +110,8 @@ class CostEstimator {
   GameContext context;
 };
 
+int cntRecursion = 0;
+
 /**
  * calculates min number of hands needed using just hand patterns of 1s, 2s, 3s,
  *full houses and bombs
@@ -124,6 +128,7 @@ int calculateMinHandsImp(int cnt1,
                          int cnt3,
                          int cnt4plus,
                          int wildCards) {
+  ++cntRecursion;
   if (wildCards <= 0) {
     return cnt1 + max(cnt2, cnt3);
   } else {
@@ -302,6 +307,10 @@ class OverallValueCostEstimator : public CostEstimator {
   double estimateCards(const THandCards& hc, int wildCards) const {
     return (double)calculateMinHands(hc, wildCards);
   }
+  //  private:
+  //   double estimateCardsImp(const THandCards& hc, int wildCards) const {
+  //     return
+  //   }
 };
 
 #ifdef __DEBUG__
@@ -643,7 +652,12 @@ StrategyResult calcForTest(string cards,
           : (CostEstimator*)new MinPlaysCostEstimator(context));
 
   list<string> solution;
+  cntRecursion = 0;
   double minCost = check(state.hc, solution, state.wildCards, *costEstimator);
+#ifdef __INFO__
+  cerr << "Recursions: " << cntRecursion << " Wildcards: " << state.wildCards
+       << endl;
+#endif
   return StrategyResult(
       {minCost, vector<string>(solution.begin(), solution.end())});
 }
