@@ -105,6 +105,7 @@ class CostEstimator {
  public:
   virtual double estimate(PlayRank playRank) const = 0;
   virtual double estimateCards(const THandCards& hc, int wildCards) const = 0;
+  virtual ~CostEstimator(){};
 
  protected:
   GameContext context;
@@ -201,6 +202,7 @@ int calculateMinHands(THandCards hc, int wildCards) {
 class MinPlaysCostEstimator : public CostEstimator {
  public:
   MinPlaysCostEstimator(GameContext argContext) { context = argContext; }
+  ~MinPlaysCostEstimator() {}
   double estimate(PlayRank playRank) const {
     switch (playRank.type) {
       case BOMB_NORMAL:
@@ -223,6 +225,7 @@ double linear(double l, double r, double valueL, double valueR, double x) {
 class OverallValueCostEstimator : public CostEstimator {
  public:
   OverallValueCostEstimator(GameContext argContext) { context = argContext; }
+  ~OverallValueCostEstimator() {}
   // {@returns cost} cost is a real number. [-2, 2]
   // -2 means stopping opponent from playing a card and plays a small card.
   // 2 means playing a small card and let opponent play a small card.
