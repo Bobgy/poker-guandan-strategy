@@ -9,7 +9,7 @@ solutions=[
   '| AC AD AH 2C 2C 3C 3C 3D 3S 4C 4D 5H 5H 5S 9S JC JD KC KC KH KS XR || 6H 7C 8H 9H WC |',
   '| AC AD AH 3D 3S 5H 5H 5S 9S JC JD KC KC KH KS XR || 2C 2C 3C 3C 4C 4D || 6H 7C 8H 9H WC |',
 ]
-overall_value_cost=5
+overall_value_cost=6
 solutions=[
   '| AC AD AH 2C 2C 3C 3C 3D 3S 4D 5H 5S 9H 9S JC JD KC KC KH KS XR WC || 4C 5H 6H 7C 8H |',
   '| AC AD AH 2C 2C 3C 3C 3D 3S 4C 4D 5H 5S 9S JC JD KC KC KH KS XR WC || 5H 6H 7C 8H 9H |',
@@ -26,7 +26,7 @@ solutions=[
   '| 2D 2S 4H 5H 5S JD JH KC KC KD XB XR || 8S 9D 0S JC QH || 6D 7S 8H 9C 0D || AD 2D 3S 4D 5C |',
   '| AD 2D 2D 2S 3S 4D 4H 5C 5H 5S JD JH KC KC KD XB XR || 8S 9D 0S JC QH || 6D 7S 8H 9C 0D |',
 ]
-overall_value_cost=7
+overall_value_cost=9
 solutions=[
   '| 2D 2S 4H 5H 5S JD JH KC KC KD XB XR || 8S 9D 0S JC QH || 6D 7S 8H 9C 0D || AD 2D 3S 4D 5C |',
   '| AD 2D 2D 2S 3S 4D 4H 5C 5H 5S JD JH KC KC KD XB XR || 8S 9D 0S JC QH || 6D 7S 8H 9C 0D |',
@@ -41,7 +41,7 @@ solutions=[
   '| 2D 2S 3C 3C 3D 3H 3S 7C 7C 7H 0H 0H 0S QH QH XR || 8C 8H 9C 9H 9S WC || AS 0C JD QD KD |',
   '| 2D 2S 3C 3C 3D 3H 3S 7C 7C 7H 8C 8H QH QH XR WC || 9C 9H 9S 0H 0H 0S || AS 0C JD QD KD |',
 ]
-overall_value_cost=4
+overall_value_cost=5
 solutions=[
   '| 2D 2S 3C 3C 3D 3H 3S 7C 7C 7H 8C 8H 9C 9H 9S 0H 0H 0S QH QH XR WC || AS 0C JD QD KD |',
   '| 2D 2S 3C 3C 3D 3H 3S 9C 9H 9S 0H 0H 0S QH QH XR || 7C 7C 7H 8C 8H WC || AS 0C JD QD KD |',
@@ -55,7 +55,7 @@ min_plays_cost=5
 solutions=[
   '| AD AS 2H 2S 3C 3S 3S 5D 5S 5S 6D 6D 6H 8H 8H XB XR || AC 0S JS QC WC || 7C 8D 9D 0C JH |',
 ]
-overall_value_cost=5
+overall_value_cost=7
 solutions=[
   '| AD AS 2H 2S 3C 3S 3S 5D 5S 5S 6D 6D 6H 8H 8H XB XR || AC 0S JS QC WC || 7C 8D 9D 0C JH |',
 ]
@@ -70,7 +70,7 @@ solutions=[
   '| 2S 4H 7C 7H 7S 8D 8S 9C 9C 9D 0S 0S JH QD QH XR || AC AD QC QC KC KD || 2D 3H 4C 5C 6C |',
   '| AC AD 2D 2S 4H 0S QC QD QH KD XR || 7H 7S 8D 8S 9C 9D || 9C 0S JH QC KC || 3H 4C 5C 6C 7C |',
 ]
-overall_value_cost=8
+overall_value_cost=9
 solutions=[
   '| AC AD 2S 4H 7C 7H 7S 8D 8S 9C 9C 9D 0S 0S JH QC QC QD QH KC KD XR || 2D 3H 4C 5C 6C |',
   '| AC AD 2S 4H 7C 7H 7S 9D JH QC QC QD QH KC KD XR || 8D 8S 9C 9C 0S 0S || 2D 3H 4C 5C 6C |',
@@ -85,7 +85,7 @@ min_plays_cost=6
 solutions=[
   '| 4C 4D 4H 4H 6H 6S 7C 7S 0D 0D JH JS KC KH KS XR || AC AD 2C 2C 3C 3S || 5C 6C 7C 8D 9H |',
 ]
-overall_value_cost=6
+overall_value_cost=7
 solutions=[
   '| 4C 4D 4H 4H 6H 6S 7C 7S 0D 0D JH JS KC KH KS XR || AC AD 2C 2C 3C 3S || 5C 6C 7C 8D 9H |',
 ]
@@ -99,7 +99,7 @@ solutions=[
   '| 2C 2C 2S 2S 4D 5C 5H 6C 6D 6D 6H 8H 8S JH KS XB || 8C 8D 9H 9S 0C 0S || AC 0C JD QC KC |',
   '| AC 2C 2C 2S 2S 4D 5C 5H 6C 6D 6D 6H 8C 8D 8H 8S 0S QC KC KS XB || 9H 9S 0C 0C JD JH |',
 ]
-overall_value_cost=7
+overall_value_cost=8
 solutions=[
   '| AC 2C 2C 2S 2S 4D 5C 5H 6C 6D 6D 6H 8C 8D 8H 8S 9H 9S 0C 0C 0S JD JH QC KC KS XB |',
   '| 2C 2C 2S 2S 4D 5C 5H 6C 6D 6D 6H 8C 8D 8H 8S 9H 9S 0C 0S JH KS XB || AC 0C JD QC KC |',
@@ -113,7 +113,7 @@ min_plays_cost=7
 solutions=[
   '| 5S 7S 8D 8H 8S 8S 0D 0H 0S JC JC QC KD KH XB XR || AD AS 2D 2S 3D 3H || 4H 5C 6C 7H 8C |',
 ]
-overall_value_cost=7
+overall_value_cost=9
 solutions=[
   '| 5S 7S 8D 8H 8S 8S 0D 0H 0S JC JC QC KD KH XB XR || AD AS 2D 2S 3D 3H || 4H 5C 6C 7H 8C |',
 ]
@@ -128,7 +128,7 @@ solutions=[
   '| AC AS 2C 3C 3C 3H 3S 7H 7S 7S 0H JC JD JS QC QC QD QS KD KD KS XR || 4S 5D 6C 7C 8H |',
   '| AS 2C 3C 3C 3H 3S 7H 7S 7S JD JS QC QD QS KD KS XR || AC 0H JC QC KD || 4S 5D 6C 7C 8H |',
 ]
-overall_value_cost=6
+overall_value_cost=7
 solutions=[
   '| 3C 3H 3S 6C 7C 7H 7S 7S 8H JD JS QC QD QS KD KS XR || AS 0H JC QC KD || AC 2C 3C 4S 5D |',
   '| AC AS 3C 3H 3S 7C 7H 7S 7S 8H 0H JC JD JS QC QC QD QS KD KD KS XR || 2C 3C 4S 5D 6C |',
@@ -155,7 +155,7 @@ solutions=[
   '| AC AC 2C 7D 8S JC QD QH QH QS KC KD KH KS XB || 8C 8D 9H 9H 0C 0C || 3H 3H 4D 4S 5S WC |',
   '| AC AC 2C 3H 3H 4D 4S 5S 7D 8C 8D 8S QD QH QH QS KC KD KH KS XB || 9H 9H 0C 0C JC WC |',
 ]
-overall_value_cost=7
+overall_value_cost=8
 solutions=[
   '| 3H 4S 7D 8C 8D 8S 9H 9H 0C QD QH QH QS KD KH KS XB || AC 2C 3H 4D 5S || AC 0C JC KC WC |',
   '| AC 3H 4S 7D 8C 8D 8S QD QH QH QS KC KD KH KS XB || 9H 9H 0C 0C JC WC || AC 2C 3H 4D 5S |',
@@ -178,7 +178,7 @@ min_plays_cost=7
 solutions=[
   '| AC AS 2D 2S 3D 4C 4S 5C 5H 5S 7C 7D 7H 7S 8H 9C 9H 0C 0D 0H QC QD QH QS QS KC XB |',
 ]
-overall_value_cost=7
+overall_value_cost=8
 solutions=[
   '| AC AS 2D 2S 3D 4C 4S 5C 5H 5S 7C 7D 7H 7S 8H 9C 9H 0C 0D 0H QC QD QH QS QS KC XB |',
 ]
@@ -201,7 +201,7 @@ solutions=[
   '| AC AH AS 3H 3H 3S 4C 4S 6C 6S XR WC || 8H 9C 0S JS QH || 7D 8C 9C 0D JD || 2D 3D 4D 5D 6D |',
   '| AC AH AS 6C 6S XR || 3H 3H 3S 4C 4S WC || 8H 9C 0S JS QH || 7D 8C 9C 0D JD || 2D 3D 4D 5D 6D |',
 ]
-overall_value_cost=4
+overall_value_cost=5
 solutions=[
   '| AC AH AS 3H 3H 3S 4C 4S 6C 6S XR WC || 8H 9C 0S JS QH || 7D 8C 9C 0D JD || 2D 3D 4D 5D 6D |',
   '| AC AH AS 6C 6S XR || 3H 3H 3S 4C 4S WC || 8H 9C 0S JS QH || 7D 8C 9C 0D JD || 2D 3D 4D 5D 6D |',
@@ -232,7 +232,7 @@ solutions=[
   '| AC AD 6C 6H 6H 6S 7D 7H 8C 8H 8H 9C 9D 9S XB || JD JH QS QS KC KD || 2C 2S 3C 3C 4C 4D |',
   '| 6C 6H 6H 6S 7D 7H 8C 8H 8H 9C 9D 9S JD JH XB || AC AD QS QS KC KD || 2C 2S 3C 3C 4C 4D |',
 ]
-overall_value_cost=4
+overall_value_cost=5
 solutions=[
   '| 4C 4D 6C 6H 6H 6S 7D 7H 8C 8H 8H 9C 9D 9S XB || JD JH QS QS KC KD || AC AD 2C 2S 3C 3C |',
   '| AC AD 6C 6H 6H 6S 7D 7H 8C 8H 8H 9C 9D 9S XB || JD JH QS QS KC KD || 2C 2S 3C 3C 4C 4D |',
@@ -248,7 +248,7 @@ solutions=[
   '| AC AD AH AS 2C 2H 4D 6D 8H 8S 8S 0D 0H 0S QC QC QD QH KH XB XR XR || 7H 8C 9C 0C JC |',
   '| AC AD AH AS 2C 2H 4D 6D 7H 8C 8H 8S 8S 0D 0H 0S QC QD QH XB XR XR || 9C 0C JC QC KH |',
 ]
-overall_value_cost=6
+overall_value_cost=9
 solutions=[
   '| AC AD AH AS 2C 2H 4D 8H 8S 8S 0D 0H 0S JC QC QC QD QH KH XB XR XR || 6D 7H 8C 9C 0C |',
   '| AD AH AS 2C 2H 4D 8H 8S 8S 0H 0S QC QD QH XB XR XR || AC 0D JC QC KH || 6D 7H 8C 9C 0C |',
@@ -264,7 +264,7 @@ solutions=[
   '| AD AH AH 2D 4H 4S 6D 6D 6H 6S 6S 7S 9S JH QC QS QS KC KD XB XB || 4C 4D 4D 5C 5D 5S |',
   '| AD AH AH 2D 4C 4D 4D 4H 4S 6S 6S 7S 9S JH QC QS QS KC KD XB XB || 5C 5D 5S 6D 6D 6H |',
 ]
-overall_value_cost=7
+overall_value_cost=9
 solutions=[
   '| AD AH AH 2D 4C 4D 4D 4H 4S 5C 5D 5S 6D 6D 6H 6S 6S 7S 9S JH QC QS QS KC KD XB XB |',
   '| AD AH AH 2D 4H 4S 6D 6D 6H 6S 6S 7S 9S JH QC QS QS KC KD XB XB || 4C 4D 4D 5C 5D 5S |',
@@ -279,7 +279,7 @@ solutions=[
   '| AS 3H 5D 0S 0S JC JH JH KC KD XB || 8C 8H 9H 9S 0D 0H || 3C 4S 5D 6H 7D || AS 2S 3S 4S 5S |',
   '| AS 3C 3H 5D 8H 9H 9S 0D 0H 0S 0S JC JH JH KC KD XB || 4S 5D 6H 7D 8C || AS 2S 3S 4S 5S |',
 ]
-overall_value_cost=7
+overall_value_cost=8
 solutions=[
   '| AS 3H 5D 8C 8H 9H 9S 0D 0H 0S 0S JC JH JH KC KD XB || 3C 4S 5D 6H 7D || AS 2S 3S 4S 5S |',
   '| AS 3H 5D 0S 0S JC JH JH KC KD XB || 8C 8H 9H 9S 0D 0H || 3C 4S 5D 6H 7D || AS 2S 3S 4S 5S |',
@@ -307,7 +307,7 @@ min_plays_cost=6
 solutions=[
   '| 4S 7D 7H 7H 7S 7S 8D 8H 0D QC QD QH KH KH XB XR || AH AS 2C 2S 3H 3S || 3C 4D 5H 6S 7C |',
 ]
-overall_value_cost=6
+overall_value_cost=8
 solutions=[
   '| 4S 7D 7H 7H 7S 7S 8D 8H 0D QC QD QH KH KH XB XR || AH AS 2C 2S 3H 3S || 3C 4D 5H 6S 7C |',
 ]
@@ -318,7 +318,7 @@ min_plays_cost=5
 solutions=[
   '| 4D 4D 4S 4S 9H 9S QS KH KH KS XR || 2C 2H 2S 3C 3D 3H || AS 0D JS QC KD || 5S 6D 7H 9D WC |',
 ]
-overall_value_cost=5
+overall_value_cost=6
 solutions=[
   '| 4D 4D 4S 4S 9H 9S QS KH KH KS XR || 2C 2H 2S 3C 3D 3H || AS 0D JS QC KD || 5S 6D 7H 9D WC |',
 ]
@@ -330,7 +330,7 @@ solutions=[
   '| AD AH AS 2D 3C 3C 3S 4D 4S 5C 5D 6D 8D 8H 8H 8S 0H 0S JC JD JH QC QD KC KD KS XB |',
   '| AD AH AS 3C 3S 4S 5D 8D 8H 8H 8S 0H 0S JC JD JH QC QD KC KD KS XB || 2D 3C 4D 5C 6D |',
 ]
-overall_value_cost=6
+overall_value_cost=7
 solutions=[
   '| AD AH AS 2D 3C 3C 3S 4D 4S 5C 5D 6D 8D 8H 8H 8S 0H 0S JC JD JH QC QD KC KD KS XB |',
   '| AD AH AS 3C 3S 4S 5D 8D 8H 8H 8S 0H 0S JC JD JH QC QD KC KD KS XB || 2D 3C 4D 5C 6D |',
@@ -342,7 +342,7 @@ min_plays_cost=6
 solutions=[
   '| AH AH AS 2C 2D 2H 3C 3S 4C 4D 4S 5S 6C 6D 9C 9D 0C 0H JD QC QH QS KC KD KS KS XB |',
 ]
-overall_value_cost=6
+overall_value_cost=7
 solutions=[
   '| AH AH AS 2C 2D 2H 3C 3S 4C 4D 4S 5S 6C 6D 9C 9D 0C 0H JD QC QH QS KC KD KS KS XB |',
 ]
@@ -379,7 +379,7 @@ min_plays_cost=7
 solutions=[
   '| 5H 5S 8D 8S 9D 9H 9S QS KC KS XB || AC AD 2D 2H 3H 3S || 6S 7C 8C 9D 0C || 2C 3C 4D 5C 6H |',
 ]
-overall_value_cost=7
+overall_value_cost=8
 solutions=[
   '| 5H 5S 8D 8S 9D 9H 9S QS KC KS XB || AC AD 2D 2H 3H 3S || 6S 7C 8C 9D 0C || 2C 3C 4D 5C 6H |',
 ]
@@ -401,7 +401,7 @@ min_plays_cost=4
 solutions=[
   '| AC 2D 2H 2S 3H 3S 4D 4H 6C 6H 6S 0C 0H 0S 0S XB || JC JD QC QH KS KS || 5D 7D 9D WC WC |',
 ]
-overall_value_cost=4
+overall_value_cost=5
 solutions=[
   '| AC 2D 2H 2S 3H 3S 4D 4H 6C 6H 6S 0C 0H 0S 0S XB || JC JD QC QH KS KS || 5D 7D 9D WC WC |',
 ]
@@ -414,7 +414,7 @@ solutions=[
   '| AC AD AH 2C 2H 2S 4D 5C 5S 6C 6C 6H 7C 7C 7H 7H 7S 8C 8S 0H XR || JD JH QC KC KD WC |',
   '| 4D 5C 5S 6C 6C 6H 7C 7C 7H 7H 7S 8C 8S 0H XR || AC AD AH 2C 2H 2S || JD JH QC KC KD WC |',
 ]
-overall_value_cost=6
+overall_value_cost=7
 solutions=[
   '| AC AD AH 2C 2H 2S 5S 6C 6H 7C 7H 7H 7S JH KC KD XR || 8S 0H JD QC WC || 4D 5C 6C 7C 8C |',
   '| AC AD AH 2C 2H 2S 4D 5C 5S 6C 6C 6H 7C 7C 7H 7H 7S 8C 8S 0H XR || JD JH QC KC KD WC |',
@@ -466,7 +466,7 @@ min_plays_cost=6
 solutions=[
   '| AC AD AD AS 2C 2D 2D 2H 5H 8H 8S 0C 0C 0D QC KH XR || 5D 6S 7H 8C 9S || 2C 3S 4H 5D 6H |',
 ]
-overall_value_cost=6
+overall_value_cost=7
 solutions=[
   '| AC AD AD AS 2C 2D 2D 2H 5H 8H 8S 0C 0C 0D QC KH XR || 5D 6S 7H 8C 9S || 2C 3S 4H 5D 6H |',
 ]
@@ -480,7 +480,7 @@ solutions=[
   '| AC AS 2H 3D 3S 4C 4S 4S 6C 6H 7H JS KD KH KS XB XR || 9S 0S JD QH KC || 5C 6C 7D 8S 9C |',
   '| AC AS 2H 3D 3S 4C 4S 4S 5C 6C 6C 6H 7D 7H 9S JS KC KD KH KS XB XR || 8S 9C 0S JD QH |',
 ]
-overall_value_cost=8
+overall_value_cost=10
 solutions=[
   '| AS 3S 4S 4S 6C 6C 6H 7D 7H 9S JS KC KD KH KS XB XR || 8S 9C 0S JD QH || AC 2H 3D 4C 5C |',
   '| 3S 4S 4S 6C 6C 6H 7D 7H 8S 9C 9S JS KD KH KS XB XR || AS 0S JD QH KC || AC 2H 3D 4C 5C |',
@@ -510,7 +510,7 @@ solutions=[
   '| 6C 6D 8D 8H 8S QC QD QS QS KC XR || 0D 0H 0H JC JH JS || 3D 4D 5D 6C 7H || 3S 5S 6S 7S WC |',
   '| 6C 6C 6D 6S 7H 7S 8D 8H 8S QC QD QS QS KC XR || 0D 0H 0H JC JH JS || 3D 3S 4D 5D 5S WC |',
 ]
-overall_value_cost=4
+overall_value_cost=5
 solutions=[
   '| 6C 6D 8D 8H 8S QC QD QS QS KC XR || 0D 0H 0H JC JH JS || 3D 4D 5D 6C 7H || 3S 5S 6S 7S WC |',
   '| 6C 6C 6D 6S 7H 7S 8D 8H 8S QC QD QS QS KC XR || 0D 0H 0H JC JH JS || 3D 3S 4D 5D 5S WC |',
@@ -554,7 +554,7 @@ solutions=[
   '| 5C 5D 5H 6C 6C 7H 0S 0S JC JH KC KD KD KS XB || 8C 8D 9D 9S 0D 0H || AC AD 2C 2H 3C 3C |',
   '| 5C 5D 5H 6C 6C 7H 8C 8D 0S 0S KC KD KD KS XB || 9D 9S 0D 0H JC JH || AC AD 2C 2H 3C 3C |',
 ]
-overall_value_cost=6
+overall_value_cost=7
 solutions=[
   '| 5C 5D 5H 6C 6C 7H 8C 8D 9D 9S 0D 0H 0S 0S JC JH KC KD KD KS XB || AC AD 2C 2H 3C 3C |',
   '| 5C 5D 5H 6C 6C 7H 0S 0S JC JH KC KD KD KS XB || 8C 8D 9D 9S 0D 0H || AC AD 2C 2H 3C 3C |',
@@ -568,7 +568,7 @@ solutions=[
   '| 4C 4D 4D 4H 8C 8H 8S 9D 9H JC JC JH JH QS KC XR || AC AC 2S 3C 3H WC || 4C 5C 6H 7D 8C |',
   '| AC AC 2S 3C 3H 4C 4C 4D 4D 4H 8C 8H 8S JC JH JH XR || 9H JC QS KC WC || 5C 6H 7D 8C 9D |',
 ]
-overall_value_cost=5
+overall_value_cost=6
 solutions=[
   '| 4C 4D 4D 4H 8C 8H 8S 9D 9H JC JC JH JH QS KC XR || AC AC 2S 3C 3H WC || 4C 5C 6H 7D 8C |',
   '| AC AC 2S 3C 3H 4C 4C 4D 4D 4H 8C 8H 8S JC JH JH XR || 9H JC QS KC WC || 5C 6H 7D 8C 9D |',
@@ -602,7 +602,7 @@ min_plays_cost=6
 solutions=[
   '| AC AD AH AS 3D 3S 6S 9H 9H 9S 0H QC QD QH KC KC XB || 8S 9C 0D JC QC || 4S 5S 6H 7C 8C |',
 ]
-overall_value_cost=6
+overall_value_cost=7
 solutions=[
   '| AC AD AH AS 3D 3S 6S 9H 9H 9S 0H QC QD QH KC KC XB || 8S 9C 0D JC QC || 4S 5S 6H 7C 8C |',
 ]
@@ -613,7 +613,7 @@ min_plays_cost=5
 solutions=[
   '| 2C 2D 2H 3C 3H 4C 4H 4S 5C 5S 6S 8C 8D 8S 8S 9C 9S 0D 0D 0H JH JS QD QH QS XR XR |',
 ]
-overall_value_cost=5
+overall_value_cost=7
 solutions=[
   '| 2C 2D 2H 3C 3H 4C 4H 4S 5C 5S 6S 8C 8D 8S 8S 9C 9S 0D 0D 0H JH JS QD QH QS XR XR |',
 ]
@@ -624,7 +624,7 @@ min_plays_cost=5
 solutions=[
   '| 2S 2S 7H 7H 0S JC JH JS KC KH KS XB || 6S 7C 8C 9S 0H || AS 2C 3S 4D 5H || 2D 3D 4D 6D WC |',
 ]
-overall_value_cost=5
+overall_value_cost=6
 solutions=[
   '| 2S 2S 7H 7H 0S JC JH JS KC KH KS XB || 6S 7C 8C 9S 0H || AS 2C 3S 4D 5H || 2D 3D 4D 6D WC |',
 ]
@@ -659,7 +659,7 @@ solutions=[
   '| 2C 2D 2S 2S 3H 3S 3S 4C 4H 5C 5S 9C 9D KD KH KS XB || AS 0S QC KC WC || 7C 8S 9C 0D JC |',
   '| 2C 2D 2S 2S 3S 9C 9D KD KH KS XB || 3H 3S 4C 4H 5C 5S || AS 0S QC KC WC || 7C 8S 9C 0D JC |',
 ]
-overall_value_cost=5
+overall_value_cost=6
 solutions=[
   '| 2C 2D 2S 2S 3H 3S 3S 4C 4H 5C 5S 9C 9D KD KH KS XB || AS 0S JC QC KC || 7C 8S 9C 0D WC |',
   '| 2C 2D 2S 2S 3S 9C 9D KD KH KS XB || 3H 3S 4C 4H 5C 5S || AS 0S JC QC KC || 7C 8S 9C 0D WC |',
@@ -673,7 +673,7 @@ min_plays_cost=4
 solutions=[
   '| 9C 9H 9S 0D 0D 0S JD JS QC QC QD QS KC XR WC || 6C 6S 7H 7S 8C 8D || AC AH 2D 3D 3H WC |',
 ]
-overall_value_cost=4
+overall_value_cost=5
 solutions=[
   '| 9C 9H 9S 0D 0D 0S JD JS QC QC QD QS KC XR WC || 6C 6S 7H 7S 8C 8D || AC AH 2D 3D 3H WC |',
 ]
@@ -737,7 +737,7 @@ solutions=[
   '| AC AC AH 2H 3C 4C 4D 5D 5H 5H 6C 6D 6H 6H 6S 9C 9H 0H 0S 0S QC QD QH QS KC KD XR |',
   '| AC AC AH 4D 5H 5H 6D 6H 6H 6S 9C 9H 0H 0S 0S QC QD QH QS KC KD XR || 2H 3C 4C 5D 6C |',
 ]
-overall_value_cost=5
+overall_value_cost=6
 solutions=[
   '| AC AC AH 2H 3C 4C 4D 5D 5H 5H 6C 6D 6H 6H 6S 9C 9H 0H 0S 0S QC QD QH QS KC KD XR |',
   '| AC AC AH 4D 5H 5H 6D 6H 6H 6S 9C 9H 0H 0S 0S QC QD QH QS KC KD XR || 2H 3C 4C 5D 6C |',
@@ -750,7 +750,7 @@ solutions=[
   '| 2C 2D 2H 3C 3S 4H 5C 5D 5H 6H 6S 8C 8C 9H 9S XR XR || AH 0C JD QH KC || 7D 8D 9D 0D WC |',
   '| 2C 2D 2H 3C 3S 4H 5C 5D 5H 6H 6S 8C 8C 9H 9S XR XR || AH 0C QH KC WC || 7D 8D 9D 0D JD |',
 ]
-overall_value_cost=6
+overall_value_cost=8
 solutions=[
   '| 2C 2D 2H 3C 3S 4H 5C 5D 5H 6H 6S 8C 8C 9H 9S XR XR || AH 0C JD QH KC || 7D 8D 9D 0D WC |',
   '| 2C 2D 2H 3C 3S 4H 5C 5D 5H 6H 6S 8C 8C 9H 9S XR XR || AH 0C QH KC WC || 7D 8D 9D 0D JD |',
@@ -767,7 +767,7 @@ solutions=[
   '| 2H 2S 4D JS JS QS XB || AS 0D JC QH KH || 5S 6D 7S 8D 9H || AS 2D 3C 4C 5H || 5C 6C 8C 9C WC |',
   '| AS AS 2D 2H 2S 3C 4C 4D 5H 5S JC JS JS QH QS KH XB || 6D 7S 8D 9H 0D || 5C 6C 8C 9C WC |',
 ]
-overall_value_cost=7
+overall_value_cost=8
 solutions=[
   '| AS 2H 2S JS JS QS XB || 9H 0D JC QH KH || 5S 6D 7S 8D 9C || AS 2D 3C 4D 5H || 4C 5C 6C 8C WC |',
   '| 2H 2S 9H JS JS QS XB || AS 0D JC QH KH || 5S 6D 7S 8D 9C || AS 2D 3C 4D 5H || 4C 5C 6C 8C WC |',
@@ -783,7 +783,7 @@ min_plays_cost=4
 solutions=[
   '| 2H 3D 3S 3S 7D 7D 7S JD JH KD KH KS KS XB XR XR WC || 8C 9H 0C JC QD || AD 2C 3D 4D 5C |',
 ]
-overall_value_cost=4
+overall_value_cost=7
 solutions=[
   '| 2H 3D 3S 3S 7D 7D 7S JD JH KD KH KS KS XB XR XR WC || 8C 9H 0C JC QD || AD 2C 3D 4D 5C |',
 ]
@@ -794,7 +794,7 @@ min_plays_cost=5
 solutions=[
   '| AD AH AH 4D 4H 5D 5D 5S 5S 8H 8S 9C 0S KD KD KS XB || 2H 3H 4C 5C 6D || 7D 8D 9D 0D JD |',
 ]
-overall_value_cost=5
+overall_value_cost=6
 solutions=[
   '| AD AH AH 4D 4H 5D 5D 5S 5S 8H 8S 9C 0S KD KD KS XB || 2H 3H 4C 5C 6D || 7D 8D 9D 0D JD |',
 ]
@@ -850,7 +850,7 @@ min_plays_cost=5
 solutions=[
   '| 2C 2D 3C 3H 4S XR || 9D 9H 0S 0S JH JS || 6C 7H 8S 9C 0D || AC JC QC KC WC || 3D 4D 5D 6D 7D |',
 ]
-overall_value_cost=5
+overall_value_cost=6
 solutions=[
   '| 2C 2D 3C 3H 4S XR || 9D 9H 0S 0S JH JS || 6C 7H 8S 9C 0D || AC JC QC KC WC || 3D 4D 5D 6D 7D |',
 ]
@@ -877,7 +877,7 @@ solutions=[
   '| AD AD AS 7D 7H 7H 7S 7S JS KC XR WC || 8S 9H 0S JH QH || 4D 5D 6S 7D 8C || 2S 3C 4C 5C 6C |',
   '| AD AD AS 7D 7H 7H 7S 7S 8S JS XR WC || 9H 0S JH QH KC || 4D 5D 6S 7D 8C || 2S 3C 4C 5C 6C |',
 ]
-overall_value_cost=5
+overall_value_cost=6
 solutions=[
   '| AD AD AS 7D 7D 7H 7H 7S 7S JS KC XR || 8S 9H 0S JH QH || 2S 3C 4D 5D 6S || 4C 5C 6C 8C WC |',
   '| AD AD AS 7D 7D 7H 7H 7S 7S 8S JS XR || 9H 0S JH QH KC || 2S 3C 4D 5D 6S || 4C 5C 6C 8C WC |',
@@ -902,7 +902,7 @@ solutions=[
   '| AD AH AS 2C 3H 3S 4D 4D 4H 4H 5C 5D 5H 5S 6S 8S 9H JH JS KC KD XR || 8C 9D 0D JD QC |',
   '| AD AH AS 2C 3H 3S 4D 4D 4H 4H 5C 5D 5H 5S 6S 8C 8S 9H JH JS KD XR || 9D 0D JD QC KC |',
 ]
-overall_value_cost=8
+overall_value_cost=9
 solutions=[
   '| AD AH AS 2C 3H 3S 4D 4D 4H 4H 5C 5D 5H 5S 6S 8C 8S 9D 9H 0D JD JH JS QC KC KD XR |',
   '| AD AH AS 3S 4D 4H 4H 5D 5H 5S 8C 8S 9D 9H 0D JD JH JS QC KC KD XR || 2C 3H 4D 5C 6S |',
@@ -929,7 +929,7 @@ solutions=[
   '| AC AD AS 2C 2C 2D 3D 4C 4D 4S 5C 5S 0H 0S JC QD QH QH KC KS XB || 6H 6S 7D 7S 8H 8S |',
   '| 3D 4C 4D 4S 5C 5S 0H 0S JC QD QH QH KC KS XB || AC AD AS 2C 2C 2D || 6H 6S 7D 7S 8H 8S |',
 ]
-overall_value_cost=7
+overall_value_cost=8
 solutions=[
   '| AC AD AS 2C 2C 2D 4D 8H 0H 0S JC QD QH QH KC KS XB || 3D 4C 5C 6H 7D || 4S 5S 6S 7S 8S |',
   '| 4D 8H 0H 0S JC QD QH QH KC KS XB || AC AD AS 2C 2C 2D || 3D 4C 5C 6H 7D || 4S 5S 6S 7S 8S |',
@@ -952,7 +952,7 @@ solutions=[
   '| 2D 2S 2S 3H 4D 4D 4H 5S 6D 6H 6S 7D 7H 8C 8C JH JS KH KS XB XB XR || AD 0C JH QH KC |',
   '| 2D 2S 2S 3H 4D 4D 4H 5S 6S JH JS KH KS XB XB XR || 6D 6H 7D 7H 8C 8C || AD 0C JH QH KC |',
 ]
-overall_value_cost=7
+overall_value_cost=10
 solutions=[
   '| 2S 2S 4D 4H 6D 6H 6S 7D 7H 8C 8C 0C JH JH JS QH KC KH KS XB XB XR || AD 2D 3H 4D 5S |',
   '| 2S 2S 4D 4H 6S 0C JH JH JS QH KC KH KS XB XB XR || 6D 6H 7D 7H 8C 8C || AD 2D 3H 4D 5S |',
@@ -968,7 +968,7 @@ min_plays_cost=7
 solutions=[
   '| 2D 2H 2S 3D 4D 4S 5C 5D 5H 5S 5S 6C 6C 6S 7D 7H 9S 9S JS QD QH XB || AS 0S JD QC KD |',
 ]
-overall_value_cost=7
+overall_value_cost=8
 solutions=[
   '| 2D 2H 2S 3D 4D 4S 5C 5D 5H 5S 5S 6C 6C 6S 7D 7H 9S 9S JS QD QH XB || AS 0S JD QC KD |',
 ]
@@ -979,7 +979,7 @@ min_plays_cost=6
 solutions=[
   '| AD AS 2C 3H 3H 3S 4C 4D 4D 4S 4S 6D 6D 6H 7C 7D 8D 9D 9S XB XB XR || AD 0D JC QS KC |',
 ]
-overall_value_cost=6
+overall_value_cost=9
 solutions=[
   '| AD AS 2C 3H 3H 3S 4C 4D 4D 4S 4S 6D 6D 6H 7C 7D 8D 9D 9S XB XB XR || AD 0D JC QS KC |',
 ]
@@ -996,7 +996,7 @@ solutions=[
   '| AD AH AS 2C 2S 3C 3H 6H 6S 7H 9C 9D 0D 0S 0S JD JH JS JS QC QS XB || 4H 5H 6D 7C 8C |',
   '| AS 6H 6S 7H 9C 9D 0D 0S 0S JD JH JS JS QC QS XB || AD AH 2C 2S 3C 3H || 4H 5H 6D 7C 8C |',
 ]
-overall_value_cost=7
+overall_value_cost=8
 solutions=[
   '| AD AH AS 2C 2S 3C 6D 6S 7C 8C 9C 9D 0D 0S 0S JD JH JS JS QC QS XB || 3H 4H 5H 6H 7H |',
   '| AD AH AS 2C 2S 3C 6S 9D 0S 0S JD JH JS JS QC QS XB || 6D 7C 8C 9C 0D || 3H 4H 5H 6H 7H |',
@@ -1041,7 +1041,7 @@ min_plays_cost=6
 solutions=[
   '| AD AH AS 2C 2H 2S 3D 3H 5D 8C 8S 0C 0H JD QD QD QH QS KD KD KS XR || 3C 4D 5C 6H 7H |',
 ]
-overall_value_cost=6
+overall_value_cost=7
 solutions=[
   '| AD AH AS 2C 2H 2S 3D 3H 5D 8C 8S 0C 0H JD QD QD QH QS KD KD KS XR || 3C 4D 5C 6H 7H |',
 ]
@@ -1053,7 +1053,7 @@ solutions=[
   '| 2C 2D 2S 2S 3C 3D 3H 3H 4C 4S 4S 7D 7S 8H 0D QS XR || AH 0C JH QD KC || 5H 6D 7C 8H 9H |',
   '| 2C 2D 2S 2S 3C 3D 3H 3H 4C 4S 4S 5H 7D 7S 8H QS XR || AH 0D JH QD KC || 6D 7C 8H 9H 0C |',
 ]
-overall_value_cost=6
+overall_value_cost=7
 solutions=[
   '| 2C 2D 2S 2S 3C 3D 3H 3H 4C 4S 4S 7D 7S 8H 0D QS XR || AH 0C JH QD KC || 5H 6D 7C 8H 9H |',
   '| 2C 2D 2S 2S 3C 3D 3H 3H 4C 4S 4S 5H 7D 7S 8H QS XR || AH 0D JH QD KC || 6D 7C 8H 9H 0C |',
@@ -1066,7 +1066,7 @@ solutions=[
   '| AD AH AS 2C 2H 2S 4C 4H 6C 6H 6S 8H 8H 9H 9S JS XB || 9C 0H JC QS KS || AD 2D 3D 5D WC |',
   '| AH AS 2C 2H 2S 4C 4H 6C 6H 6S 8H 8H 9C 9H 9S JS XB || AD 0H JC QS KS || AD 2D 3D 5D WC |',
 ]
-overall_value_cost=5
+overall_value_cost=6
 solutions=[
   '| AD AH AS 2C 2H 2S 4C 4H 6C 6H 6S 8H 8H 9H 9S JS XB || 9C 0H JC QS KS || AD 2D 3D 5D WC |',
   '| AH AS 2C 2H 2S 4C 4H 6C 6H 6S 8H 8H 9C 9H 9S JS XB || AD 0H JC QS KS || AD 2D 3D 5D WC |',
@@ -1082,7 +1082,7 @@ solutions=[
   '| AD 2C 4S 9C 9D 0C 0D 0D JS KC KH KS KS XB XR || 7H 7H 7S 8C 8D 8H || 3H 3S 4C 4D 5S 5S |',
   '| AD 2C 3H 3S 4C 4D 4S 5S 5S 9C 9D 0C 0D 0D JS KC KH KS KS XB XR || 7H 7H 7S 8C 8D 8H |',
 ]
-overall_value_cost=7
+overall_value_cost=9
 solutions=[
   '| AD 2C 3H 3S 4C 4D 4S 5S 5S 7H 7H 7S 8C 8D 8H 9C 9D 0C 0D 0D JS KC KH KS KS XB XR |',
   '| 3S 4D 4S 5S 7H 7H 7S 8C 8D 8H 9C 9D 0C 0D 0D JS KC KH KS KS XB XR || AD 2C 3H 4C 5S |',
@@ -1102,7 +1102,7 @@ solutions=[
   '| AD AH 2C 2D 2S 3D 3S 4C 4D 4H 8C 9S 9S 0D 0H 0S 0S JH KH KS XB XR || 5C 6D 7C 8C 9C |',
   '| 2S 4C 4D 4H 8C 9S 9S 0D 0H 0S 0S JH KH KS XB XR || AD AH 2C 2D 3D 3S || 5C 6D 7C 8C 9C |',
 ]
-overall_value_cost=7
+overall_value_cost=9
 solutions=[
   '| AD AH 2C 2D 2S 3S 4D 4H 8C 8C 9C 9S 9S 0D 0H 0S 0S JH KH KS XB XR || 3D 4C 5C 6D 7C |',
   '| AD AH 2C 2D 2S 3D 3S 4D 4H 8C 9C 9S 9S 0D 0H 0S 0S JH KH KS XB XR || 4C 5C 6D 7C 8C |',
@@ -1119,7 +1119,7 @@ solutions=[
   '| AD 2H 2H 3S 5C 5D 5H 6C 6D 6H 6S 6S 7C 7C 8C 8D 8D 9D JD JH QD QS QS KC KD KH XB |',
   '| AD 2H 2H 3S 5C 5D 5H 6C 6D 6H 6S 6S 7C 7C 8C 8D 8D 9D JD JH XB || QD QS QS KC KD KH |',
 ]
-overall_value_cost=7
+overall_value_cost=8
 solutions=[
   '| AD 2H 2H 3S 5C 5D 5H 6C 6D 6H 6S 6S 7C 7C 8C 8D 8D 9D JD JH QD QS QS KC KD KH XB |',
   '| AD 2H 2H 3S 5C 5D 5H 6C 6D 6H 6S 6S 7C 7C 8C 8D 8D 9D JD JH XB || QD QS QS KC KD KH |',
@@ -1132,7 +1132,7 @@ solutions=[
   '| AC AD AH AH 2C 2H 3C 3H 3S 7C 7D 0S KC KD XR WC || 4H 4H 5S 5S 6C 6D || 8D 9H 0D JC QS |',
   '| AC AD AH AH 2C 2H 3C 3H 3S 4H 4H 0S KC KD XR WC || 5S 5S 6C 6D 7C 7D || 8D 9H 0D JC QS |',
 ]
-overall_value_cost=5
+overall_value_cost=6
 solutions=[
   '| AC AD AH AH 2C 2H 3C 3H 3S 7C 7D 0S KC KD XR WC || 4H 4H 5S 5S 6C 6D || 8D 9H 0D JC QS |',
   '| AC AD AH AH 2C 2H 3C 3H 3S 4H 4H 0S KC KD XR WC || 5S 5S 6C 6D 7C 7D || 8D 9H 0D JC QS |',
@@ -1144,7 +1144,7 @@ min_plays_cost=3
 solutions=[
   '| 3C 3C 3H 3H 3S 4D 4D 4H 4S 5S 5S 6D 6H 6H XR XR || JC JH QH KC KD WC || 6C 7D 8C 9C 0S |',
 ]
-overall_value_cost=3
+overall_value_cost=5
 solutions=[
   '| 3C 3C 3H 3H 3S 4D 4D 4H 4S 5S 5S 6D 6H 6H XR XR || JC JH QH KC KD WC || 6C 7D 8C 9C 0S |',
 ]
@@ -1173,7 +1173,7 @@ solutions=[
   '| AS 2C 2D 2S 4C 4D 4H 4S 5C 5D 5D 5H 7S 0C 0D 0S QC QD QD QS XR WC || 5C 6C 7D 8D 9H |',
   '| AS 2C 2D 2S 4C 4D 4H 4S 5C 5C 5D 5D 5H 7S 0D 0S QC QD QD QS XR WC || 6C 7D 8D 9H 0C |',
 ]
-overall_value_cost=4
+overall_value_cost=5
 solutions=[
   '| AS 2C 2D 2S 4C 4D 4H 4S 5C 5D 5D 5H 7S 0C 0D 0S QC QD QD QS XR WC || 5C 6C 7D 8D 9H |',
   '| AS 2C 2D 2S 4C 4D 4H 4S 5C 5C 5D 5D 5H 7S 0D 0S QC QD QD QS XR WC || 6C 7D 8D 9H 0C |',
@@ -1185,7 +1185,7 @@ min_plays_cost=6
 solutions=[
   '| 2S 5D 5D 5S 7S XB || JH JS QH QS KC KD || 7C 8H 9D 0D JD || AC 2S 3C 4D 5C || 6C 7C 8C 9C 0C |',
 ]
-overall_value_cost=6
+overall_value_cost=7
 solutions=[
   '| 2S 5D 5D 5S 7S XB || JH JS QH QS KC KD || 7C 8H 9D 0D JD || AC 2S 3C 4D 5C || 6C 7C 8C 9C 0C |',
 ]
@@ -1202,7 +1202,7 @@ solutions=[
   '| AD AH AS 3H 5D 8D 8H 9S JS QC QH KD KS KS XB || 6H 6S 7H 7S 8C 8D || 2C 2D 3C 3C 4D 4H |',
   '| AD AH AS 2C 2D 3C 3C 3H 4D 4H 5D 8D 8H 9S JS QC QH KD KS KS XB || 6H 6S 7H 7S 8C 8D |',
 ]
-overall_value_cost=8
+overall_value_cost=9
 solutions=[
   '| AD AH AS 2C 2D 3C 3C 3H 4D 4H 5D 6H 6S 7H 7S 8C 8D 8D 8H 9S JS QC QH KD KS KS XB |',
   '| AD AH AS 2C 2D 3C 3C 3H 4D 4H 6S 7S 8D 8D 8H JS QC QH KD KS KS XB || 5D 6H 7H 8C 9S |',
@@ -1238,7 +1238,7 @@ min_plays_cost=8
 solutions=[
   '| AD 2D 2S 3C 3D 3S 4C 4D 4D 4H 6H JD QD QH KD KS XB || 8S 9S 0S JC QD || 5C 6C 7H 8D 9C |',
 ]
-overall_value_cost=8
+overall_value_cost=9
 solutions=[
   '| AD 2D 2S 3C 3D 3S 4C 4D 4D 4H 6H JD QD QH KD KS XB || 8S 9S 0S JC QD || 5C 6C 7H 8D 9C |',
 ]
@@ -1251,7 +1251,7 @@ solutions=[
   '| 2D 5C 5D 9D 9D 9S JS KS XB XR || 3C 3C 3D 4D 4S 4S || AH AS QD QH KD KH || 7H 8D 9C 0C JD |',
   '| AH AS 2D 5C 5D 9D 9D 9S JS QD QH KD KH KS XB XR || 3C 3C 3D 4D 4S 4S || 7H 8D 9C 0C JD |',
 ]
-overall_value_cost=7
+overall_value_cost=9
 solutions=[
   '| AH AS 2D 3C 3C 3D 4D 4S 4S 5C 5D 9D 9D 9S JS QD QH KD KH KS XB XR || 7H 8D 9C 0C JD |',
   '| 2D 5C 5D 9D 9D 9S JS KS XB XR || 3C 3C 3D 4D 4S 4S || AH AS QD QH KD KH || 7H 8D 9C 0C JD |',
@@ -1287,7 +1287,7 @@ min_plays_cost=6
 solutions=[
   '| 3D 3H 6D 6H 6S 7D 7H 0H XB XB XR || AS AS QC QS KD KD || 7D 8D 9C 0D JD || AH 2D 3C 4S 5D |',
 ]
-overall_value_cost=6
+overall_value_cost=9
 solutions=[
   '| 3D 3H 6D 6H 6S 7D 7H 0H XB XB XR || AS AS QC QS KD KD || 7D 8D 9C 0D JD || AH 2D 3C 4S 5D |',
 ]
@@ -1305,7 +1305,7 @@ solutions=[
   '| AH 2D 2S 2S 3D 3D 3H 3S 3S 4H 4S KC KD KH KS KS XB || 8S 0D JC WC WC || 5D 6C 7H 8H 9S |',
   '| 2D 2S 2S 3D 3D 3H 3S 3S 4H 4S 8S KD KH KS KS XB WC || AH 0D JC KC WC || 5D 6C 7H 8H 9S |',
 ]
-overall_value_cost=4
+overall_value_cost=5
 solutions=[
   '| 2S 2S 3D 3S 3S 8S KC KD KH KS KS XB || 7H 8H 9S 0D JC || 2D 3D 4S 5D 6C || AH 3H 4H WC WC |',
   '| 2S 2S 3D 3H 3S 3S KC KD KH KS KS XB || 8S 9S 0D JC WC || 4S 6C 7H 8H WC || AH 2D 3D 4H 5D |',
@@ -1324,7 +1324,7 @@ solutions=[
   '| AC AH 2C 2C 2H 6H QS KC KH XR || 8C 8H 9H 9S 0H 0S || 4S 4S 5C 5S 6C 6H || 7D 8D 9D JD WC |',
   '| AC AH 2C 2C 2H 4S 4S 5C 5S 6C 6H 6H QS KC KH XR || 8C 8H 9H 9S 0H 0S || 7D 8D 9D JD WC |',
 ]
-overall_value_cost=6
+overall_value_cost=7
 solutions=[
   '| AC AH 2C 2C 2H 6H QS KC KH XR || 8C 8H 9H 9S 0H 0S || 4S 4S 5C 5S 6C 6H || 7D 8D 9D JD WC |',
   '| AC AH 2C 2C 2H 4S 4S 5C 5S 6C 6H 6H QS KC KH XR || 8C 8H 9H 9S 0H 0S || 7D 8D 9D JD WC |',
@@ -1349,7 +1349,7 @@ min_plays_cost=4
 solutions=[
   '| AC AS 3D 3D 3H 4D 4S 7C 7C 7S JC JH JH KD KH XB || 8C 8C 9D 9H 0H 0S || 4H 6H 7H 8H WC |',
 ]
-overall_value_cost=4
+overall_value_cost=5
 solutions=[
   '| AC AS 3D 3D 3H 4D 4S 7C 7C 7S JC JH JH KD KH XB || 8C 8C 9D 9H 0H 0S || 4H 6H 7H 8H WC |',
 ]
@@ -1362,7 +1362,7 @@ solutions=[
   '| AC AS 3S 6D 6H 6S 7C 8C 8C 8H 0C 0D JC JD QD QD QH KC KC KH KS XB || 2S 3C 4H 5D 6C |',
   '| AC AS 2S 3S 6D 6H 6S 8C 8C 8H 0C 0D JC JD QD QD QH KC KC KH KS XB || 3C 4H 5D 6C 7C |',
 ]
-overall_value_cost=6
+overall_value_cost=7
 solutions=[
   '| AS 3S 6C 6D 6H 6S 7C 8C 8C 8H 0C 0D JC JD QD QD QH KC KC KH KS XB || AC 2S 3C 4H 5D |',
   '| AC AS 3S 6D 6H 6S 7C 8C 8C 8H 0C 0D JC JD QD QD QH KC KC KH KS XB || 2S 3C 4H 5D 6C |',
@@ -1383,7 +1383,7 @@ solutions=[
   '| AC AH AS AS 2S 5H 6H 7C 7D 9H 0S JD JH JS XB || JC JC QC QD KD KS || 2C 2D 3H 3S 4D 4S |',
   '| AC AH AS AS 2C 2D 2S 3H 3S 4D 4S 5H 6H 7C 7D 9H 0S JD JH JS XB || JC JC QC QD KD KS |',
 ]
-overall_value_cost=8
+overall_value_cost=9
 solutions=[
   '| AC AH AS AS 2D 2S 3S 4S 7C 7D JC JD JH JS QD KS XB || 9H 0S JC QC KD || 2C 3H 4D 5H 6H |',
   '| AC AH AS AS 2D 2S 3S 4S 7C 7D 9H 0S JD JH JS XB || JC JC QC QD KD KS || 2C 3H 4D 5H 6H |',
@@ -1402,7 +1402,7 @@ min_plays_cost=5
 solutions=[
   '| 4C 4D 4S 6D 6H 9C 0C 0D 0H 0H QD KC KD KD KH XB || AC AC 2D 2H 3S WC || 5C 6C 7S 8H 9C |',
 ]
-overall_value_cost=5
+overall_value_cost=6
 solutions=[
   '| 4C 4D 4S 6D 6H 9C 0C 0D 0H 0H QD KC KD KD KH XB || AC AC 2D 2H 3S WC || 5C 6C 7S 8H 9C |',
 ]
@@ -1414,7 +1414,7 @@ solutions=[
   '| AC AS 2D 3S 3S 5S 5S 6D 7C 7C 7D 7H 7S 7S 9D 9H 9S 0C 0D 0H XR || JD JS QD QS KC KH |',
   '| 2D 3S 3S 5S 5S 6D 7C 7C 7D 7H 7S 7S 9D 9H 9S 0C 0D 0H JD JS XR || AC AS QD QS KC KH |',
 ]
-overall_value_cost=6
+overall_value_cost=7
 solutions=[
   '| AC AS 2D 3S 3S 5S 5S 6D 7C 7C 7D 7H 7S 7S 9D 9H 9S 0C 0D 0H XR || JD JS QD QS KC KH |',
   '| 2D 3S 3S 5S 5S 6D 7C 7C 7D 7H 7S 7S 9D 9H 9S 0C 0D 0H JD JS XR || AC AS QD QS KC KH |',
@@ -1452,7 +1452,7 @@ solutions=[
   '| AC AH 2C 2D 3C 3D 3S 6S 7D 7D 9D 9H KC KH KS XR || 0S 0S JC JC QD QH || 5S 6C 7C 8H 9C |',
   '| AC AH 2C 2D 3C 3D 3S 5S 6C 6S 7C 7D 7D 8H 9C 9D 9H KC KH KS XR || 0S 0S JC JC QD QH |',
 ]
-overall_value_cost=7
+overall_value_cost=8
 solutions=[
   '| 3S 6S 7D 7D QD QH KC KH KS XR || 9D 9H 0S 0S JC JC || AC AH 2C 2D 3C 3D || 5S 6C 7C 8H 9C |',
   '| 3S 6S 7D 7D 9D 9H KC KH KS XR || 0S 0S JC JC QD QH || AC AH 2C 2D 3C 3D || 5S 6C 7C 8H 9C |',
@@ -1478,7 +1478,7 @@ solutions=[
   '| 2S 2S 4C 5C 5D 5S QD QS XB XR || 6D 6H 7C 7D 8H 8H || AH AS 2C 2H 3H WC || AC 0H JS QC KC |',
   '| AH AS 2C 2H 2S 2S 3H 4C 5C 5D 5S QD QS XB XR WC || 6D 6H 7C 7D 8H 8H || AC 0H JS QC KC |',
 ]
-overall_value_cost=6
+overall_value_cost=8
 solutions=[
   '| AS 2H 2S 2S 3H 8H 8H QD QS XB XR || 5D 5S 6D 6H 7C 7D || AH 0H JS QC KC || AC 2C 4C 5C WC |',
   '| AS 2H 2S 2S 3H 5D 5S QD QS XB XR || 6D 6H 7C 7D 8H 8H || AH 0H JS QC KC || AC 2C 4C 5C WC |',
@@ -1548,7 +1548,7 @@ min_plays_cost=4
 solutions=[
   '| AD AH AH 5D 5H 5S 0H 0H XB XR WC || 2C 2S 3C 3D 4H 4S || 8D 9S 0C QH WC || 4D 5D 6H 7C 8C |',
 ]
-overall_value_cost=4
+overall_value_cost=6
 solutions=[
   '| AD AH AH 5D 5H 5S 0H 0H XB XR WC || 2C 2S 3C 3D 4H 4S || 8D 9S 0C QH WC || 4D 5D 6H 7C 8C |',
 ]
@@ -1560,7 +1560,7 @@ solutions=[
   '| AD AH AS AS 3D 4D 4S 8C 8H QD XB XR || 9C 0H JS QC KD || 2C 3C 4C 5H 6H || 6S 8S 0S WC WC |',
   '| AD AH AS AS 3D 4D 4S 8C 8S QD XB XR || 9C 0S JS QC KD || 2C 3C 4C 5H 6S || 6H 8H 0H WC WC |',
 ]
-overall_value_cost=6
+overall_value_cost=8
 solutions=[
   '| AD AH AS AS 3D 4D 4S 8C 8H QD XB XR || 9C 0H JS QC KD || 2C 3C 4C 5H 6H || 6S 8S 0S WC WC |',
   '| AD AH AS AS 3D 4D 4S 8C 8S QD XB XR || 9C 0S JS QC KD || 2C 3C 4C 5H 6S || 6H 8H 0H WC WC |',
@@ -1575,7 +1575,7 @@ solutions=[
   '| 4S 5D 6D 6H 7C 7D 7H 7S JD JH JS QH QS KS XB || 8H 8H 9S 9S 0D 0H || 2C 2H 3D 3S 4C 4H |',
   '| 2C 2H 3D 3S 4C 4H 4S 5D 6D 6H 7C 7D 7H 7S JD JH JS QH QS KS XB || 8H 8H 9S 9S 0D 0H |',
 ]
-overall_value_cost=7
+overall_value_cost=8
 solutions=[
   '| 7H 7S JH JS QS XB || 2C 2H 3D 3S 4H 4S || 9S 0H JD QH KS || 6H 7D 8H 9S 0D || 4C 5D 6D 7C 8H |',
   '| 6H 7D 7H 7S JS XB || 2C 2H 3D 3S 4H 4S || 9S 0H JH QS KS || 8H 9S 0D JD QH || 4C 5D 6D 7C 8H |',
@@ -1591,7 +1591,7 @@ solutions=[
   '| 2S 4H 4H 6D 6H 6H 7S 9S 0D 0S QH QS KD KD KH KS XR || 7C 8D 9C 0C JH || AS 2D 3D 4D 5C |',
   '| 2S 4H 4H 6D 6H 6H 7C 7S 9S 0D 0S QS KD KD KH KS XR || 8D 9C 0C JH QH || AS 2D 3D 4D 5C |',
 ]
-overall_value_cost=8
+overall_value_cost=9
 solutions=[
   '| 2S 4H 4H 6D 6H 6H 7C 7S 8D 9C 9S 0C 0D 0S JH QH QS KD KD KH KS XR || AS 2D 3D 4D 5C |',
   '| 2S 4H 4H 6D 6H 6H 7S 9S 0D 0S QH QS KD KD KH KS XR || 7C 8D 9C 0C JH || AS 2D 3D 4D 5C |',
@@ -1620,7 +1620,7 @@ solutions=[
   '| AH AH 3S 3S 7C 7D 7S 8C 8H 8S 9C 9D 0D 0D 0H 0S JH JH JS KH XR || 4D 4H 4S 5C 5H 5S |',
   '| AH AH 3S 3S 4D 4H 4S 5C 5H 5S 9C 9D 0D 0D 0H 0S JH JH JS KH XR || 7C 7D 7S 8C 8H 8S |',
 ]
-overall_value_cost=5
+overall_value_cost=6
 solutions=[
   '| AH AH 3S 3S 7C 7D 7S 8C 8H 8S 9C 9D 0D 0D 0H 0S JH JH JS KH XR || 4D 4H 4S 5C 5H 5S |',
   '| AH AH 3S 3S 4D 4H 4S 5C 5H 5S 9C 9D 0D 0D 0H 0S JH JH JS KH XR || 7C 7D 7S 8C 8H 8S |',

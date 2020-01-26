@@ -6,7 +6,8 @@
     "BUILD": "bazel",
     "METADATA": "bazel",
     "WORKSPACE": "bazel",
-    "algorithm": "cpp"
+    "algorithm": "cpp",
+    "list": "cpp"
   },
   "C_Cpp.clang_format_style": "Chromium"
 }

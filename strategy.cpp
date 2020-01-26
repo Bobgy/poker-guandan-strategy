@@ -29,9 +29,11 @@ using namespace std;
 typedef pair<int, char> TCard;
 typedef map<int, multiset<char>> THandCards;
 typedef list<string> TSolutions;
-const int JOKER = 100000;
+const int JOKER = 15;
 const int BLACK_JOKER = JOKER;
 const int RED_JOKER = BLACK_JOKER + 1;
+const int RANK_MAX = RED_JOKER;
+const int RANK_K = 13;
 const string SUITS = "SHDCA";
 const int INF = 100000;
 
@@ -266,7 +268,9 @@ class OverallValueCostEstimator : public CostEstimator {
           default:
             return linear(0, 10, 1.0, -0.1, order);
         }
-      case TRIPLE:
+      case TRIPLE:  // ASSUMPTION: tripes and full house are equivalent.
+                    // TODO: avoid this assumption
+      case FULL_HOUSE:
         assert(order <= 12);  // joker cannot be triples
         switch (order) {
           case 12:
@@ -308,12 +312,70 @@ class OverallValueCostEstimator : public CostEstimator {
     }
   }
   double estimateCards(const THandCards& hc, int wildCards) const {
-    return (double)calculateMinHands(hc, wildCards);
+    int rankCounts[RANK_MAX + 1] = {};
+    for (const auto cards : hc) {
+      assert(cards.first <= RANK_MAX);
+      rankCounts[cards.first] = cards.second.size();
+    }
+    return estimateCardsImp(rankCounts, wildCards);
   }
-  //  private:
-  //   double estimateCardsImp(const THandCards& hc, int wildCards) const {
-  //     return
-  //   }
+
+ private:
+  double estimateCardsImp(int rankCounts[RANK_MAX + 1], int wildCards) const {
+    assert(wildCards >= 0);
+    if (wildCards == 0) {
+      int pairsInFullhouses = 0;
+      double valueSum = 0.0;
+      // Count triples, accumulate value for triples
+      for (int rank = 1; rank <= RANK_K; ++rank) {
+        if (rankCounts[rank] == 3) {
+          pairsInFullhouses++;
+          valueSum += estimate(makePlayRank(TRIPLE, rank));
+        }
+      }
+      for (int rank = 1; rank <= RANK_K; ++rank) {
+        int value;
+        switch (rankCounts[rank]) {
+          case 1:
+            valueSum += estimate(makePlayRank(SINGLE, rank));
+            break;
+          case 2:
+            value = estimate(makePlayRank(PAIR, rank));
+            if (value > 0 && pairsInFullhouses > 0) {
+              pairsInFullhouses--;
+            } else {
+              valueSum += value;
+            }
+            break;
+          case 3:
+            // triples have already been calculated
+            break;
+          case 0:
+            // zeros can be skipped
+            break;
+          default:
+            assert(rankCounts[rank] >= 0);
+            // there could be 8 cards + 2 wildcards
+            assert(rankCounts[rank] <= 10);
+            valueSum += estimate(makeBomb(rank, rankCounts[rank]));
+        }
+      }
+      valueSum +=
+          rankCounts[BLACK_JOKER] * estimate(makePlayRank(SINGLE, BLACK_JOKER));
+      valueSum +=
+          rankCounts[RED_JOKER] * estimate(makePlayRank(SINGLE, RED_JOKER));
+      return valueSum;
+    } else {
+      double minValueSum = 10000000;
+      for (int wildCardAsRank = 1; wildCardAsRank <= RANK_K; ++wildCardAsRank) {
+        ++rankCounts[wildCardAsRank];
+        minValueSum =
+            min(minValueSum, estimateCardsImp(rankCounts, wildCards - 1));
+        --rankCounts[wildCardAsRank];
+      }
+      return minValueSum;
+    }
+  }
 };
 
 #ifdef __DEBUG__

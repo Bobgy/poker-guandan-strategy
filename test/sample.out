@@ -4,7 +4,7 @@ min_plays_cost=1
 solutions=[
   '| XR XR WC WC |',
 ]
-overall_value_cost=1
+overall_value_cost=3
 solutions=[
   '| XR XR WC WC |',
 ]
@@ -20,7 +20,7 @@ solutions=[
   '| AC AD AH 2C 2C 3C 3C 3D 3S 4C 4D 5H 5H 5S 9S JC JD KC KC KH KS XR || 6H 7C 8H 9H WC |',
   '| AC AD AH 3D 3S 5H 5H 5S 9S JC JD KC KC KH KS XR || 2C 2C 3C 3C 4C 4D || 6H 7C 8H 9H WC |',
 ]
-overall_value_cost=5
+overall_value_cost=6
 solutions=[
   '| AC AD AH 2C 2C 3C 3C 3D 3S 4D 5H 5S 9H 9S JC JD KC KC KH KS XR WC || 4C 5H 6H 7C 8H |',
   '| AC AD AH 2C 2C 3C 3C 3D 3S 4C 4D 5H 5S 9S JC JD KC KC KH KS XR WC || 5H 6H 7C 8H 9H |',
@@ -37,7 +37,7 @@ solutions=[
   '| 2D 2S 4H 5H 5S JD JH KC KC KD XB XR || 8S 9D 0S JC QH || 6D 7S 8H 9C 0D || AD 2D 3S 4D 5C |',
   '| AD 2D 2D 2S 3S 4D 4H 5C 5H 5S JD JH KC KC KD XB XR || 8S 9D 0S JC QH || 6D 7S 8H 9C 0D |',
 ]
-overall_value_cost=7
+overall_value_cost=9
 solutions=[
   '| 2D 2S 4H 5H 5S JD JH KC KC KD XB XR || 8S 9D 0S JC QH || 6D 7S 8H 9C 0D || AD 2D 3S 4D 5C |',
   '| AD 2D 2D 2S 3S 4D 4H 5C 5H 5S JD JH KC KC KD XB XR || 8S 9D 0S JC QH || 6D 7S 8H 9C 0D |',
