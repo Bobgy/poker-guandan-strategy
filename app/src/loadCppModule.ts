@@ -28,11 +28,11 @@ export interface CppModule {
   onRuntimeInitialized: () => void
   onAbort: () => void
   add: (a: number, b: number) => number
-  calc: (cards: string, mainRank: number) => OriginalStrategyResult
+  calc: (cards: string, mainRank: number, useOverallValueEstimator: boolean) => OriginalStrategyResult
 }
 
 export interface PortedCppModule {
-  calc: (cards: string, mainRank: string) => StrategyResult
+  calc: (cards: string, mainRank: string, useOverallValueEstimator: boolean) => StrategyResult
 }
 
 declare global {

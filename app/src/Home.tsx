@@ -10,20 +10,20 @@ import { RankChooser } from './RankChooser'
 
 interface StatelessHomePageProps
   extends Pick<
-      AppState,
-      | 'rank'
-      | 'setRank'
-      | 'cards'
-      | 'clearCards'
-      | 'addCard'
-      | 'randomCards'
-      | 'deleteLastCard'
-      | 'strategyResult'
-      | 'setResult'
-      | 'strategyModule'
-      | 'windowSize'
-    >,
-    Pick<NavigationProps, 'navigation'> {}
+  AppState,
+  | 'rank'
+  | 'setRank'
+  | 'cards'
+  | 'clearCards'
+  | 'addCard'
+  | 'randomCards'
+  | 'deleteLastCard'
+  | 'strategyResult'
+  | 'setResult'
+  | 'strategyModule'
+  | 'windowSize'
+  >,
+  Pick<NavigationProps, 'navigation'> { }
 const HomePage: React.FunctionComponent<StatelessHomePageProps> = ({
   rank,
   setRank,
@@ -46,7 +46,7 @@ const HomePage: React.FunctionComponent<StatelessHomePageProps> = ({
         // console.log(cards)
         const cardsStr = cardsToString(cards)
         // console.log(cardsStr)
-        const result = strategyModule.calc(cardsStr, rank)
+        const result = strategyModule.calc(cardsStr, rank, true)
 
         // set a minimum extra delay to avoid UI flashing too quickly
         setTimeout(() => {

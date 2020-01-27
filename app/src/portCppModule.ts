@@ -7,10 +7,11 @@ import {
 
 export function portCppModule(cppModule: CppModule) {
   return {
-    calc: (cards: string, mainRank: string): StrategyResult => {
+    calc: (cards: string, mainRank: string, useOverallValueEstimator: boolean = false): StrategyResult => {
       const { minHands, solutions: originalSolutions } = cppModule.calc(
         cards,
         mainRank.charCodeAt(0),
+        useOverallValueEstimator,
       )
       const solutionsRaw = vector2Array(originalSolutions)
 
