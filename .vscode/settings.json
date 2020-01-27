@@ -7,7 +7,13 @@
     "METADATA": "bazel",
     "WORKSPACE": "bazel",
     "algorithm": "cpp",
-    "list": "cpp"
+    "list": "cpp",
+    "iostream": "cpp",
+    "__hash_table": "cpp",
+    "__tree": "cpp",
+    "functional": "cpp",
+    "locale": "cpp",
+    "string": "cpp"
   },
   "C_Cpp.clang_format_style": "Chromium"
 }

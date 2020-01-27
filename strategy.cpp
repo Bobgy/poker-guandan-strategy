@@ -221,6 +221,7 @@ class MinPlaysCostEstimator : public CostEstimator {
 };
 
 double linear(double l, double r, double valueL, double valueR, double x) {
+  assert(l < r);
   return (x - l) * (valueR - valueL) / (r - l) + valueL;
 }
 
@@ -232,14 +233,6 @@ class OverallValueCostEstimator : public CostEstimator {
   // -2 means stopping opponent from playing a card and plays a small card.
   // 2 means playing a small card and let opponent play a small card.
   double estimate(PlayRank playRank) const {
-    switch (playRank.type) {
-      case BOMB_NORMAL:
-      case STRAIGHT_FLUSH:
-      case FOUR_JOKER:
-        return 0.0;  // 0 plays, because you can play them any time
-      default:
-        return 1.0;  // 1 play
-    }
     const int rank = playRank.rank;
     const int actualRank = getActualRank(rank);
     const int order = context.getOrder(rank);
@@ -567,12 +560,12 @@ string handToStr(THandCards hc, int wildCards = 0) {
   return str;
 }
 
-int check(THandCards& hc,
-          list<string>& ASolution,
-          int wildCardsLeft,
-          const CostEstimator& costEstimator,
-          int CurrentTypePosition = 0,
-          int CurrentStartingNumPosition = 1);
+double check(THandCards& hc,
+             list<string>& ASolution,
+             int wildCardsLeft,
+             const CostEstimator& costEstimator,
+             int CurrentTypePosition = 0,
+             int CurrentStartingNumPosition = 1);
 
 void tryExtractOneHand(char NowSuit,
                        int seriesCount,
@@ -636,12 +629,12 @@ void tryExtractOneHand(char NowSuit,
   }
 }
 
-int check(THandCards& hc,
-          list<string>& ASolution,
-          int wildCardsLeft,
-          const CostEstimator& costEstimator,
-          int CurrentTypePosition,
-          int CurrentStartingNumPosition) {
+double check(THandCards& hc,
+             list<string>& ASolution,
+             int wildCardsLeft,
+             const CostEstimator& costEstimator,
+             int CurrentTypePosition,
+             int CurrentStartingNumPosition) {
 #ifdef __DEBUG__
   cerr << wildCardsLeft << " ";
   debug(hc);
