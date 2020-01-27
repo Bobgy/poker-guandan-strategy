@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/poker-guandan-strategy/precache-manifest.80d9f222d4d20c55110ae20d462ae8d1.js"
+  "/poker-guandan-strategy/precache-manifest.db4faf7d282f43465c4ce4972a683cd0.js"
 );
 
 self.addEventListener('message', (event) => {
