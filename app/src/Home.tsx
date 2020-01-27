@@ -1,4 +1,4 @@
-import React, { useCallback, Fragment } from 'react'
+import React, { useCallback, Fragment, useState } from 'react'
 import { View, Text } from 'react-native'
 import { NavigationProps, AppState } from './types'
 import { CardsChooser } from './CardsChooser'
@@ -38,6 +38,7 @@ const HomePage: React.FunctionComponent<StatelessHomePageProps> = ({
   strategyModule,
   windowSize,
 }) => {
+  const [useValueEstimator, setUseValueEstimator] = useState(true);
   const handleSolutionCalcButton = useCallback(() => {
     if (strategyModule != null && strategyModule !== 'error') {
       setResult('loading')
@@ -46,7 +47,7 @@ const HomePage: React.FunctionComponent<StatelessHomePageProps> = ({
         // console.log(cards)
         const cardsStr = cardsToString(cards)
         // console.log(cardsStr)
-        const result = strategyModule.calc(cardsStr, rank, true)
+        const result = strategyModule.calc(cardsStr, rank, useValueEstimator)
 
         // set a minimum extra delay to avoid UI flashing too quickly
         setTimeout(() => {
@@ -55,7 +56,7 @@ const HomePage: React.FunctionComponent<StatelessHomePageProps> = ({
         }, 300)
       }, 0)
     }
-  }, [cards, setResult, navigation, strategyModule])
+  }, [cards, setResult, navigation, strategyModule, useValueEstimator])
 
   if (strategyModule === 'error') {
     return <Text>{'strategy module failed to load'}</Text>
@@ -67,6 +68,7 @@ const HomePage: React.FunctionComponent<StatelessHomePageProps> = ({
         style={[
           commonStyles.container,
           {
+            flexDirection: 'row',
             height: 40,
             justifyContent: 'center',
             alignItems: 'center',
@@ -74,6 +76,13 @@ const HomePage: React.FunctionComponent<StatelessHomePageProps> = ({
         ]}
       >
         <RankChooser rank={rank} setRank={setRank} />
+        <MyButton
+          title={useValueEstimator ? '价值' : '手数'}
+          onPress={() => setUseValueEstimator(use => !use)}
+          titleStyle={{
+            fontSize: 18,
+          }}
+        />
       </View>
       <Divider />
       <View
