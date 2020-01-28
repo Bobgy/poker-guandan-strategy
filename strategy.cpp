@@ -23,86 +23,10 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include "cc/common.hpp"
 
 using namespace std;
 
-typedef pair<int, char> TCard;
-typedef map<int, multiset<char>> THandCards;
-typedef list<string> TSolutions;
-const int JOKER = 15;
-const int BLACK_JOKER = JOKER;
-const int RED_JOKER = BLACK_JOKER + 1;
-const int RANK_MAX = RED_JOKER;
-const int RANK_K = 13;
-const string SUITS = "SHDCA";
-const int INF = 100000;
-
-enum PlayType {
-  UNKNOWN,
-  SINGLE,
-  PAIR,
-  TRIPLE,
-  FULL_HOUSE,  // like 333,22
-  STRAIGHT,    // like 12345
-  TUBE,        // like 33,44,55
-  PLATE,       // like 333,444
-  // === The following is a bomb ===
-  STRAIGHT_FLUSH,  // like 34567 all hearts
-  BOMB_NORMAL,     // like 4444
-  FOUR_JOKER
-};
-// Represents a card play's rank information
-struct PlayRank {
-  PlayType type;
-  int rank;
-  int count;  // only used in a normal bomb
-};
-PlayRank makePlayRank(PlayType type, int rank) {
-  return PlayRank({type, rank, 0});
-}
-PlayRank makeBomb(int rank, int count) {
-  return PlayRank({PlayType::BOMB_NORMAL, rank, count});
-}
-PlayRank makeFourJoker() {
-  return PlayRank({PlayType::FOUR_JOKER, 0, 0});
-}
-
-// rank 14 -> A -> should be found at rank 1
-int getActualRank(int rank) {
-  return rank == 14 ? 1 : rank;
-}
-// in ordinal rank, A should be found at rank 14
-int getOrdinalRank(int rank) {
-  return rank == 1 ? 14 : rank;
-}
-
-struct GameContext {
-  // Which rank is largest in current game play.
-  int mainRank;
-
-  /**
-   * Returns range[0, 14], order of the rank in this gameplay.
-   * The smallest is 0. The largest (red joker) is 14.
-   */
-  int getOrder(int rank) const {
-    if (rank == RED_JOKER) {
-      return 14;
-    } else if (rank == BLACK_JOKER) {
-      return 13;
-    } else if (rank == mainRank) {
-      return 12;
-    } else {
-      assert(rank >= 1 && rank <= 14);
-      rank = getOrdinalRank(rank);
-      int ordinalMainRank = getOrdinalRank(mainRank);
-      if (rank > ordinalMainRank) {
-        return rank - 3;  // 10 becomes 7, ...
-      } else {
-        return rank - 2;  // 2 becomes 0, 3 becomes 1, ...
-      }
-    }
-  }
-};
 class CostEstimator {
  public:
   virtual double estimate(PlayRank playRank) const = 0;
@@ -219,11 +143,6 @@ class MinPlaysCostEstimator : public CostEstimator {
     return (double)calculateMinHands(hc, wildCards);
   }
 };
-
-double linear(double l, double r, double valueL, double valueR, double x) {
-  assert(l < r);
-  return (x - l) * (valueR - valueL) / (r - l) + valueL;
-}
 
 class OverallValueCostEstimator : public CostEstimator {
  public:
@@ -371,195 +290,6 @@ class OverallValueCostEstimator : public CostEstimator {
   }
 };
 
-#ifdef __DEBUG__
-void debug(THandCards& hc) {
-  for (auto entry : hc) {
-    if (entry.second.size() == 0)
-      continue;
-    cerr << "(" << entry.first << " :";
-    for (auto suite : entry.second) {
-      cerr << suite << " ";
-    }
-    cerr << ")";
-  }
-  cerr << endl;
-}
-#endif
-
-int parseRankFromChar(char rank) {
-  if (rank >= '2' && rank <= '9') {
-    return rank - '0';
-  } else if (rank == 'A') {
-    return 1;
-  } else if (rank == 'J') {
-    return 11;
-  } else if (rank == 'Q') {
-    return 12;
-  } else if (rank == 'K') {
-    return 13;
-  } else if (rank == '0') {
-    return 10;
-  } else if (rank == 'X') {
-    return JOKER;
-  }
-
-  assert("invalid card" && false);
-}
-
-void AddCard(THandCards& hc, char ch1, char ch2) {
-  int rank = parseRankFromChar(ch1);
-  assert(rank >= 1 && rank <= JOKER);
-  TCard tmp;
-  tmp.first = rank;
-  tmp.second = ch2;
-  if (rank == JOKER) {
-    // First character cannot distinguish red joker and black joker.
-    if (ch2 == 'R') {
-      tmp.first = RED_JOKER;
-    } else if (ch2 == 'B') {
-      tmp.first = BLACK_JOKER;
-    }
-  }
-  hc[tmp.first].insert(tmp.second);
-}
-
-string CardToStr(int num, char suit) {
-  string str = "";
-  if (num >= 2 && num <= 9) {
-    str += num + '0';
-  } else if (num == 1) {
-    str += "A";
-  } else if (num == 11) {
-    str += "J";
-  } else if (num == 13) {
-    str += "K";
-  } else if (num == 12) {
-    str += "Q";
-  } else if (num == 10) {
-    str += "0";
-  }
-
-  if (num == JOKER + 1) {
-    str += "XR";
-  } else if (num == JOKER) {
-    str += "XB";
-  } else {
-    str += suit;
-  }
-  return str;
-}
-
-// Suit: S-Spade C-Club D-Diamond H-Heart A-All
-bool ExistShunZi(THandCards& hc,
-                 int wildCards,
-                 int StartingNumber,
-                 int Length,
-                 int HandNum,
-                 char Suit,
-                 THandCards& oneHand,
-                 int& wildCardsToUse) {
-  // assert the sequence is valid
-  assert(StartingNumber >= 1);
-  assert(StartingNumber + Length - 1 <= 14);
-  oneHand.clear();
-  if (Suit == 'A') {
-    int cardsLacking = 0;
-#ifdef __DEBUG__
-    debug(hc);
-    cerr << "exist shunzi " << StartingNumber << " " << Length << " " << HandNum
-         << " " << endl;
-#endif
-    for (int k = StartingNumber; k < StartingNumber + Length; k++) {
-      // cerr << " #" << k << " " << hc[getActualRank(k)].size() << "# ";
-      cardsLacking += max(0, HandNum - (int)hc[getActualRank(k)].size());
-    }
-#ifdef __DEBUG__
-    cerr << cardsLacking << " " << wildCards << endl;
-#endif
-
-    if (cardsLacking > wildCards)
-      return false;
-
-    wildCardsToUse = cardsLacking;
-    for (int k = StartingNumber; k < StartingNumber + Length; k++) {
-      int i = getActualRank(k);
-      multiset<char>::iterator it;
-      int j;
-      for (j = 0, it = hc[i].begin(); j < HandNum && it != hc[i].end();
-           j++, it++) {
-        oneHand[i].insert(*it);
-      }
-    }
-  } else {
-    int cardsLacking = 0;
-    for (int k = StartingNumber; k < StartingNumber + Length; k++) {
-      cardsLacking += max(0, HandNum - (int)hc[getActualRank(k)].count(Suit));
-    }
-
-    if (cardsLacking > wildCards)
-      return false;
-
-    wildCardsToUse = cardsLacking;
-    for (int k = StartingNumber; k < StartingNumber + Length; k++) {
-      for (int j = 0; j < min(HandNum, (int)hc[getActualRank(k)].count(Suit));
-           j++) {
-        oneHand[getActualRank(k)].insert(Suit);
-      }
-    }
-  }
-  return true;
-}
-
-int Chu(THandCards& hc, THandCards& oneHand) {
-  THandCards::iterator it;
-  for (it = oneHand.begin(); it != oneHand.end(); it++) {
-    multiset<char>::iterator it2;
-    for (it2 = (*it).second.begin(); it2 != (*it).second.end(); it2++) {
-      multiset<char>::iterator it3;
-      it3 = hc[(*it).first].lower_bound(*it2);
-      if (it3 == hc[(*it).first].end() || (*it3) != (*it2)) {
-        // cout << "Error 2" << endl;  // debug
-        return -1;
-      } else {
-        hc[(*it).first].erase(it3);
-      }
-    }
-  }
-  return 0;
-}
-
-int Mo(THandCards& hc, THandCards& oneHand) {
-  THandCards::iterator it;
-  for (it = oneHand.begin(); it != oneHand.end(); it++) {
-    multiset<char>::iterator it2;
-    for (it2 = (*it).second.begin(); it2 != (*it).second.end(); it2++) {
-      hc[(*it).first].insert(*it2);
-    }
-  }
-  return 0;
-}
-
-string wildCardsToStr(int wildCards) {
-  string str = "";
-  for (int i = 0; i < wildCards; ++i) {
-    str += "WC ";  // wild card
-  }
-  return str;
-}
-
-string handToStr(THandCards hc, int wildCards = 0) {
-  string str = "";
-  THandCards::iterator it;
-  for (it = hc.begin(); it != hc.end(); it++) {
-    multiset<char>::iterator it2;
-    for (it2 = (*it).second.begin(); it2 != (*it).second.end(); it2++) {
-      str += CardToStr((*it).first, *it2) + ' ';
-    }
-  }
-  str += wildCardsToStr(wildCards);
-  return str;
-}
-
 double check(THandCards& hc,
              list<string>& ASolution,
              int wildCardsLeft,
@@ -659,35 +389,13 @@ double check(THandCards& hc,
   return min;
 }
 
-struct StrategyResult {
-  double cost;
-  vector<string> solutions;
-};
-
-struct CardState {
-  THandCards hc;
-  int wildCards;
-};
-
-CardState parseCardState(string cards, char mainRank) {
-  CardState state{};
-  for (int i = 0; i < cards.length() / 2; i++) {
-    char ch1 = cards[i * 2], ch2 = cards[i * 2 + 1];
-    if (ch1 == mainRank && ch2 == 'H')
-      state.wildCards++;
-    else
-      AddCard(state.hc, ch1, ch2);
-  }
-  return state;
-}
-
 // cards: cards represented in string
 // 红桃：?H | 黑桃：?S | 梅花：?C | 方块：?D | 小鬼：XB | 大鬼：XR | 数字10：0 ?
 // | 其余和牌面相同 mainRank: main rank, starting from 2
 EMSCRIPTEN_KEEPALIVE StrategyResult calc(string cards,
                                          char mainRank,
                                          bool useOverallValueEstimator) {
-  CardState state = parseCardState(cards, mainRank);
+  CardsState state = parseCardState(cards, mainRank);
   int rank = parseRankFromChar(mainRank);
   GameContext context{rank};
   const unique_ptr<CostEstimator> costEstimator(

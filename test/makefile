@@ -23,8 +23,8 @@ clean:
 gen.exe: gen.cc
 	g++ gen.cc -std=c++11 -O2 -o gen.exe
 
-wrapper.exe: wrapper.cc ../strategy.cpp
-	g++ wrapper.cc -std=c++11 -O2 -o wrapper.exe
+wrapper.exe: wrapper.cc ../strategy.cpp ../cc/common.cpp
+	g++ wrapper.cc ../cc/common.cpp -std=c++11 -O2 -o wrapper.exe
 
 # == generate output ==
 curr_output.txt: wrapper.exe input.txt
