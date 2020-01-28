@@ -25,9 +25,9 @@ int main(int argc, char* argv[]) {
     cin >> cards;
     cout << "cards=" << cards << endl;
     cout << "mainRank=" << mainRank << endl;
-    StrategyResult resultMinPlays = calcForTest(cards, mainRank, false);
+    StrategyResult resultMinPlays = calc(cards, mainRank, false);
     printStrategyResult(resultMinPlays, "min_plays_");
-    StrategyResult resultOverallValue = calcForTest(cards, mainRank, true);
+    StrategyResult resultOverallValue = calc(cards, mainRank, true);
     printStrategyResult(resultOverallValue, "overall_value_");
     cout << endl;
   }

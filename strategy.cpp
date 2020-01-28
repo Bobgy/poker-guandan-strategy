@@ -696,26 +696,6 @@ EMSCRIPTEN_KEEPALIVE StrategyResult calc(string cards,
           : (CostEstimator*)new MinPlaysCostEstimator(context));
 
   list<string> solution;
-  double minCost = check(state.hc, solution, state.wildCards, *costEstimator);
-  return StrategyResult(
-      {minCost, vector<string>(solution.begin(), solution.end())});
-}
-
-// cards: cards represented in string
-// 红桃：?H | 黑桃：?S | 梅花：?C | 方块：?D | 小鬼：XB | 大鬼：XR | 数字10：0 ?
-// | 其余和牌面相同 mainRank: main rank, starting from 2
-StrategyResult calcForTest(string cards,
-                           char mainRank,
-                           bool useOverallValueEstimator) {
-  CardState state = parseCardState(cards, mainRank);
-  int rank = parseRankFromChar(mainRank);
-  GameContext context{rank};
-  const unique_ptr<CostEstimator> costEstimator(
-      useOverallValueEstimator
-          ? (CostEstimator*)new OverallValueCostEstimator(context)
-          : (CostEstimator*)new MinPlaysCostEstimator(context));
-
-  list<string> solution;
   cntRecursion = 0;
   double minCost = check(state.hc, solution, state.wildCards, *costEstimator);
 #ifdef __INFO__
