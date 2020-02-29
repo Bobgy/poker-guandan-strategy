@@ -1,6 +1,6 @@
-import { ResultProps } from './useResultState'
-import { PortedCppModule } from './loadCppModule'
-import { WindowSize } from './useWindowSize'
+import { ResultProps } from '../useResultState'
+import { PortedCppModule } from '../loadCppModule'
+import { WindowSize } from '../useWindowSize'
 
 export interface RankState {
   rank: string

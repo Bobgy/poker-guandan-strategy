@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, Picker } from 'react-native'
-import { RankState } from './types'
-import { RANKS, SUIT, RANK } from './cardUtils'
+import { RankState } from './common/types'
+import { RANKS, SUIT, RANK } from './common/cardUtils'
 
 export function RankChooser({ rank, setRank }: RankState) {
   return (

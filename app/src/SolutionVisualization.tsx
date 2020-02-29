@@ -10,7 +10,7 @@ import {
 import { Divider } from './Divider'
 import { CardDeck } from './Card'
 import { commonStyles } from './styles'
-import { parseRawCard } from './cardUtils'
+import { parseRawCard } from './common/cardUtils'
 import { StrategyResultState } from './useResultState'
 import { ReactComponent as Close } from './icons/close.svg'
 import { ReactComponent as Info } from './icons/info.svg'
@@ -56,75 +56,75 @@ const SolutionWindow: React.FunctionComponent<SolutionWindowProps> = ({
   rank,
   windowSize,
 }) => (
-  <ScrollView
-    style={[
-      commonStyles.container,
-      {
-        flex: 2,
-      },
-    ]}
-  >
-    {strategyResult &&
-      (strategyResult === 'loading' ? (
-        <Text
-          style={{
-            fontSize: 20,
-          }}
-        >
-          {/* 计算中... */}
-        </Text>
-      ) : (
-        <>
-          <View
+    <ScrollView
+      style={[
+        commonStyles.container,
+        {
+          flex: 2,
+        },
+      ]}
+    >
+      {strategyResult &&
+        (strategyResult === 'loading' ? (
+          <Text
             style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
+              fontSize: 20,
             }}
           >
-            <Text
-              style={{ fontSize: 18, flexShrink: 0, marginRight: 20 }}
-            >{`最少${strategyResult.minHands}手牌`}</Text>
-            <Text style={{ textAlignVertical: 'center' }}>
-              <Info style={{ width: 19, height: 19, verticalAlign: 'top' }} />
-              大小王、炸弹算0手，其他牌型算1手
+            {/* 计算中... */}
+          </Text>
+        ) : (
+            <>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}
+              >
+                <Text
+                  style={{ fontSize: 18, flexShrink: 0, marginRight: 20 }}
+                >{`最少${strategyResult.minHands}手牌`}</Text>
+                <Text style={{ textAlignVertical: 'center' }}>
+                  <Info style={{ width: 19, height: 19, verticalAlign: 'top' }} />
+                  大小王、炸弹算0手，其他牌型算1手
             </Text>
-          </View>
-          <View>
-            {(() => {
-              const solutionsCount = strategyResult.solutions.length
-              const hiddenMoreSolutions = solutionsCount - 10
-              return (
-                <>
-                  {strategyResult.solutions
-                    .slice(0, 10)
-                    .map((solution, solutionIndex) => (
-                      <CardDeck
-                        key={solutionIndex}
-                        hands={solution.actualHands.map(hand =>
-                          hand.map(card =>
-                            parseRawCard(card, {
-                              rank: rank,
-                              suit: 'H',
-                            }),
-                          ),
-                        )}
-                        style={{
-                          margin: 6,
-                        }}
-                        large={windowSize === 'BIG'}
-                      />
-                    ))}
-                  {hiddenMoreSolutions > 0 &&
-                    `还有${hiddenMoreSolutions}种方案可以达到同样的最少手数`}
-                </>
-              )
-            })()}
-          </View>
-        </>
-      ))}
-  </ScrollView>
-)
+              </View>
+              <View>
+                {(() => {
+                  const solutionsCount = strategyResult.solutions.length
+                  const hiddenMoreSolutions = solutionsCount - 10
+                  return (
+                    <>
+                      {strategyResult.solutions
+                        .slice(0, 10)
+                        .map((solution, solutionIndex) => (
+                          <CardDeck
+                            key={solutionIndex}
+                            hands={solution.actualHands.map(hand =>
+                              hand.map(card =>
+                                parseRawCard(card, {
+                                  rank: rank,
+                                  suit: 'H',
+                                }),
+                              ),
+                            )}
+                            style={{
+                              margin: 6,
+                            }}
+                            large={windowSize === 'BIG'}
+                          />
+                        ))}
+                      {hiddenMoreSolutions > 0 &&
+                        `还有${hiddenMoreSolutions}种方案可以达到同样的最少手数`}
+                    </>
+                  )
+                })()}
+              </View>
+            </>
+          ))}
+    </ScrollView>
+  )
 const MemoedSolutionWindow = memo(SolutionWindow)
 
 const SolutionVisualization: React.FunctionComponent<

@@ -8,8 +8,8 @@ import {
   StyleProp,
   ViewStyle,
 } from 'react-native'
-import { SUIT, RANK } from './cardUtils'
-import { TCard } from './types'
+import { SUIT, RANK } from './common/cardUtils'
+import { TCard } from './common/types'
 import nekoImg from './imgs/neko-40x40.png'
 
 const STACKED_CARD_MARGIN = 52

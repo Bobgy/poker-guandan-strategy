@@ -1,5 +1,5 @@
 import { TCard } from './types'
-import { CardRaw } from './loadCppModule'
+import { CardRaw } from '../loadCppModule'
 
 export const RANKS = [
   '2',
@@ -94,13 +94,13 @@ export const SUITS_JOKER = [SUIT.B, SUIT.R]
 const ALL_CARDS_ONE_DECK: TCard[] = RANKS.map(rank =>
   rank.isJoker
     ? SUITS_JOKER.map(suit => ({
-        rank: rank.value,
-        suit: suit.value,
-      }))
+      rank: rank.value,
+      suit: suit.value,
+    }))
     : SUITS.map(suit => ({
-        rank: rank.value,
-        suit: suit.value,
-      })),
+      rank: rank.value,
+      suit: suit.value,
+    })),
 ).reduce((res, cards) => {
   res.push(...cards)
   return res

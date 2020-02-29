@@ -1,10 +1,10 @@
 import React, { useCallback, Fragment, useState } from 'react'
 import { View, Text } from 'react-native'
-import { NavigationProps, AppState } from './types'
+import { NavigationProps, AppState } from './common/types'
 import { CardsChooser } from './CardsChooser'
 import { Divider } from './Divider'
 import { commonStyles } from './styles'
-import { cardsToString } from './cardUtils'
+import { cardsToString } from './common/cardUtils'
 import { MyButton } from './MyButton'
 import { RankChooser } from './RankChooser'
 
