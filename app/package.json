@@ -13,6 +13,7 @@
     "@types/react-native": "^0.57.36",
     "@types/react-transition-group": "^2.0.16",
     "history": "^4.7.2",
+    "invariant": "^2.2.4",
     "react": "^16.8.2",
     "react-art": "^16.8.2",
     "react-dom": "^16.8.2",
@@ -36,6 +37,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "@types/invariant": "^2.2.31",
     "prettier": "1.16.4",
     "react-scripts": "^3.2.0"
   }

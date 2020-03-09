@@ -13,7 +13,10 @@
     "__tree": "cpp",
     "functional": "cpp",
     "locale": "cpp",
-    "string": "cpp"
+    "string": "cpp",
+    "chrono": "cpp",
+    "limits": "cpp",
+    "ratio": "cpp"
   },
   "C_Cpp.clang_format_style": "Chromium"
 }

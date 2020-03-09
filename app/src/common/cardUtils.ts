@@ -47,14 +47,16 @@ export const RANK: RankIndex = RANKS.reduce((rankIndex: RankIndex, rank) => {
   rankIndex[rank.value] = rank
   return rankIndex
 }, {})
-interface SuiteIndex {
-  [suit: string]: {
-    value: string
-    label: string
-    color: string
-  }
+export type SuiteMetadata = {
+  value: string,
+  label: string,
+  color: string,
 }
-export const SUIT: SuiteIndex = {
+export type Suit = 'H' | 'D' | 'S' | 'C';
+export type SuitRedJoker = 'R';
+export type SuitBlackJoker = 'B';
+export type AllSuit = Suit | SuitRedJoker | SuitBlackJoker;
+export const SUIT: Record<Suit, SuiteMetadata> = {
   H: {
     value: 'H',
     label: '♥',
