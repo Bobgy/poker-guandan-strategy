@@ -48,15 +48,15 @@ export const RANK: RankIndex = RANKS.reduce((rankIndex: RankIndex, rank) => {
   return rankIndex
 }, {})
 export type SuiteMetadata = {
-  value: string,
-  label: string,
-  color: string,
+  value: string
+  label: string
+  color: string
 }
-export type Suit = 'H' | 'D' | 'S' | 'C';
-export type SuitRedJoker = 'R';
-export type SuitBlackJoker = 'B';
-export type AllSuit = Suit | SuitRedJoker | SuitBlackJoker;
-export const SUIT: Record<Suit, SuiteMetadata> = {
+export type Suit = 'H' | 'D' | 'S' | 'C'
+export type SuitRedJoker = 'R'
+export type SuitBlackJoker = 'B'
+export type AllSuit = Suit | SuitRedJoker | SuitBlackJoker
+export const SUIT: Record<AllSuit, SuiteMetadata> = {
   H: {
     value: 'H',
     label: '♥',
@@ -96,13 +96,13 @@ export const SUITS_JOKER = [SUIT.B, SUIT.R]
 const ALL_CARDS_ONE_DECK: TCard[] = RANKS.map(rank =>
   rank.isJoker
     ? SUITS_JOKER.map(suit => ({
-      rank: rank.value,
-      suit: suit.value,
-    }))
+        rank: rank.value,
+        suit: suit.value,
+      }))
     : SUITS.map(suit => ({
-      rank: rank.value,
-      suit: suit.value,
-    })),
+        rank: rank.value,
+        suit: suit.value,
+      })),
 ).reduce((res, cards) => {
   res.push(...cards)
   return res
@@ -155,9 +155,7 @@ export function canIAddCard(cards: TCard[], cardToAdd: TCard): boolean {
 }
 
 export function cardsToString(cards: TCard[]) {
-  return cards
-    .map(card => card.rank + card.suit)
-    .join('')
+  return cards.map(card => card.rank + card.suit).join('')
 }
 
 export function parseRawCard(cardRaw: CardRaw, wildCard: TCard): TCard {
