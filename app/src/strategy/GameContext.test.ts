@@ -3,7 +3,7 @@ import {
   NATURAL_RANKS_WITHOUT_JOKERS,
   NATURAL_RANKS,
   NATURAL_RANK,
-} from './utils'
+} from './const'
 
 import { GameContext } from './GameContext'
 

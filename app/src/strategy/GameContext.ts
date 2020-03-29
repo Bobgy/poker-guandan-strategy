@@ -4,8 +4,8 @@ import {
   PowerRank,
   RED_JOKER,
   BLACK_JOKER,
-  getUsualPowerRank,
-} from './utils'
+} from './const'
+import { getUsualPowerRank } from './utils'
 
 export class GameContext {
   constructor(mainRank: NaturalRankWithoutJokers) {

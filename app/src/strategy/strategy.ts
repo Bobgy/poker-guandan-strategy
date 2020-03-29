@@ -1,5 +1,11 @@
-import { Card } from './utils'
+import { Card, NaturalRank } from './const'
 
-export function calc(cards: Card[]) {
+export function calc({
+  cards,
+  mainRank,
+}: {
+  cards: Card[]
+  mainRank: NaturalRank
+}) {
   return null
 }
