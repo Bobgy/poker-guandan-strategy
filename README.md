@@ -12,7 +12,3 @@ For detailed rules in English, refer to https://www.pagat.com/climbing/guan_dan.
 This was started as a cpp program using dfs with _heavy_ pruning optimization (lol) to calculate best (min hands) strategy for the card game, Guan Dan.
 
 Now I've recently built a mobile friendly web app with react-native-web using the cpp module to calculate strategy. The app is published as a PWA in https://bobgy.github.io/poker-guandan-strategy/.
-
-#12
-
-(#12)
