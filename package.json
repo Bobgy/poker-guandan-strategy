@@ -1,7 +1,7 @@
 {
   "name": "poker-guandan-strategy",
   "version": "1.0.0",
-  "description": "guandan strategy calculation",
+  "description": "guandan strategy calculation and web app",
   "scripts": {
     "npm:init:win": "npm config set script-shell \"C:\\bin\\Git\\bin\\bash.exe\"",
     "prebuild": "npm run clean && mkdir -p app/public/res",
