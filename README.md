@@ -6,6 +6,7 @@ Guan4 Dan4 is a Chinese card game whose name means throwing eggs. It originated 
 
 For detailed rules in English, refer to https://www.pagat.com/climbing/guan_dan.html
 
+
 ## About this repo
 
 This was started as a cpp program using dfs with _heavy_ pruning optimization (lol) to calculate best (min hands) strategy for the card game, Guan Dan.
