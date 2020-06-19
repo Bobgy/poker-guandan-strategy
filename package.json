@@ -18,6 +18,7 @@
     "url": "git+https://github.com/Bobgy/poker-guandan-strategy.git"
   },
   "keywords": [
+    "poker",
     "guandan",
     "strategy",
     "wasm"
