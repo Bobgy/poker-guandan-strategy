@@ -14,4 +14,5 @@ This was started as a cpp program using dfs with _heavy_ pruning optimization (l
 Now I've recently built a mobile friendly web app with react-native-web using the cpp module to calculate strategy. The app is published as a PWA in https://bobgy.github.io/poker-guandan-strategy/.
 
 #12
+
 (#12)
