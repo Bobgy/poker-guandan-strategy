@@ -4,7 +4,6 @@
   "description": "guandan strategy calculation",
   "scripts": {
     "npm:init:win": "npm config set script-shell \"C:\\bin\\Git\\bin\\bash.exe\"",
-    "test": "echo \"Error: no test specified\" && exit 1",
     "prebuild": "npm run clean && mkdir -p app/public/res",
     "build": "em++ strategy.cpp cc/common.cpp -o app/public/res/strategy.js -s EXTRA_EXPORTED_RUNTIME_METHODS='[\"cwrap\", \"ccall\"]' --bind",
     "build:asm": "em++ strategy.cpp cc/common.cpp -o app/public/res/strategy.js -s WASM=0 -s EXTRA_EXPORTED_RUNTIME_METHODS='[\"cwrap\", \"ccall\"]' --bind",
