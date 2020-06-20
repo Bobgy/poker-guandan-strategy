@@ -95,6 +95,7 @@ export type PowerRank =
   | 12
   | 13
   | 14
+export const POWER_RANK_MAX = 14
 export type Card =
   | {
       // Natural rank, from [A, K] maps to [1, 13]
