@@ -1,4 +1,4 @@
-import { Suit, SuitRedJoker, SuitBlackJoker } from '../../common/cardUtils'
+import { Suit, SuitRedJoker, SuitBlackJoker } from './Suite'
 
 export type J = 11
 export const J = 11
@@ -96,7 +96,7 @@ export type PowerRank =
   | 13
   | 14
 export const POWER_RANK_MAX = 14
-export type Card =
+export type CardRaw =
   | {
       // Natural rank, from [A, K] maps to [1, 13]
       // 14 is kept for A's order rank.

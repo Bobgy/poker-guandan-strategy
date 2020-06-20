@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react'
 import { View, Text, Picker } from 'react-native'
-import { RANKS, RANK, SUIT, generateRandomHands } from './common/cardUtils'
+import { RANKS, RANK, generateRandomHands } from './common/cardUtils'
+import { SUIT } from './strategy/models/Suite'
 import { CardState, RankState, TCard } from './common/types'
 
 export function useCardState(): CardState {

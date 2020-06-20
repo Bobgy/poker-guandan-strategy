@@ -8,7 +8,8 @@ import {
   StyleProp,
   ViewStyle,
 } from 'react-native'
-import { SUIT, RANK } from './common/cardUtils'
+import { RANK } from './common/cardUtils'
+import { SUIT } from './strategy/models/Suite'
 import { TCard } from './common/types'
 import nekoImg from './imgs/neko-40x40.png'
 

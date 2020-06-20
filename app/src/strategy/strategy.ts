@@ -1,10 +1,10 @@
-import { Card, NaturalRank } from './models/const'
+import { CardRaw, NaturalRank } from './models/const'
 
 export function calc({
   cards,
   mainRank,
 }: {
-  cards: Card[]
+  cards: CardRaw[]
   mainRank: NaturalRank
 }) {
   return null

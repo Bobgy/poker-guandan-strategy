@@ -6,7 +6,8 @@ import {
   ScrollView,
   Text,
 } from 'react-native'
-import { RANKS, SUITS, SUITS_JOKER, canIAddCard } from './common/cardUtils'
+import { RANKS, canIAddCard } from './common/cardUtils'
+import { SUITS, SUITS_JOKER } from './strategy/models/Suite'
 import { CardState, TCard } from './common/types'
 import { Divider } from './Divider'
 import { CardDeck, Card } from './Card'
@@ -199,7 +200,7 @@ export function CardsChooser({
       <Divider />
       <Text style={{ fontSize: 14, margin: 4 }}>{`点击扑克牌添加，目前已有${
         cards.length
-        }张牌`}</Text>
+      }张牌`}</Text>
       <ScrollView
         style={{
           height: windowSize === 'SMALL' ? 110 : 150,

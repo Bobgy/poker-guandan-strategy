@@ -1,5 +1,6 @@
 import { TCard } from './types'
 import { CardRaw } from '../loadCppModule'
+import { SUITS_JOKER, SUITS } from '../strategy/models/Suite'
 
 export const RANKS = [
   '2',
@@ -47,51 +48,6 @@ export const RANK: RankIndex = RANKS.reduce((rankIndex: RankIndex, rank) => {
   rankIndex[rank.value] = rank
   return rankIndex
 }, {})
-export type SuiteMetadata = {
-  value: string
-  label: string
-  color: string
-}
-export type Suit = 'H' | 'D' | 'S' | 'C'
-export type SuitRedJoker = 'R'
-export type SuitBlackJoker = 'B'
-export type AllSuit = Suit | SuitRedJoker | SuitBlackJoker
-export const SUIT: Record<AllSuit, SuiteMetadata> = {
-  H: {
-    value: 'H',
-    label: '♥',
-    color: 'red',
-  },
-  D: {
-    value: 'D',
-    label: '♦',
-    color: 'red',
-  },
-  S: {
-    value: 'S',
-    label: '♠',
-    color: 'black',
-  },
-  C: {
-    value: 'C',
-    label: '♣',
-    color: 'black',
-  },
-  B: {
-    // black joker
-    value: 'B',
-    label: '',
-    color: 'black',
-  },
-  R: {
-    // red joker
-    value: 'R',
-    label: '',
-    color: 'red',
-  },
-}
-export const SUITS = [SUIT.H, SUIT.S, SUIT.C, SUIT.D]
-export const SUITS_JOKER = [SUIT.B, SUIT.R]
 
 const ALL_CARDS_ONE_DECK: TCard[] = RANKS.map(rank =>
   rank.isJoker
