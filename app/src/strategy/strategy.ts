@@ -1,4 +1,4 @@
-import { Card, NaturalRank } from './const'
+import { Card, NaturalRank } from './models/const'
 
 export function calc({
   cards,

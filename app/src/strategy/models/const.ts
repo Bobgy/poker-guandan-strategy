@@ -1,4 +1,4 @@
-import { Suit, SuitRedJoker, SuitBlackJoker } from '../common/cardUtils'
+import { Suit, SuitRedJoker, SuitBlackJoker } from '../../common/cardUtils'
 
 export type J = 11
 export const J = 11

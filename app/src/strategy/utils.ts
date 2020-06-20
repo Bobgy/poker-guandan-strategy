@@ -1,4 +1,10 @@
-import { NaturalRank, PowerRank, RED_JOKER, BLACK_JOKER, A } from './const'
+import {
+  NaturalRank,
+  PowerRank,
+  RED_JOKER,
+  BLACK_JOKER,
+  A,
+} from './models/const'
 
 export function getUsualPowerRank(rank: NaturalRank): PowerRank {
   switch (rank) {
