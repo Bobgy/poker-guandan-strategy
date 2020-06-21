@@ -1,7 +1,16 @@
-import { Rank } from './Rank'
-import { Suit } from './Suite'
+import { Rank, makeRank } from './Rank'
+import { AllSuit } from './Suite'
+import { CardRaw } from './const'
+import { GameContext } from './GameContext'
 
 export type Card = {
   rank: Rank
-  suite: Suit
+  suit: AllSuit
+}
+
+export function parseCardRaw(raw: CardRaw, context: GameContext): Card {
+  return {
+    rank: makeRank({ natural: raw.rank, context }),
+    suit: raw.suit,
+  }
 }

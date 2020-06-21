@@ -102,13 +102,13 @@ export type CardRaw =
       // 14 is kept for A's order rank.
       // Black Joker is 15, Red Joker is 16
       rank: NaturalRankWithoutJokers
-      suite: Suit
+      suit: Suit
     }
   | {
       rank: BlackJoker
-      suite: SuitBlackJoker
+      suit: SuitBlackJoker
     }
   | {
       rank: RedJoker
-      suite: SuitRedJoker
+      suit: SuitRedJoker
     }

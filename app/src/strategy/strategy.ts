@@ -11,3 +11,5 @@ export function calc({
   const context = new GameContext(mainRank)
   return null
 }
+
+// function iterateSolutions()
