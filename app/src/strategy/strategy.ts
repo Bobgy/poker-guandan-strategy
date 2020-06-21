@@ -1,4 +1,4 @@
-import { CardRaw, NaturalRank, NaturalRankWithoutJokers } from './models/const'
+import { CardRaw, NaturalRankWithoutJokers } from './models/const'
 import { GameContext } from './models/GameContext'
 
 export function calc({

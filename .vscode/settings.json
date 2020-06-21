@@ -1,4 +1,9 @@
 {
+  "[typescript]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true
+    }
+  },
   "files.associations": {
     "*.jinja": "jinja",
     "*.jinja.schema": "yaml",
