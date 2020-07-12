@@ -1,10 +1,23 @@
+import { A, CardRaw, NaturalRankWithoutJokers } from './models/const'
+import { planToText } from './models/Plan'
 import { calc } from './strategy'
-import { A } from './models/const'
 
 describe('Strategy Module', () => {
   it("doesn't crash when 0 cards provided", () => {
-    expect(calc({ cards: [], mainRank: A })[0]).toMatchObject({
-      plays: [],
-    })
+    expect(calcBestPlan({ cards: [] })).toEqual([])
+  })
+
+  it('plays one card as a SINGLE', () => {
+    expect(calcBestPlan({ cards: [{ rank: 2, suit: 'H' }] })).toEqual(['♥2'])
   })
 })
+
+function calcBestPlan({
+  cards,
+  mainRank = A,
+}: {
+  cards: CardRaw[]
+  mainRank?: NaturalRankWithoutJokers
+}): string[] {
+  return planToText(calc({ cards, mainRank })[0])
+}

@@ -1,5 +1,6 @@
-import { Card } from './Card'
+import { Card, cardToText } from './Card'
 import { PowerRank } from './const'
+import { cardsToString } from '../../common/cardUtils'
 
 export enum PlayType {
   UNKNOWN,
@@ -36,4 +37,8 @@ export type PlayRank = PlayRankNormal | PlayRankBombNTuple | PlayRankFourJoker
 export type Play = {
   playRank: PlayRank
   cards: Card[]
+}
+
+export function playToText(play: Play): string {
+  return play.cards.map(cardToText).join()
 }
