@@ -1,7 +1,7 @@
-import { Rank, makeRank } from './Rank'
-import { AllSuit, SUITS, SUIT } from './Suite'
 import { CardRaw, NATURAL_RANK } from './const'
 import { GameContext } from './GameContext'
+import { makeRank, Rank } from './Rank'
+import { AllSuit, SUIT } from './Suite'
 
 export type Card = {
   rank: Rank
@@ -16,5 +16,5 @@ export function parseCardRaw(raw: CardRaw, context: GameContext): Card {
 }
 
 export function cardToText(card: Card): string {
-  return SUIT[card.suit].label + NATURAL_RANK[card.rank.naturalRank].label
+  return SUIT[card.suit].value + NATURAL_RANK[card.rank.naturalRank].label
 }

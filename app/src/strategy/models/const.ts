@@ -1,4 +1,11 @@
-import { Suit, SuitRedJoker, SuitBlackJoker } from './Suite'
+import {
+  Suit,
+  SuitRedJoker,
+  SuitBlackJoker,
+  SUIT,
+  SUIT_VALUES,
+  parseSuit,
+} from './Suite'
 
 export type J = 11
 export const J = 11
@@ -112,3 +119,60 @@ export type CardRaw =
       rank: RedJoker
       suit: SuitRedJoker
     }
+
+export function parseRawCards(text: string): CardRaw[] {
+  const cards: CardRaw[] = []
+  for (let i = 0; i < text.length; ) {
+    if (text[i] === 'R') {
+      if (text[i + 1] !== 'J') {
+        throw new Error(
+          `R should be followed by J -- red joker in ${text}, position ${i}`,
+        )
+      }
+      cards.push({ rank: RED_JOKER, suit: 'R' })
+      i += 2
+    } else if (text[i] === 'B') {
+      if (text[i + 1] !== 'J') {
+        throw new Error(
+          `B should be followed by J -- black joker in ${text}, position ${i}`,
+        )
+      }
+      cards.push({ rank: BLACK_JOKER, suit: 'B' })
+      i += 2
+    } else {
+      const parsedSuit = parseSuit(text[i])
+      const [_, error] = parsedSuit
+      if (parsedSuit[1] != null) {
+        throw new Error(`${error}, in ${text}, position ${i}`)
+      }
+      const [suit] = parsedSuit
+      if (text[i + 1] === '1' && text[i + 2] === '0') {
+        cards.push({ rank: 10, suit })
+        i += 3
+      } else if (text[i + 1] === 'A') {
+        cards.push({ rank: A, suit })
+        i += 2
+      } else if (text[i + 1] === 'J') {
+        cards.push({ rank: J, suit })
+        i += 2
+      } else if (text[i + 1] === 'Q') {
+        cards.push({ rank: Q, suit })
+        i += 2
+      } else if (text[i + 1] === 'K') {
+        cards.push({ rank: K, suit })
+        i += 2
+      } else {
+        const rank = text[i + 1].charCodeAt(0) - '0'.charCodeAt(0)
+        if (rank < 2 || rank > 9) {
+          throw new Error(
+            `Rank should be in range [2, 9], but found ${rank}, in ${text}, position ${i +
+              1}`,
+          )
+        }
+        cards.push({ rank: rank as NaturalRankWithoutJokers, suit })
+        i += 2
+      }
+    }
+  }
+  return cards
+}

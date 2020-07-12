@@ -41,5 +41,17 @@ export const SUIT: Record<AllSuit, SuiteMetadata> = {
     color: 'red',
   },
 }
+export const SUIT_VALUES = ['H', 'S', 'C', 'D']
 export const SUITS = [SUIT.H, SUIT.S, SUIT.C, SUIT.D]
 export const SUITS_JOKER = [SUIT.B, SUIT.R]
+export function parseSuit(
+  suit: string,
+): [undefined, string] | [Suit, undefined] {
+  if (!SUIT_VALUES.includes(suit)) {
+    return [
+      undefined,
+      `Suit should be one of ${SUIT_VALUES}, but found ${suit}.`,
+    ]
+  }
+  return [suit as Suit, undefined]
+}
