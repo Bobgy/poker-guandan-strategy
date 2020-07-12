@@ -51,14 +51,25 @@ function iteratePlans({
   collectPlan(plan)
 }
 
-type RankToCardMap = Partial<Record<NaturalRank, Card[]>>
-function buildRankToCardMap(cards: Card[]): RankToCardMap {
-  const map: RankToCardMap = {}
+type RankToCardsMap = Partial<Record<NaturalRank, Card[]>>
+function buildRankToCardMap(cards: Card[]): RankToCardsMap {
+  const map: RankToCardsMap = {}
   cards.forEach(card => {
     ;(map[card.rank.natural] = map[card.rank.natural] || []).push(card)
   })
   return map
 }
+
+const DFS_PLAY_TYPE_ORDER = [PlayType.PAIR, PlayType.SINGLE]
+type DfsState = {
+  cardsLeftByRank: RankToCardsMap
+  playTypeIndex: number
+  minimalRank: NaturalRank
+}
+type DfsContext = {
+  collectPlan: PlanCollector
+}
+function dfs(state: DfsState, context: DfsContext) {}
 
 const makeBestPlanCollector = () => {
   let bestPlan: Plan | undefined = undefined
