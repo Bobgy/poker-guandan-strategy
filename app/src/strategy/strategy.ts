@@ -1,8 +1,13 @@
-import { CardRaw, NaturalRankWithoutJokers } from './models/const'
+import { Card, parseCardRaw } from './models/Card'
+import {
+  CardRaw,
+  NaturalRank,
+  NaturalRankWithoutJokers,
+  NATURAL_RANKS,
+} from './models/const'
 import { GameContext } from './models/GameContext'
 import { Plan } from './models/Plan'
-import { Card, parseCardRaw } from './models/Card'
-import { PlayType, Play } from './models/Play'
+import { Play, PlayType } from './models/Play'
 
 export function calc({
   cards: rawCards,
@@ -37,13 +42,22 @@ function iteratePlans({
       (card): Play => ({
         playRank: {
           type: PlayType.SINGLE,
-          rank: card.rank.powerRank,
+          rank: card.rank.power,
         },
         cards: [card],
       }),
     ),
   }
   collectPlan(plan)
+}
+
+type RankToCardMap = Partial<Record<NaturalRank, Card[]>>
+function buildRankToCardMap(cards: Card[]): RankToCardMap {
+  const map: RankToCardMap = {}
+  cards.forEach(card => {
+    ;(map[card.rank.natural] = map[card.rank.natural] || []).push(card)
+  })
+  return map
 }
 
 const makeBestPlanCollector = () => {

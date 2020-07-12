@@ -2,8 +2,8 @@ import { GameContext } from './GameContext'
 import { NaturalRank, PowerRank } from './const'
 
 export interface Rank {
-  naturalRank: NaturalRank
-  powerRank: PowerRank
+  natural: NaturalRank
+  power: PowerRank
 }
 
 export function makeRank({
@@ -14,7 +14,7 @@ export function makeRank({
   context: GameContext
 }): Rank {
   return {
-    naturalRank: natural,
-    powerRank: context.getOrder(natural),
+    natural: natural,
+    power: context.getOrder(natural),
   }
 }

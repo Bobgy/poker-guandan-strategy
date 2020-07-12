@@ -6,8 +6,8 @@ describe('parseCardRaw', () => {
   it('parses AH', () => {
     expect(parseCardRaw({ rank: A, suit: 'H' }, new GameContext(2))).toEqual({
       rank: {
-        naturalRank: 1,
-        powerRank: 11,
+        natural: 1,
+        power: 11,
       },
       suit: 'H',
     })
@@ -18,8 +18,8 @@ describe('parseCardRaw', () => {
       parseCardRaw({ rank: BLACK_JOKER, suit: 'B' }, new GameContext(2)),
     ).toEqual({
       rank: {
-        naturalRank: BLACK_JOKER,
-        powerRank: POWER_RANK_MAX - 1,
+        natural: BLACK_JOKER,
+        power: POWER_RANK_MAX - 1,
       },
       suit: 'B',
     })
