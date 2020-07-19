@@ -10,6 +10,10 @@ describe('Strategy Module', () => {
   it('plays one card as a SINGLE', () => {
     expect(calcBestPlan({ cardsText: 'H2' })).toEqual(['H2'])
   })
+
+  it('plays two different cards as two SINGLEs', () => {
+    expect(calcBestPlan({ cardsText: 'H2H3' })).toEqual(['H2', 'H3'])
+  })
 })
 
 function calcBestPlan({
