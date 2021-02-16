@@ -42,7 +42,11 @@ describe('Strategy Module', () => {
     },
     {
       cardsText: 'H2D2D2S2H3D3S4',
-      bestPlan: ['H3D3', 'H2D2D2S2', 'S4'],
+      bestPlan: ['H2D2D2S2', 'H3D3', 'S4'],
+    },
+    {
+      cardsText: 'H2H3D4H5H6',
+      bestPlan: ['H2H3D4H5H6'],
     },
   ]
   testcases.forEach(({ name, cardsText, bestPlan }, index) => {

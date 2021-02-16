@@ -1,15 +1,16 @@
 import { Card } from './models/Card'
-import { A, NaturalRank, nextRank } from './models/const'
+import { A, K, NaturalRank, nextRank } from './models/const'
 import { GameContext } from './models/GameContext'
 import { Plan } from './models/Plan'
-import { PlayType } from './models/Play'
+import { Play, PlayType } from './models/Play'
 
+const PLAY_TYPE_START = PlayType.STRAIGHT
 const NEXT_PLAY_TYPE: { [T in PlayType]?: PlayType } = {
-  [PlayType.PAIR]: PlayType.TRIPLE,
-  [PlayType.TRIPLE]: PlayType.BOMB_N_TUPLE,
-  [PlayType.BOMB_N_TUPLE]: undefined,
+  [PlayType.STRAIGHT]: PlayType.BOMB_N_TUPLE,
+  [PlayType.BOMB_N_TUPLE]: PlayType.TRIPLE,
+  [PlayType.TRIPLE]: PlayType.PAIR,
+  [PlayType.PAIR]: undefined,
 } as const
-const PLAY_TYPE_START = PlayType.PAIR
 function nextPlayType(playType: PlayType): PlayType | undefined {
   return NEXT_PLAY_TYPE[playType]
 }
@@ -45,6 +46,7 @@ function organize(cards: Card[]): CardsByRank {
   })
   return organized
 }
+export const TEST_ONLY = { organize }
 
 type IteratorContext = {
   game: GameContext
@@ -71,7 +73,7 @@ const playCardsOfTheSameRank = (n: number): PlayTypeFunc => ({
   return {
     cardsByRank: { ...cards, [nowRank]: nowCards.slice(n) },
     plan: {
-      score: plan.score + 1,
+      score: plan.score + (n > 3 ? /* Bomb is free to play. */ 0 : 1),
       plays: plan.plays.concat({
         playRank: {
           type:
@@ -88,6 +90,49 @@ const playCardsOfTheSameRank = (n: number): PlayTypeFunc => ({
     },
   }
 }
+const playCardSequence = ({
+  cardCount,
+  length,
+}: {
+  cardCount: number
+  length: number
+}): PlayTypeFunc => ({ cards: cardsByRank, nowRank, plan, context }) => {
+  if (context.debug) {
+    console.log(`playCardSequence: ${JSON.stringify(cardsByRank)}, ${nowRank}`)
+  }
+  const end = nowRank + length - 1
+  if (end > K + 1) {
+    // This sequence is not possible, because it cannot go past A.
+    return undefined
+  }
+  for (let i = nowRank; i <= end; ++i) {
+    const ii = i == K + 1 ? A : i
+    if (!cardsByRank[ii] || cardsByRank[ii]!.length < cardCount) {
+      return undefined
+    }
+  }
+  let newCardsByRank = { ...cardsByRank }
+  let play: Play = {
+    cards: [],
+    playRank: { type: PlayType.STRAIGHT, rank: context.game.getOrder(nowRank) },
+  }
+  for (let i = nowRank; i <= end; ++i) {
+    const ii = i == K + 1 ? A : i
+    const cards = cardsByRank[ii]
+    if (!cards || cards.length < cardCount) {
+      return undefined
+    }
+    newCardsByRank[ii] = cards.slice(cardCount)
+    play.cards.push(...cards.slice(0, cardCount))
+  }
+  return {
+    cardsByRank: newCardsByRank,
+    plan: {
+      score: plan.score + 1,
+      plays: plan.plays.concat(play),
+    },
+  }
+}
 const playPair = playCardsOfTheSameRank(2)
 const playTriple = playCardsOfTheSameRank(3)
 const playBomb4 = playCardsOfTheSameRank(4)
@@ -95,6 +140,7 @@ const playBomb5 = playCardsOfTheSameRank(5)
 const playBomb6 = playCardsOfTheSameRank(6)
 const playBomb7 = playCardsOfTheSameRank(7)
 const playBomb8 = playCardsOfTheSameRank(8)
+export const playStraight = playCardSequence({ cardCount: 1, length: 5 })
 const PLAY_TYPE_FUNC: { [T in PlayType]?: readonly PlayTypeFunc[] } = {
   [PlayType.PAIR]: [playPair],
   [PlayType.TRIPLE]: [playTriple],
@@ -105,6 +151,7 @@ const PLAY_TYPE_FUNC: { [T in PlayType]?: readonly PlayTypeFunc[] } = {
     playBomb7,
     playBomb8,
   ],
+  [PlayType.STRAIGHT]: [playStraight],
 } as const
 
 function iterateImp({
