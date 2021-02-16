@@ -9,7 +9,7 @@ import {
   ViewStyle,
 } from 'react-native'
 import { RANK } from './common/cardUtils'
-import { SUIT } from './strategy/models/Suite'
+import { Suit, SUIT } from './strategy/models/Suite'
 import { TCard } from './common/types'
 import nekoImg from './imgs/neko-40x40.png'
 
@@ -88,7 +88,7 @@ export function Card({
   large?: boolean
 }) {
   const rankDef = RANK[rank]
-  const suitDef = SUIT[suit]
+  const suitDef = SUIT[suit as Suit] // TODO: fix type force cast
   return (
     <View
       style={[
