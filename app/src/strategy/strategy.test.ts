@@ -32,6 +32,18 @@ describe('Strategy Module', () => {
       cardsText: 'H2D2D2',
       bestPlan: ['H2D2D2'],
     },
+    {
+      cardsText: 'H2D2D2S2',
+      bestPlan: ['H2D2D2S2'],
+    },
+    {
+      cardsText: 'H2H2S2H2D2D2C2C2',
+      bestPlan: ['H2H2S2H2D2D2C2C2'],
+    },
+    {
+      cardsText: 'H2D2D2S2H3D3S4',
+      bestPlan: ['H3D3', 'H2D2D2S2', 'S4'],
+    },
   ]
   testcases.forEach(({ name, cardsText, bestPlan }, index) => {
     it(name || `Best plan of ${cardsText} should be ${bestPlan}`, () => {
