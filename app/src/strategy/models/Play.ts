@@ -2,7 +2,7 @@ import { Card, cardToText } from './Card'
 import { PowerRank } from './const'
 
 export enum PlayType {
-  UNKNOWN,
+  UNKNOWN = 0,
   SINGLE,
   PAIR,
   TRIPLE,

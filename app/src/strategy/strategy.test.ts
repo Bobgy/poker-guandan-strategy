@@ -28,8 +28,12 @@ describe('Strategy Module', () => {
       cardsText: 'H2D2D3',
       bestPlan: ['H2D2', 'D3'],
     },
+    {
+      cardsText: 'H2D2D2',
+      bestPlan: ['H2D2D2'],
+    },
   ]
-  testcases.forEach(({ name, cardsText, bestPlan }) => {
+  testcases.forEach(({ name, cardsText, bestPlan }, index) => {
     it(name || `Best plan of ${cardsText} should be ${bestPlan}`, () => {
       expect(calcBestPlan({ cardsText })).toEqual(bestPlan)
     })
