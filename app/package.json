@@ -38,7 +38,7 @@
   ],
   "devDependencies": {
     "@types/invariant": "^2.2.31",
-    "prettier": "1.16.4",
+    "prettier": "^2.2.1",
     "react-scripts": "^3.2.0"
   }
 }

@@ -1,11 +1,4 @@
-import {
-  Suit,
-  SuitRedJoker,
-  SuitBlackJoker,
-  SUIT,
-  SUIT_VALUES,
-  parseSuit,
-} from './Suite'
+import { parseSuit, Suit, SuitBlackJoker, SuitRedJoker } from './Suite'
 
 export type J = 11
 export const J = 11
@@ -15,12 +8,12 @@ export type K = 13
 export const K = 13
 export type A = 1
 export const A = 1
-export type BlackJoker = 15
-export const BLACK_JOKER = 15
-export type RedJoker = 16
-export const RED_JOKER = 16
+export type BlackJoker = 14
+export const BLACK_JOKER = 14
+export type RedJoker = 15
+export const RED_JOKER = 15
 export type NaturalRank =
-  | 1
+  | A
   | 2
   | 3
   | 4
@@ -78,6 +71,13 @@ export const NATURAL_RANK: Record<NaturalRank, RankMetadata> = {
   [BLACK_JOKER]: { label: 'BJ', naturalRank: BLACK_JOKER },
   [RED_JOKER]: { label: 'RJ', naturalRank: RED_JOKER },
 } as const
+export function nextRank(rank: NaturalRank): NaturalRank | undefined {
+  const next = rank + 1
+  if (next > RED_JOKER) {
+    return undefined
+  }
+  return next as NaturalRank
+}
 export const NATURAL_RANKS_WITHOUT_JOKERS: NaturalRankWithoutJokers[] = NATURAL_RANKS.slice(
   0,
   NATURAL_RANKS.length - 2,
@@ -165,8 +165,9 @@ export function parseRawCards(text: string): CardRaw[] {
         const rank = text[i + 1].charCodeAt(0) - '0'.charCodeAt(0)
         if (rank < 2 || rank > 9) {
           throw new Error(
-            `Rank should be in range [2, 9], but found ${rank}, in ${text}, position ${i +
-              1}`,
+            `Rank should be in range [2, 9], but found ${rank}, in ${text}, position ${
+              i + 1
+            }`,
           )
         }
         cards.push({ rank: rank as NaturalRankWithoutJokers, suit })

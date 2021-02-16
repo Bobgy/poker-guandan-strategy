@@ -55,3 +55,13 @@ export function parseSuit(
   }
   return [suit as Suit, undefined]
 }
+
+const NEXT_SUIT = {
+  H: 'S',
+  S: 'C',
+  C: 'D',
+  D: undefined,
+} as const
+export function nextSuit(suit: Suit): Suit | undefined {
+  return NEXT_SUIT[suit]
+}

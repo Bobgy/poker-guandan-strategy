@@ -1,6 +1,5 @@
 import { Card, cardToText } from './Card'
 import { PowerRank } from './const'
-import { cardsToString } from '../../common/cardUtils'
 
 export enum PlayType {
   UNKNOWN,
@@ -40,5 +39,5 @@ export type Play = {
 }
 
 export function playToText(play: Play): string {
-  return play.cards.map(cardToText).join()
+  return play.cards.map(cardToText).join('')
 }

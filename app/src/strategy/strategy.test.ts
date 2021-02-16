@@ -3,16 +3,36 @@ import { planToText } from './models/Plan'
 import { calc } from './strategy'
 
 describe('Strategy Module', () => {
-  it("doesn't crash when 0 cards provided", () => {
-    expect(calcBestPlan({ cardsText: '' })).toEqual([])
-  })
-
-  it('plays one card as a SINGLE', () => {
-    expect(calcBestPlan({ cardsText: 'H2' })).toEqual(['H2'])
-  })
-
-  it('plays two different cards as two SINGLEs', () => {
-    expect(calcBestPlan({ cardsText: 'H2H3' })).toEqual(['H2', 'H3'])
+  const testcases = [
+    {
+      name: "doesn't crash when 0 cards provided",
+      cardsText: '',
+      bestPlan: [],
+    },
+    {
+      name: 'plays one card as a SINGLE',
+      cardsText: 'H2',
+      bestPlan: ['H2'],
+    },
+    {
+      name: 'plays two different cards as two SINGLEs',
+      cardsText: 'H2H3',
+      bestPlan: ['H2', 'H3'],
+    },
+    {
+      name: 'plays two cards of the same rank as a PAIR',
+      cardsText: 'H2D2',
+      bestPlan: ['H2D2'],
+    },
+    {
+      cardsText: 'H2D2D3',
+      bestPlan: ['H2D2', 'D3'],
+    },
+  ]
+  testcases.forEach(({ name, cardsText, bestPlan }) => {
+    it(name || `Best plan of ${cardsText} should be ${bestPlan}`, () => {
+      expect(calcBestPlan({ cardsText })).toEqual(bestPlan)
+    })
   })
 })
 
