@@ -16,5 +16,5 @@ export function parseCardRaw(raw: CardRaw, context: GameContext): Card {
 }
 
 export function cardToText(card: Card): string {
-  return SUIT[card.suit].value + NATURAL_RANK[card.rank.natural].label
+  return SUIT[card.suit].label + NATURAL_RANK[card.rank.natural].label
 }

@@ -95,9 +95,11 @@ const playCardsOfTheSameRank = (n: number): PlayTypeFunc => ({
 const playCardSequence = ({
   cardCount,
   length,
+  playType,
 }: {
   cardCount: number
   length: number
+  playType: PlayType.TUBE | PlayType.STRAIGHT | PlayType.PLATE
 }): PlayTypeFunc => ({ cards: cardsByRank, nowRank, plan, context }) => {
   if (context.debug) {
     console.log(`playCardSequence: ${JSON.stringify(cardsByRank)}, ${nowRank}`)
@@ -116,7 +118,7 @@ const playCardSequence = ({
   let newCardsByRank = { ...cardsByRank }
   let play: Play = {
     cards: [],
-    playRank: { type: PlayType.STRAIGHT, rank: context.game.getOrder(nowRank) },
+    playRank: { type: playType, rank: context.game.getOrder(nowRank) },
   }
   for (let i = nowRank; i <= end; ++i) {
     const ii = i == K + 1 ? A : i
@@ -142,9 +144,21 @@ const playBomb5 = playCardsOfTheSameRank(5)
 const playBomb6 = playCardsOfTheSameRank(6)
 const playBomb7 = playCardsOfTheSameRank(7)
 const playBomb8 = playCardsOfTheSameRank(8)
-export const playStraight = playCardSequence({ cardCount: 1, length: 5 })
-const playTube = playCardSequence({ cardCount: 2, length: 3 })
-const playPlate = playCardSequence({ cardCount: 3, length: 2 })
+export const playStraight = playCardSequence({
+  cardCount: 1,
+  length: 5,
+  playType: PlayType.STRAIGHT,
+})
+const playTube = playCardSequence({
+  cardCount: 2,
+  length: 3,
+  playType: PlayType.TUBE,
+})
+const playPlate = playCardSequence({
+  cardCount: 3,
+  length: 2,
+  playType: PlayType.PLATE,
+})
 const PLAY_TYPE_FUNC: { [T in PlayType]?: readonly PlayTypeFunc[] } = {
   [PlayType.PAIR]: [playPair],
   [PlayType.TRIPLE]: [playTriple],
