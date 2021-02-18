@@ -3,7 +3,7 @@ export type SuiteMetadata = {
   label: string
   color: string
 }
-export type Suit = 'H' | 'D' | 'S' | 'C'
+export type Suit = 'S' | 'C' | 'D' | 'H'
 export type SuitRedJoker = 'R'
 export type SuitBlackJoker = 'B'
 export type AllSuit = Suit | SuitRedJoker | SuitBlackJoker
@@ -41,7 +41,7 @@ export const SUIT: Record<AllSuit, SuiteMetadata> = {
     color: 'red',
   },
 }
-export const SUIT_VALUES = ['H', 'S', 'C', 'D']
+export const SUIT_VALUES = ['S', 'C', 'D', 'H']
 export const SUITS = [SUIT.H, SUIT.S, SUIT.C, SUIT.D]
 export const SUITS_JOKER = [SUIT.B, SUIT.R]
 export function parseSuit(
@@ -57,11 +57,12 @@ export function parseSuit(
 }
 
 const NEXT_SUIT = {
-  H: 'S',
   S: 'C',
   C: 'D',
-  D: undefined,
+  D: 'H',
+  H: undefined,
 } as const
-export function nextSuit(suit: Suit): Suit | undefined {
+export const SUIT_START: Suit = 'S'
+export function getNextSuit(suit: Suit): Suit | undefined {
   return NEXT_SUIT[suit]
 }

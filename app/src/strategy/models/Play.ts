@@ -1,5 +1,5 @@
 import { Card, cardToText } from './Card'
-import { PowerRank } from './const'
+import { NaturalRank, PowerRank } from './const'
 
 export enum PlayType {
   UNKNOWN = 0,
@@ -27,11 +27,24 @@ export type PlayRankFourJoker = {
 }
 
 export type PlayRankNormal = {
-  type: Exclude<PlayType, PlayType.BOMB_N_TUPLE | PlayType.FOUR_JOKER>
+  type: PlayType.FULL_HOUSE | PlayType.PAIR | PlayType.SINGLE | PlayType.TRIPLE
   rank: PowerRank
 }
 
-export type PlayRank = PlayRankNormal | PlayRankBombNTuple | PlayRankFourJoker
+export type PlayRankNatural = {
+  type:
+    | PlayType.STRAIGHT_FLUSH
+    | PlayType.STRAIGHT
+    | PlayType.TUBE
+    | PlayType.PLATE
+  rank: NaturalRank
+}
+
+export type PlayRank =
+  | PlayRankNormal
+  | PlayRankNatural
+  | PlayRankBombNTuple
+  | PlayRankFourJoker
 
 export type Play = {
   playRank: PlayRank

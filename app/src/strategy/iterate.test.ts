@@ -1,9 +1,40 @@
-import { playStraight, TEST_ONLY } from './iterate'
+import {
+  ITERATOR_STATE_START,
+  nextIteratorState,
+  playStraight,
+  TEST_ONLY,
+} from './iterate'
 import { parseCardRaw } from './models/Card'
 import { A, NaturalRankWithoutJokers, parseRawCards } from './models/const'
 import { GameContext } from './models/GameContext'
 
 describe('iterate', () => {
+  describe('nextIteratorState', () => {
+    it('works', () => {
+      let next = nextIteratorState(ITERATOR_STATE_START)
+      expect(next).toMatchInlineSnapshot(`
+              Object {
+                "rank": 2,
+                "suit": "S",
+                "type": 8,
+              }
+          `)
+      for (let i = 0; i < 100 && next != undefined; ++i) {
+        next = nextIteratorState(next!)
+      }
+      expect(next).toMatchInlineSnapshot(`
+        Object {
+          "rank": 12,
+          "suit": undefined,
+          "type": 6,
+        }
+      `)
+      for (let i = 0; i < 100 && next != undefined; ++i) {
+        next = nextIteratorState(next!)
+      }
+      expect(next).toMatchInlineSnapshot(`undefined`)
+    })
+  })
   describe('playStraight', () => {
     it('returns undefined when cards are not enough', () => {
       const result = playStraight({
@@ -67,7 +98,7 @@ describe('iterate', () => {
                 },
               ],
               "playRank": Object {
-                "rank": 0,
+                "rank": 2,
                 "type": 5,
               },
             },

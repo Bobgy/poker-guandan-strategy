@@ -1,9 +1,9 @@
+import { MAX_PLANS } from './const'
 import { iteratePlans } from './iterate'
 import { Card, parseCardRaw } from './models/Card'
 import { CardRaw, NaturalRank, NaturalRankWithoutJokers } from './models/const'
 import { GameContext } from './models/GameContext'
 import { Plan } from './models/Plan'
-import { PlayType } from './models/Play'
 
 export function calc({
   cards: rawCards,
@@ -23,8 +23,6 @@ export function calc({
   return [bestPlan]
 }
 
-type PlanCollector = (plan: Plan) => void
-
 type RankToCardsMap = Partial<Record<NaturalRank, Card[]>>
 function buildRankToCardMap(cards: Card[]): RankToCardsMap {
   const map: RankToCardsMap = {}
@@ -34,23 +32,17 @@ function buildRankToCardMap(cards: Card[]): RankToCardsMap {
   return map
 }
 
-const DFS_PLAY_TYPE_ORDER = [PlayType.PAIR, PlayType.SINGLE]
-type DfsState = {
-  cardsLeftByRank: RankToCardsMap
-  playTypeIndex: number
-  minimalRank: NaturalRank
-}
-type DfsContext = {
-  collectPlan: PlanCollector
-}
-function dfs(state: DfsState, context: DfsContext) {}
-
 const makeBestPlanCollector = () => {
   let bestPlan: Plan | undefined = undefined
+  let count = 0
   return {
     collectPlan: (plan: Plan) => {
       if (bestPlan == null || plan.score <= bestPlan.score) {
         bestPlan = plan
+      }
+      ++count
+      if (count > MAX_PLANS) {
+        throw new Error('too many plans')
       }
     },
     getBestPlan: () => bestPlan,

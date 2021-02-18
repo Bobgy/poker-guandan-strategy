@@ -7,6 +7,8 @@ type TestCase = {
   cardsText: string
   mainRank?: NaturalRankWithoutJokers
   bestPlan: string[]
+  score?: number
+  only?: boolean
 }
 
 describe('Strategy Module', () => {
@@ -39,6 +41,12 @@ describe('Strategy Module', () => {
         bestPlan: ['♥A♥A', '♥2♥2', '♥K♥K'],
       },
       { name: 'PLATE', cardsText: 'D6D6D6S7D7H7', bestPlan: ['♦6♦6♦6♠7♦7♥7'] },
+      {
+        name: 'STRAIGHT_FLUSH',
+        cardsText: 'HAH2H3H4H5',
+        bestPlan: ['♥A♥2♥3♥4♥5'],
+        score: 0,
+      },
     ]
     runTestCases(testcases)
   })
@@ -47,19 +55,20 @@ describe('Strategy Module', () => {
     // reverse cards: for(let i=0;i<a.length;i+=2){b=b+a[i+1]+a[i];}
     const testcases: TestCase[] = [
       {
-        cardsText: 'DAD3H8H6CKSKD4CJH3C3H9C2H5S9DJC3HKC7CKHAH5C2C4S3RJCAS5',
+        cardsText: 'DAD3H8H6CKSKD4CJH3C3H9C2H5S9DJC3HKH7CKHAH5C2C4S3RJCAS5',
         mainRank: 3,
         bestPlan: [
-          '♦A♥A♣2♣2♦3♥3',
-          '♣3♣3♦4♣4♥5♥5',
-          '♠5♥6♣7♥8♥9',
+          '♥5♥6♥7♥8♥9',
           '♣K♠K♥K♣K',
+          '♦A♣2♦3♦4♥5',
+          '♥A♣2♥3♣4♠5',
+          '♣3♣3♠3',
           '♣J♦J',
           '♣A',
-          '♠3',
           '♠9',
           'RJ',
         ],
+        score: 7,
       },
       {
         cardsText: 'CKD10H4DKD6CJCKS2H8DADJD4C9S7HJS3BJRJD2HQH5S8D9S5S10D2C5',
@@ -76,6 +85,7 @@ describe('Strategy Module', () => {
           'BJ',
           'RJ',
         ],
+        score: 10,
       },
     ]
     runTestCases(testcases)
@@ -88,27 +98,48 @@ function calcBestPlan({
 }: {
   cardsText: string
   mainRank?: NaturalRankWithoutJokers
-}): string[] {
-  return planToText(calc({ cards: parseRawCards(cardsText), mainRank })[0])
+}): { textPlan: string[]; score: number } {
+  const plan = calc({ cards: parseRawCards(cardsText), mainRank })[0]
+  return { textPlan: planToText(plan), score: plan.score }
 }
 
 function runTestCases(cases: TestCase[]) {
   // updateTestCases(cases)
   // return
-  cases.forEach(({ name, cardsText, mainRank, bestPlan }) => {
-    it(`${
-      name ? `${name}: ` : ''
-    }Best plan of ${cardsText} should be ${bestPlan}`, () => {
-      expect(calcBestPlan({ cardsText, mainRank })).toEqual(bestPlan)
-    })
+  cases.forEach(({ name, cardsText, mainRank, bestPlan, score, only }) => {
+    const func = only ? it.only : it
+    func(
+      `${
+        name ? `${name}: ` : ''
+      }Best plan of ${cardsText} should be ${bestPlan}`,
+      () => {
+        const { textPlan: actualPlan, score: actualScore } = calcBestPlan({
+          cardsText,
+          mainRank,
+        })
+        expect(actualPlan).toEqual(bestPlan)
+        if (score != null) {
+          expect(actualScore).toEqual(score)
+        }
+      },
+    )
   })
 }
 
 function updateTestCases(cases: TestCase[]) {
   let expectedCases: TestCase[] = []
-  cases.forEach(({ name, cardsText, mainRank, bestPlan }) => {
-    const actualPlan = calcBestPlan({ cardsText, mainRank })
-    expectedCases.push({ name, cardsText, mainRank, bestPlan: actualPlan })
+  cases.forEach(({ name, cardsText, mainRank, score, bestPlan }) => {
+    const { textPlan: actualPlan, score: actualScore } = calcBestPlan({
+      cardsText,
+      mainRank,
+    })
+    expectedCases.push({
+      name,
+      cardsText,
+      mainRank,
+      bestPlan: actualPlan,
+      score: actualScore,
+    })
   })
   console.log(JSON.stringify(expectedCases))
 }
