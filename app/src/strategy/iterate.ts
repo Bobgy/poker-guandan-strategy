@@ -4,8 +4,10 @@ import { GameContext } from './models/GameContext'
 import { Plan } from './models/Plan'
 import { Play, PlayType } from './models/Play'
 
-const PLAY_TYPE_START = PlayType.STRAIGHT
+const PLAY_TYPE_START = PlayType.PLATE
 const NEXT_PLAY_TYPE: { [T in PlayType]?: PlayType } = {
+  [PlayType.PLATE]: PlayType.TUBE,
+  [PlayType.TUBE]: PlayType.STRAIGHT,
   [PlayType.STRAIGHT]: PlayType.BOMB_N_TUPLE,
   [PlayType.BOMB_N_TUPLE]: PlayType.TRIPLE,
   [PlayType.TRIPLE]: PlayType.PAIR,
@@ -141,6 +143,8 @@ const playBomb6 = playCardsOfTheSameRank(6)
 const playBomb7 = playCardsOfTheSameRank(7)
 const playBomb8 = playCardsOfTheSameRank(8)
 export const playStraight = playCardSequence({ cardCount: 1, length: 5 })
+const playTube = playCardSequence({ cardCount: 2, length: 3 })
+const playPlate = playCardSequence({ cardCount: 3, length: 2 })
 const PLAY_TYPE_FUNC: { [T in PlayType]?: readonly PlayTypeFunc[] } = {
   [PlayType.PAIR]: [playPair],
   [PlayType.TRIPLE]: [playTriple],
@@ -152,6 +156,8 @@ const PLAY_TYPE_FUNC: { [T in PlayType]?: readonly PlayTypeFunc[] } = {
     playBomb8,
   ],
   [PlayType.STRAIGHT]: [playStraight],
+  [PlayType.TUBE]: [playTube],
+  [PlayType.PLATE]: [playPlate],
 } as const
 
 function iterateImp({

@@ -20,7 +20,7 @@ describe('Strategy Module', () => {
       bestPlan: ['H2', 'H3'],
     },
     {
-      name: 'plays two cards of the same rank as a PAIR',
+      name: 'PAIR',
       cardsText: 'H2D2',
       bestPlan: ['H2D2'],
     },
@@ -33,6 +33,7 @@ describe('Strategy Module', () => {
       bestPlan: ['H2D2D2'],
     },
     {
+      name: 'TRIPLE',
       cardsText: 'H2D2D2S2',
       bestPlan: ['H2D2D2S2'],
     },
@@ -45,12 +46,38 @@ describe('Strategy Module', () => {
       bestPlan: ['H2D2D2S2', 'H3D3', 'S4'],
     },
     {
+      name: 'STRAIGHT',
       cardsText: 'H2H3D4H5H6',
       bestPlan: ['H2H3D4H5H6'],
     },
+    {
+      name: 'TUBE',
+      cardsText: 'H2H2H3H3H4H4',
+      bestPlan: ['H2H2H3H3H4H4'],
+    },
+    {
+      cardsText: 'HAHAH2H2H3H3',
+      bestPlan: ['HAHAH2H2H3H3'],
+    },
+    {
+      cardsText: 'HQHQHKHKHAHA',
+      bestPlan: ['HQHQHKHKHAHA'],
+    },
+    {
+      name: 'TUBE cannot go from K to 2',
+      cardsText: 'HKHKHAHAH2H2',
+      bestPlan: ['HAHA', 'H2H2', 'HKHK'],
+    },
+    {
+      name: 'PLATE',
+      cardsText: 'D6D6D6S7D7H7',
+      bestPlan: ['D6D6D6S7D7H7'],
+    },
   ]
-  testcases.forEach(({ name, cardsText, bestPlan }, index) => {
-    it(name || `Best plan of ${cardsText} should be ${bestPlan}`, () => {
+  testcases.forEach(({ name, cardsText, bestPlan }) => {
+    it(`${
+      name ? `${name}: ` : ''
+    }Best plan of ${cardsText} should be ${bestPlan}`, () => {
       expect(calcBestPlan({ cardsText })).toEqual(bestPlan)
     })
   })
