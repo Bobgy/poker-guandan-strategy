@@ -189,12 +189,6 @@ const playCardSequence = ({
     // This sequence is not possible, because it cannot go past A.
     return undefined
   }
-  for (let i = nowRank; i <= end; ++i) {
-    const ii = i == K + 1 ? A : i
-    if (!cardsByRank[ii] || cardsByRank[ii]!.length < cardCount) {
-      return undefined
-    }
-  }
   let newCardsByRank = { ...cardsByRank }
   let play: Play = {
     cards: [],
@@ -202,12 +196,11 @@ const playCardSequence = ({
   }
   for (let i = nowRank; i <= end; ++i) {
     const ii = i == K + 1 ? A : i
-    const cards = cardsByRank[ii]
-    if (!cards || cards.length < cardCount) {
+    const taken = takeCard(newCardsByRank, ii, cardCount)
+    if (taken == null) {
       return undefined
     }
-    newCardsByRank[ii] = cards.slice(cardCount)
-    play.cards.push(...cards.slice(0, cardCount))
+    play.cards.push(...taken)
   }
   return {
     cardsByRank: newCardsByRank,

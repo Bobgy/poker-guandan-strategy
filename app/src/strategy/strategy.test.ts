@@ -1,4 +1,4 @@
-import { A, NaturalRankWithoutJokers, parseRawCards } from './models/const'
+import { A, K, NaturalRankWithoutJokers, parseRawCards } from './models/const'
 import { planToText } from './models/Plan'
 import { calc } from './strategy'
 
@@ -49,9 +49,24 @@ describe('Strategy Module', () => {
       },
       {
         name: 'WILD_CARD',
+        mainRank: 2,
         cardsText: 'H2D2S2',
         bestPlan: ['♦2♠2♥2'],
-        mainRank: 2,
+      },
+      {
+        mainRank: K,
+        cardsText: 'HKD3D4D5S6',
+        bestPlan: ['♦3♦4♦5♠6♥K'],
+      },
+      {
+        mainRank: K,
+        cardsText: 'HKD3D3D4D4D5',
+        bestPlan: ['♦3♦3♦4♦4♦5♥K'],
+      },
+      {
+        mainRank: K,
+        cardsText: 'HKD3D3D4D4D4',
+        bestPlan: ['♦3♦3♥K♦4♦4♦4'],
       },
     ]
     runTestCases(testcases)
