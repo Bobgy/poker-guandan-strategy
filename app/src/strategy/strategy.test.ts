@@ -54,6 +54,12 @@ describe('Strategy Module', () => {
         bestPlan: ['♦2♠2♥2'],
       },
       {
+        mainRank: 3,
+        cardsText: 'H3H3D2S2S2',
+        bestPlan: ['♦2♠2♠2♥3♥3'],
+        score: 0,
+      },
+      {
         mainRank: K,
         cardsText: 'HKD3D4D5S6',
         bestPlan: ['♦3♦4♦5♠6♥K'],
@@ -67,6 +73,12 @@ describe('Strategy Module', () => {
         mainRank: K,
         cardsText: 'HKD3D3D4D4D4',
         bestPlan: ['♦3♦3♥K♦4♦4♦4'],
+      },
+      {
+        mainRank: 9,
+        cardsText: 'H9D10DJDQDK',
+        bestPlan: ['♦10♦J♦Q♦K♥9'],
+        score: 0,
       },
     ]
     runTestCases(testcases)
@@ -90,6 +102,22 @@ describe('Strategy Module', () => {
           'RJ',
         ],
         score: 7,
+      },
+      {
+        cardsText: 'DAD3H8H6CKSKD4CJH3H3H9C2H5S9DJC3HKH7CKHAH5C2C4S3RJCAS5',
+        mainRank: 3,
+        bestPlan: [
+          '♥6♥7♥8♥9♥3',
+          '♥5♥5♠5♥3',
+          '♣K♠K♥K♣K',
+          '♣2♣2♦3♣3♦4♣4',
+          '♦A♥A♣A',
+          '♣J♦J',
+          '♠3',
+          '♠9',
+          'RJ',
+        ],
+        score: 6,
       },
       {
         cardsText: 'CKD10H4DKD6CJCKS2H8DADJD4C9S7HJS3BJRJD2HQH5S8D9S5S10D2C5',

@@ -126,6 +126,26 @@ function takeCard(
   cards[WILD_CARD] = wildCards.slice(wildCardsNeeded)
   return taken
 }
+function takeCardBySuit(
+  cardsByRank: CardsByRank,
+  rank: NaturalRank,
+  suit: Suit,
+): Card | undefined {
+  const rankCards = cardsByRank[rank] || []
+  const index = rankCards.findIndex((card) => card.suit === suit)
+  if (index >= 0) {
+    cardsByRank[rank] = [...rankCards] // splice modifies the array, so copy it first
+    cardsByRank[rank]!.splice(index, 1)
+    return rankCards[index]
+  }
+  const wildCards = cardsByRank[WILD_CARD] || []
+  if (wildCards.length > 0) {
+    cardsByRank[WILD_CARD] = wildCards.slice(1)
+    return wildCards[0]
+  }
+  // not found
+  return undefined
+}
 
 type IteratorContext = {
   game: GameContext
@@ -224,20 +244,15 @@ const playStraightFlush: PlayTypeFunc = ({
       )}, ${nowRank}, ${nowSuit}`,
     )
   }
+  if (!nowSuit) {
+    // playStraightFlush should always be called with suit
+    console.assert(nowSuit)
+    return undefined
+  }
   const end = nowRank + 5 - 1
   if (end > K + 1) {
     // This sequence is not possible, because it cannot go past A.
     return undefined
-  }
-  for (let i = nowRank; i <= end; ++i) {
-    const ii = i == K + 1 ? A : i
-    if (
-      !cardsByRank[ii] ||
-      cardsByRank[ii]!.length == 0 ||
-      !cardsByRank[ii]?.find((card) => card.suit === nowSuit)
-    ) {
-      return undefined
-    }
   }
   let newCardsByRank = { ...cardsByRank }
   let play: Play = {
@@ -246,18 +261,12 @@ const playStraightFlush: PlayTypeFunc = ({
   }
   for (let i = nowRank; i <= end; ++i) {
     const ii = i == K + 1 ? A : i
-    const cards = cardsByRank[ii]
-    if (!cards) {
-      return undefined
-    }
-    const index = cards.findIndex((card) => card.suit === nowSuit)
-    if (index < 0) {
+    const taken = takeCardBySuit(newCardsByRank, ii, nowSuit)
+    if (taken == null) {
       // not found
       return undefined
     }
-    newCardsByRank[ii] = [...cards] // splice modifies the array, so copy it first
-    newCardsByRank[ii]!.splice(index, 1)
-    play.cards.push(cards[index])
+    play.cards.push(taken)
   }
   return {
     cardsByRank: newCardsByRank,
