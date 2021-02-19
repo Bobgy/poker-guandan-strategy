@@ -1,11 +1,12 @@
+import { getUsualPowerRank } from '../utils'
+import { Card } from './Card'
 import {
-  NaturalRankWithoutJokers,
+  BLACK_JOKER,
   NaturalRank,
+  NaturalRankWithoutJokers,
   PowerRank,
   RED_JOKER,
-  BLACK_JOKER,
 } from './const'
-import { getUsualPowerRank } from '../utils'
 
 export class GameContext {
   constructor(mainRank: NaturalRankWithoutJokers) {
@@ -33,5 +34,9 @@ export class GameContext {
         return usualRank as PowerRank
       }
     }
+  }
+
+  isWildCard(card: Card): boolean {
+    return card.rank.natural === this.mainRank && card.suit === 'H'
   }
 }

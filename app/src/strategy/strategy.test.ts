@@ -33,19 +33,25 @@ describe('Strategy Module', () => {
       { cardsText: 'H2D2D2S2H3D3S4', bestPlan: ['♥2♦2♦2♠2', '♥3♦3', '♠4'] },
       { name: 'STRAIGHT', cardsText: 'H2H3D4H5H6', bestPlan: ['♥2♥3♦4♥5♥6'] },
       { name: 'TUBE', cardsText: 'H2H2H3H3H4H4', bestPlan: ['♥2♥2♥3♥3♥4♥4'] },
-      { cardsText: 'HAHAH2H2H3H3', bestPlan: ['♥A♥A♥2♥2♥3♥3'] },
-      { cardsText: 'HQHQHKHKHAHA', bestPlan: ['♥Q♥Q♥K♥K♥A♥A'] },
+      { cardsText: 'DADAH2H2H3H3', bestPlan: ['♦A♦A♥2♥2♥3♥3'] },
+      { cardsText: 'HQHQHKHKDADA', bestPlan: ['♥Q♥Q♥K♥K♦A♦A'] },
       {
         name: 'TUBE cannot go from K to 2',
-        cardsText: 'HKHKHAHAH2H2',
-        bestPlan: ['♥A♥A', '♥2♥2', '♥K♥K'],
+        cardsText: 'HKHKDADAH2H2',
+        bestPlan: ['♦A♦A', '♥2♥2', '♥K♥K'],
       },
       { name: 'PLATE', cardsText: 'D6D6D6S7D7H7', bestPlan: ['♦6♦6♦6♠7♦7♥7'] },
       {
         name: 'STRAIGHT_FLUSH',
-        cardsText: 'HAH2H3H4H5',
-        bestPlan: ['♥A♥2♥3♥4♥5'],
+        cardsText: 'DAD2D3D4D5',
+        bestPlan: ['♦A♦2♦3♦4♦5'],
         score: 0,
+      },
+      {
+        name: 'WILD_CARD',
+        cardsText: 'H2D2S2',
+        bestPlan: ['♦2♠2♥2'],
+        mainRank: 2,
       },
     ]
     runTestCases(testcases)
@@ -55,13 +61,13 @@ describe('Strategy Module', () => {
     // reverse cards: for(let i=0;i<a.length;i+=2){b=b+a[i+1]+a[i];}
     const testcases: TestCase[] = [
       {
-        cardsText: 'DAD3H8H6CKSKD4CJH3C3H9C2H5S9DJC3HKH7CKHAH5C2C4S3RJCAS5',
+        cardsText: 'DAD3H8H6CKSKD4CJD3C3H9C2H5S9DJC3HKH7CKHAH5C2C4S3RJCAS5',
         mainRank: 3,
         bestPlan: [
           '♥5♥6♥7♥8♥9',
           '♣K♠K♥K♣K',
           '♦A♣2♦3♦4♥5',
-          '♥A♣2♥3♣4♠5',
+          '♥A♣2♦3♣4♠5',
           '♣3♣3♠3',
           '♣J♦J',
           '♣A',

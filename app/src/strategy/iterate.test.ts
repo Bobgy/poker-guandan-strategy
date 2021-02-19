@@ -129,5 +129,6 @@ function parseCardsText({
   const context = new GameContext(mainRank)
   return TEST_ONLY.organize(
     parseRawCards(cardsText).map((raw) => parseCardRaw(raw, context)),
+    context,
   )
 }

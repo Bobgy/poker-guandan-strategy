@@ -80,7 +80,7 @@ export function iteratePlans({
   collectPlan: PlanCollector
   context: GameContext
 }) {
-  const cardsByRank = organize(cards)
+  const cardsByRank = organize(cards, gameContext)
   iterateImp({
     cardsByRank,
     context: {
@@ -91,16 +91,41 @@ export function iteratePlans({
   })
 }
 
-type CardsByRank = { [R in NaturalRank]?: Card[] }
-function organize(cards: Card[]): CardsByRank {
+type RankWildCard = 0
+const WILD_CARD: RankWildCard = 0
+type CardsByRank = { [R in NaturalRank | RankWildCard]?: Card[] }
+function organize(cards: Card[], context: GameContext): CardsByRank {
   const organized: CardsByRank = {}
   cards.forEach((card) => {
-    organized[card.rank.natural] = organized[card.rank.natural] || []
-    organized[card.rank.natural]!.push(card)
+    const rank = context.isWildCard(card) ? WILD_CARD : card.rank.natural
+    organized[rank] = organized[rank] || []
+    organized[rank]!.push(card)
   })
   return organized
 }
 export const TEST_ONLY = { organize }
+function takeCard(
+  cards: CardsByRank, // Warning: this will mutate cards.
+  rank: NaturalRank,
+  count: number = 1,
+): Card[] | undefined {
+  console.assert(count >= 1)
+  const rankCards = cards[rank] || []
+  if (count <= rankCards.length) {
+    const taken = rankCards.slice(0, count)
+    cards[rank] = rankCards.slice(count)
+    return taken
+  }
+  const wildCards = cards[WILD_CARD]
+  const wildCardsNeeded = count - rankCards.length
+  if (!wildCards || wildCardsNeeded > wildCards.length) {
+    return undefined
+  }
+  const taken = rankCards.concat(wildCards.slice(0, wildCardsNeeded))
+  cards[rank] = []
+  cards[WILD_CARD] = wildCards.slice(wildCardsNeeded)
+  return taken
+}
 
 type IteratorContext = {
   game: GameContext
@@ -121,8 +146,9 @@ const playCardsOfTheSameRank = (n: number): PlayTypeFunc => ({
   plan,
   context,
 }) => {
-  const nowCards = cards[nowRank]
-  if (!nowCards || nowCards.length < n) {
+  const newCards = { ...cards }
+  const taken = takeCard(newCards, nowRank, n)
+  if (taken == null) {
     return undefined
   }
   const playRank: PlayRankBombNTuple | PlayRankNormal = {
@@ -136,12 +162,12 @@ const playCardsOfTheSameRank = (n: number): PlayTypeFunc => ({
     cardCount: n,
   }
   return {
-    cardsByRank: { ...cards, [nowRank]: nowCards.slice(n) },
+    cardsByRank: newCards,
     plan: {
       score: plan.score + (n > 3 ? /* Bomb is free to play. */ 0 : 1),
       plays: plan.plays.concat({
         playRank,
-        cards: nowCards.slice(0, n),
+        cards: taken,
       }),
     },
   }
