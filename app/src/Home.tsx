@@ -7,23 +7,23 @@ import { commonStyles } from './styles'
 import { cardsToString } from './common/cardUtils'
 import { MyButton } from './MyButton'
 import { RankChooser } from './RankChooser'
+import { parseTCard } from './strategy/models/Card'
 
 interface StatelessHomePageProps
   extends Pick<
-  AppState,
-  | 'rank'
-  | 'setRank'
-  | 'cards'
-  | 'clearCards'
-  | 'addCard'
-  | 'randomCards'
-  | 'deleteLastCard'
-  | 'strategyResult'
-  | 'setResult'
-  | 'strategyModule'
-  | 'windowSize'
-  >,
-  Pick<NavigationProps, 'navigation'> { }
+      AppState,
+      | 'rank'
+      | 'setRank'
+      | 'cards'
+      | 'clearCards'
+      | 'addCard'
+      | 'randomCards'
+      | 'deleteLastCard'
+      | 'strategyResult'
+      | 'setResult'
+      | 'windowSize'
+    >,
+    Pick<NavigationProps, 'navigation'> {}
 const HomePage: React.FunctionComponent<StatelessHomePageProps> = ({
   rank,
   setRank,
@@ -35,32 +35,24 @@ const HomePage: React.FunctionComponent<StatelessHomePageProps> = ({
   strategyResult,
   setResult,
   navigation,
-  strategyModule,
   windowSize,
 }) => {
-  const [useValueEstimator, setUseValueEstimator] = useState(true);
+  const [useValueEstimator, setUseValueEstimator] = useState(true)
   const handleSolutionCalcButton = useCallback(() => {
-    if (strategyModule != null && strategyModule !== 'error') {
-      setResult('loading')
+    setResult('loading')
 
-      setTimeout(() => {
-        // console.log(cards)
-        const cardsStr = cardsToString(cards)
-        // console.log(cardsStr)
-        const result = strategyModule.calc(cardsStr, rank, useValueEstimator)
+    setTimeout(() => {
+      // console.log(cards)
+      console.log(cards.map(parseTCard))
+      // const result = strategyModule.calc(cardsStr, rank, useValueEstimator)
 
-        // set a minimum extra delay to avoid UI flashing too quickly
-        setTimeout(() => {
-          navigation.navigate('Result')
-          setResult(result)
-        }, 300)
-      }, 0)
-    }
-  }, [cards, setResult, navigation, strategyModule, useValueEstimator])
-
-  if (strategyModule === 'error') {
-    return <Text>{'strategy module failed to load'}</Text>
-  }
+      // set a minimum extra delay to avoid UI flashing too quickly
+      // setTimeout(() => {
+      //   navigation.navigate('Result')
+      //   setResult(result)
+      // }, 300)
+    }, 0)
+  }, [cards, setResult, navigation, useValueEstimator])
 
   return (
     <Fragment>
@@ -78,7 +70,7 @@ const HomePage: React.FunctionComponent<StatelessHomePageProps> = ({
         <RankChooser rank={rank} setRank={setRank} />
         <MyButton
           title={useValueEstimator ? '价值' : '手数'}
-          onPress={() => setUseValueEstimator(use => !use)}
+          onPress={() => setUseValueEstimator((use) => !use)}
           titleStyle={{
             fontSize: 18,
           }}

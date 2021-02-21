@@ -11,7 +11,6 @@ import { Fade } from './Fade'
 import { TransitionGroup } from 'react-transition-group'
 import { createBrowserRouterHook } from './useRouterState'
 import createHistory from 'history/createBrowserHistory'
-import { PortedCppModule, loadCppModule } from './loadCppModule'
 import { useWindowSize } from './useWindowSize'
 
 interface AppNavigatorProps extends NavigationProps {
@@ -85,18 +84,6 @@ function App() {
   const cardStateProps = useCardState()
   const resultProps = useResultState()
   const { route, navigation } = useRouterState()
-  const [strategyModule, setModule] = useState<
-    PortedCppModule | null | 'error'
-  >(null)
-  useEffect(() => {
-    loadCppModule()
-      .then(cppModule => {
-        setModule(cppModule)
-      })
-      .catch(() => {
-        setModule('error')
-      })
-  }, [])
   const windowSize = useWindowSize()
 
   return (
@@ -117,7 +104,6 @@ function App() {
               setRank,
               ...cardStateProps,
               ...resultProps,
-              strategyModule,
               windowSize,
             }}
             navigation={navigation}

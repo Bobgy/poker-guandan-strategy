@@ -1,7 +1,7 @@
 import { MAX_PLANS } from './const'
 import { iteratePlans } from './iterate'
-import { Card, parseCardRaw } from './models/Card'
-import { CardRaw, NaturalRank, NaturalRankWithoutJokers } from './models/const'
+import { parseCardRaw } from './models/Card'
+import { CardRaw, NaturalRankWithoutJokers } from './models/const'
 import { GameContext } from './models/GameContext'
 import { Plan } from './models/Plan'
 
@@ -21,15 +21,6 @@ export function calc({
     throw new Error('No plan found')
   }
   return [bestPlan]
-}
-
-type RankToCardsMap = Partial<Record<NaturalRank, Card[]>>
-function buildRankToCardMap(cards: Card[]): RankToCardsMap {
-  const map: RankToCardsMap = {}
-  cards.forEach((card) => {
-    ;(map[card.rank.natural] = map[card.rank.natural] || []).push(card)
-  })
-  return map
 }
 
 const makeBestPlanCollector = () => {
