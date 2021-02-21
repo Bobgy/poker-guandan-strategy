@@ -16,9 +16,9 @@ const NEXT_PLAY_TYPE: { [T in PlayType]?: PlayType } = {
   [PlayType.BOMB_N_TUPLE]: PlayType.PLATE,
   [PlayType.PLATE]: PlayType.TUBE,
   [PlayType.TUBE]: PlayType.STRAIGHT,
-  [PlayType.STRAIGHT]: PlayType.TRIPLE,
-  [PlayType.TRIPLE]: PlayType.PAIR,
-  [PlayType.PAIR]: undefined,
+  [PlayType.STRAIGHT]: PlayType.PAIR,
+  [PlayType.PAIR]: PlayType.TRIPLE,
+  [PlayType.TRIPLE]: undefined,
 } as const
 function nextPlayType(playType: PlayType): PlayType | undefined {
   return NEXT_PLAY_TYPE[playType]
@@ -283,6 +283,37 @@ const playBomb5 = playCardsOfTheSameRank(5)
 const playBomb6 = playCardsOfTheSameRank(6)
 const playBomb7 = playCardsOfTheSameRank(7)
 const playBomb8 = playCardsOfTheSameRank(8)
+const playFullHouse: PlayTypeFunc = ({ cards, nowRank, plan, context }) => {
+  const result = playTriple({ cards, nowRank, plan, context })
+  if (result == null) {
+    return undefined
+  }
+  const { cardsByRank: newCards, plan: newPlan } = result
+  const pairIndex = newPlan.plays.findIndex(
+    (play) => play.playRank.type === PlayType.PAIR,
+  )
+  if (pairIndex < 0) {
+    // No pairs left, cannot make a full house.
+    return undefined
+  }
+  const triplePlay = newPlan.plays[newPlan.plays.length - 1] as Play
+  const pairPlay = newPlan.plays[pairIndex]
+  // Remove pair and triple.
+  newPlan.plays = newPlan.plays
+    .slice(0, pairIndex)
+    .concat(newPlan.plays.slice(pairIndex + 1, newPlan.plays.length - 1))
+  // Push a full house.
+  newPlan.plays.push({
+    playRank: {
+      type: PlayType.FULL_HOUSE,
+      rank: (triplePlay.playRank as PlayRankNormal).rank,
+    },
+    cards: triplePlay.cards.concat(pairPlay.cards),
+  })
+  // Pair and triple becomes a full house, one fewer hand to play.
+  newPlan.score = newPlan.score - 1
+  return { plan: newPlan, cardsByRank: newCards }
+}
 export const playStraight = playCardSequence({
   cardCount: 1,
   length: 5,
@@ -300,7 +331,7 @@ const playPlate = playCardSequence({
 })
 const PLAY_TYPE_FUNC: { [T in PlayType]?: readonly PlayTypeFunc[] } = {
   [PlayType.PAIR]: [playPair],
-  [PlayType.TRIPLE]: [playTriple],
+  [PlayType.TRIPLE]: [playTriple, playFullHouse],
   [PlayType.BOMB_N_TUPLE]: [
     playBomb4,
     playBomb5,

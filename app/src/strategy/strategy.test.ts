@@ -6,10 +6,19 @@ type TestCase = {
   name?: string
   cardsText: string
   mainRank?: NaturalRankWithoutJokers
-  bestPlan: string[]
-  score?: number
   only?: boolean
-}
+} & (
+  | {
+      bestPlan: string[]
+      score?: number
+      callback?: undefined
+    }
+  | {
+      bestPlan?: undefined
+      score?: undefined
+      callback: (result: { plan: string[]; score: number }) => void
+    }
+)
 
 describe('Strategy Module', () => {
   describe('unit tests', () => {
@@ -28,9 +37,22 @@ describe('Strategy Module', () => {
       { name: 'PAIR', cardsText: 'H2D2', bestPlan: ['♥2♦2'] },
       { cardsText: 'H2D2D3', bestPlan: ['♥2♦2', '♦3'] },
       { cardsText: 'H2D2D2', bestPlan: ['♥2♦2♦2'] },
-      { name: 'TRIPLE', cardsText: 'H2D2D2S2', bestPlan: ['♥2♦2♦2♠2'] },
-      { cardsText: 'H2H2S2H2D2D2C2C2', bestPlan: ['♥2♥2♠2♥2♦2♦2♣2♣2'] },
-      { cardsText: 'H2D2D2S2H3D3S4', bestPlan: ['♥2♦2♦2♠2', '♥3♦3', '♠4'] },
+      {
+        name: 'BOMB_N_TUPLE',
+        cardsText: 'H2D2D2S2',
+        bestPlan: ['♥2♦2♦2♠2'],
+        score: 0,
+      },
+      {
+        cardsText: 'H2H2S2H2D2D2C2C2',
+        bestPlan: ['♥2♥2♠2♥2♦2♦2♣2♣2'],
+        score: 0,
+      },
+      {
+        cardsText: 'H2D2D2S2H3D3S4',
+        bestPlan: ['♥2♦2♦2♠2', '♥3♦3', '♠4'],
+        score: 2,
+      },
       { name: 'STRAIGHT', cardsText: 'H2H3D4H5H6', bestPlan: ['♥2♥3♦4♥5♥6'] },
       { name: 'TUBE', cardsText: 'H2H2H3H3H4H4', bestPlan: ['♥2♥2♥3♥3♥4♥4'] },
       { cardsText: 'DADAH2H2H3H3', bestPlan: ['♦A♦A♥2♥2♥3♥3'] },
@@ -80,64 +102,79 @@ describe('Strategy Module', () => {
         bestPlan: ['♦10♦J♦Q♦K♥9'],
         score: 0,
       },
+      {
+        name: 'FULL_HOUSE',
+        cardsText: 'D2D2D3D3D3',
+        bestPlan: ['♦3♦3♦3♦2♦2'],
+      },
     ]
     runTestCases(testcases)
   })
 
   describe('real world cases', () => {
     // reverse cards: for(let i=0;i<a.length;i+=2){b=b+a[i+1]+a[i];}
-    const testcases: TestCase[] = [
-      {
-        cardsText: 'DAD3H8H6CKSKD4CJD3C3H9C2H5S9DJC3HKH7CKHAH5C2C4S3RJCAS5',
-        mainRank: 3,
-        bestPlan: [
-          '♥5♥6♥7♥8♥9',
-          '♣K♠K♥K♣K',
-          '♦A♣2♦3♦4♥5',
-          '♥A♣2♦3♣4♠5',
-          '♣3♣3♠3',
-          '♣J♦J',
-          '♣A',
-          '♠9',
-          'RJ',
-        ],
-        score: 7,
+    runTestCase({
+      cardsText: 'DAD3H8H6CKSKD4CJD3C3H9C2H5S9DJC3HKH7CKHAH5C2C4S3RJCAS5',
+      mainRank: 3,
+      callback: (result) => {
+        expect(result).toMatchInlineSnapshot(`
+                  Object {
+                    "plan": Array [
+                      "♥5♥6♥7♥8♥9",
+                      "♣K♠K♥K♣K",
+                      "♦3♦3♦4♣4♥5♠5",
+                      "♦A♥A♣A♣2♣2",
+                      "♣3♣3♠3♣J♦J",
+                      "♠9",
+                      "RJ",
+                    ],
+                    "score": 5,
+                  }
+              `)
       },
-      {
-        cardsText: 'DAD3H8H6CKSKD4CJH3H3H9C2H5S9DJC3HKH7CKHAH5C2C4S3RJCAS5',
-        mainRank: 3,
-        bestPlan: [
-          '♥6♥7♥8♥9♥3',
-          '♥5♥5♠5♥3',
-          '♣K♠K♥K♣K',
-          '♣2♣2♦3♣3♦4♣4',
-          '♦A♥A♣A',
-          '♣J♦J',
-          '♠3',
-          '♠9',
-          'RJ',
-        ],
-        score: 6,
+    })
+    runTestCase({
+      cardsText: 'DAD3H8H6CKSKD4CJH3H3H9C2H5S9DJC3HKH7CKHAH5C2C4S3RJCAS5',
+      mainRank: 3,
+      callback: (result) => {
+        expect(result).toMatchInlineSnapshot(`
+          Object {
+            "plan": Array [
+              "♥6♥7♥8♥9♥3",
+              "♣K♠K♥K♣K♥3",
+              "♦A♥A♣A♣2♣2",
+              "♦3♣3♠3♦4♣4",
+              "♥5♥5♠5♣J♦J",
+              "♠9",
+              "RJ",
+            ],
+            "score": 5,
+          }
+        `)
       },
-      {
-        cardsText: 'CKD10H4DKD6CJCKS2H8DADJD4C9S7HJS3BJRJD2HQH5S8D9S5S10D2C5',
-        mainRank: 6,
-        bestPlan: [
-          '♦A♠2♠3♥4♥5',
-          '♦6♠7♥8♣9♦10',
-          '♠8♦9♠10♣J♥Q',
-          '♣K♦K♣K',
-          '♦2♦2',
-          '♠5♣5',
-          '♦J♥J',
-          '♦4',
-          'BJ',
-          'RJ',
-        ],
-        score: 10,
+    })
+    runTestCase({
+      cardsText: 'CKD10H4DKD6CJCKS2H8DADJD4C9S7HJS3BJRJD2HQH5S8D9S5S10D2C5',
+      mainRank: 6,
+      callback: (result) => {
+        expect(result).toMatchInlineSnapshot(`
+          Object {
+            "plan": Array [
+              "♦6♠7♥8♣9♦10",
+              "♠8♦9♠10♣J♥Q",
+              "♠2♦2♦2♥4♦4",
+              "♥5♠5♣5♦J♥J",
+              "♣K♦K♣K",
+              "♦A",
+              "♠3",
+              "BJ",
+              "RJ",
+            ],
+            "score": 9,
+          }
+        `)
       },
-    ]
-    runTestCases(testcases)
+    })
   })
 })
 
@@ -152,27 +189,39 @@ function calcBestPlan({
   return { textPlan: planToText(plan), score: plan.score }
 }
 
+function runTestCase({
+  name,
+  cardsText,
+  mainRank,
+  bestPlan,
+  score,
+  only,
+  callback,
+}: TestCase) {
+  const func = only ? it.only : it
+  func(
+    `${name ? `${name}: ` : ''}Best plan of ${cardsText} should be ${bestPlan}`,
+    () => {
+      const { textPlan: actualPlan, score: actualScore } = calcBestPlan({
+        cardsText,
+        mainRank,
+      })
+      if (!callback) {
+        expect({ plan: actualPlan, score: actualScore }).toEqual({
+          plan: bestPlan,
+          score: score == null ? bestPlan?.length : score,
+        })
+      } else {
+        callback({ plan: actualPlan, score: actualScore })
+      }
+    },
+  )
+}
+
 function runTestCases(cases: TestCase[]) {
   // updateTestCases(cases)
   // return
-  cases.forEach(({ name, cardsText, mainRank, bestPlan, score, only }) => {
-    const func = only ? it.only : it
-    func(
-      `${
-        name ? `${name}: ` : ''
-      }Best plan of ${cardsText} should be ${bestPlan}`,
-      () => {
-        const { textPlan: actualPlan, score: actualScore } = calcBestPlan({
-          cardsText,
-          mainRank,
-        })
-        expect(actualPlan).toEqual(bestPlan)
-        if (score != null) {
-          expect(actualScore).toEqual(score)
-        }
-      },
-    )
-  })
+  cases.forEach((testCase) => runTestCase(testCase))
 }
 
 function updateTestCases(cases: TestCase[]) {

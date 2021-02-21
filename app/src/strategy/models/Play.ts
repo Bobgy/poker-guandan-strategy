@@ -6,7 +6,7 @@ export enum PlayType {
   SINGLE,
   PAIR,
   TRIPLE,
-  FULL_HOUSE, // like 333,22
+  FULL_HOUSE, // like 555,22
   STRAIGHT, // like 12345
   TUBE, // like 33,44,55
   PLATE, // like 333,444
