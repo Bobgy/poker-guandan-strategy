@@ -1,62 +1,18 @@
-import { TCard } from './types'
-import { CardRaw } from '../loadCppModule'
-import { SUITS_JOKER, SUITS } from '../strategy/models/Suite'
+import {
+  BLACK_JOKER,
+  CardRaw,
+  NATURAL_RANKS,
+  RED_JOKER,
+} from '../strategy/models/const'
+import { SUITS } from '../strategy/models/Suite'
 
-export const RANKS = [
-  '2',
-  '3',
-  '4',
-  '5',
-  '6',
-  '7',
-  '8',
-  '9',
-  {
-    value: '0',
-    label: '10',
-    isJoker: false,
-  },
-  'J',
-  'Q',
-  'K',
-  'A',
-  {
-    value: 'X',
-    label: 'Joker',
-    isJoker: true,
-  },
-].map(data => {
-  if (typeof data === 'object') {
-    return data
-  } else {
-    const rank = data
-    return {
-      label: rank,
-      value: rank,
-      isJoker: false,
-    }
-  }
-})
-interface RankIndex {
-  [rank: string]: {
-    value: string
-    label: string
-    isJoker: boolean
-  }
-}
-export const RANK: RankIndex = RANKS.reduce((rankIndex: RankIndex, rank) => {
-  rankIndex[rank.value] = rank
-  return rankIndex
-}, {})
-
-const ALL_CARDS_ONE_DECK: TCard[] = RANKS.map(rank =>
-  rank.isJoker
-    ? SUITS_JOKER.map(suit => ({
-        rank: rank.value,
-        suit: suit.value,
-      }))
-    : SUITS.map(suit => ({
-        rank: rank.value,
+const ALL_CARDS_ONE_DECK: CardRaw[] = NATURAL_RANKS.map((rank): CardRaw[] =>
+  rank === BLACK_JOKER
+    ? [{ rank, suit: 'B' }]
+    : rank === RED_JOKER
+    ? [{ rank, suit: 'R' }]
+    : SUITS.map((suit) => ({
+        rank,
         suit: suit.value,
       })),
 ).reduce((res, cards) => {
@@ -79,52 +35,28 @@ function shuffle<T>(a: T[]): T[] {
   return a
 }
 
-function cardCompare(a: TCard, b: TCard): number {
-  const rankA = RANKS.findIndex(rank => rank.value === a.rank)
-  const rankB = RANKS.findIndex(rank => rank.value === b.rank)
-  if (rankA === -1 || rankB === -1) {
-    throw new Error('rank not found for cards, ' + a + ' ' + b)
-  }
-  if (rankA !== rankB) {
-    return rankA - rankB
+function cardCompare(a: CardRaw, b: CardRaw): number {
+  if (a.rank !== b.rank) {
+    return a.rank - b.rank
   }
 
   return a.suit < b.suit ? -1 : a.suit === b.suit ? 0 : 1
 }
 
-function cardEqual(a: TCard, b: TCard): boolean {
+function cardEqual(a: CardRaw, b: CardRaw): boolean {
   return cardCompare(a, b) === 0
 }
 
-function sortCards(a: TCard[]): TCard[] {
+function sortCards(a: CardRaw[]): CardRaw[] {
   return a.sort(cardCompare)
 }
 
-export function generateRandomHands(): TCard[] {
+export function generateRandomHands(): CardRaw[] {
   return sortCards(
     shuffle([...ALL_CARDS_ONE_DECK, ...ALL_CARDS_ONE_DECK]).slice(0, 27),
   )
 }
 
-export function canIAddCard(cards: TCard[], cardToAdd: TCard): boolean {
-  return cards.filter(card => cardEqual(card, cardToAdd)).length < 2
-}
-
-export function cardsToString(cards: TCard[]) {
-  return cards.map(card => card.rank + card.suit).join('')
-}
-
-export function parseRawCard(cardRaw: CardRaw, wildCard: TCard): TCard {
-  if (cardRaw.length !== 2) {
-    throw new Error('CardRaw should have a length of 2')
-  }
-
-  if (cardRaw === 'WC') {
-    return wildCard
-  }
-
-  return {
-    rank: cardRaw[0],
-    suit: cardRaw[1],
-  }
+export function canIAddCard(cards: CardRaw[], cardToAdd: CardRaw): boolean {
+  return cards.filter((card) => cardEqual(card, cardToAdd)).length < 2
 }

@@ -1,21 +1,20 @@
-import React, { useState, useCallback } from 'react'
-import { View, Text, Picker } from 'react-native'
-import { RANKS, RANK, generateRandomHands } from './common/cardUtils'
-import { SUIT } from './strategy/models/Suite'
-import { CardState, RankState, TCard } from './common/types'
+import { useCallback, useState } from 'react'
+import { generateRandomHands } from './common/cardUtils'
+import { CardState } from './common/types'
+import { CardRaw } from './strategy/models/const'
 
 export function useCardState(): CardState {
-  const [cards, setCards] = useState<TCard[]>([])
+  const [cards, setCards] = useState<CardRaw[]>([])
   const clearCards = useCallback(() => setCards([]), [setCards])
   const addCard = useCallback(
-    card => setCards(cardsNow => cardsNow.concat(card)),
+    (card) => setCards((cardsNow) => cardsNow.concat(card)),
     [setCards],
   )
   const randomCards = useCallback(() => setCards(generateRandomHands()), [
     setCards,
   ])
   const deleteLastCard = useCallback(
-    () => setCards(cardsNow => cardsNow.slice(0, cardsNow.length - 1)),
+    () => setCards((cardsNow) => cardsNow.slice(0, cardsNow.length - 1)),
     [setCards],
   )
   return {

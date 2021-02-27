@@ -10,15 +10,15 @@ import {
 import { Divider } from './Divider'
 import { CardDeck } from './Card'
 import { commonStyles } from './styles'
-import { parseRawCard } from './common/cardUtils'
 import { StrategyResultState } from './useResultState'
 import { ReactComponent as Close } from './icons/close.svg'
 import { ReactComponent as Info } from './icons/info.svg'
 import { WindowSize } from './useWindowSize'
+import { NaturalRankWithoutJokers } from './strategy/models/const'
 
 interface SolutionVisualizationProps {
   strategyResult: StrategyResultState
-  rank: string
+  rank: NaturalRankWithoutJokers
   windowSize: WindowSize
   onClose: () => void
 }
@@ -27,9 +27,9 @@ interface WindowSizeToggleProps {
   onClose: () => void
   style: StyleProp<ViewStyle>
 }
-const CloseWindowButton: React.FunctionComponent<
-  WindowSizeToggleProps
-> = props => (
+const CloseWindowButton: React.FunctionComponent<WindowSizeToggleProps> = (
+  props,
+) => (
   <TouchableOpacity
     style={[
       {
@@ -47,7 +47,7 @@ const CloseWindowButton: React.FunctionComponent<
 )
 
 interface SolutionWindowProps {
-  rank: string
+  rank: NaturalRankWithoutJokers
   strategyResult: StrategyResultState
   windowSize: WindowSize
 }
@@ -56,47 +56,47 @@ const SolutionWindow: React.FunctionComponent<SolutionWindowProps> = ({
   rank,
   windowSize,
 }) => (
-    <ScrollView
-      style={[
-        commonStyles.container,
-        {
-          flex: 2,
-        },
-      ]}
-    >
-      {strategyResult &&
-        (strategyResult === 'loading' ? (
-          <Text
+  <ScrollView
+    style={[
+      commonStyles.container,
+      {
+        flex: 2,
+      },
+    ]}
+  >
+    {strategyResult &&
+      (strategyResult === 'loading' ? (
+        <Text
+          style={{
+            fontSize: 20,
+          }}
+        >
+          {/* 计算中... */}
+        </Text>
+      ) : (
+        <>
+          <View
             style={{
-              fontSize: 20,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
             }}
           >
-            {/* 计算中... */}
-          </Text>
-        ) : (
-            <>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}
-              >
-                <Text
-                  style={{ fontSize: 18, flexShrink: 0, marginRight: 20 }}
-                >{`最少${strategyResult.minHands}手牌`}</Text>
-                <Text style={{ textAlignVertical: 'center' }}>
-                  <Info style={{ width: 19, height: 19, verticalAlign: 'top' }} />
-                  大小王、炸弹算0手，其他牌型算1手
+            <Text
+              style={{ fontSize: 18, flexShrink: 0, marginRight: 20 }}
+            >{`最少${strategyResult.minHands}手牌`}</Text>
+            <Text style={{ textAlignVertical: 'center' }}>
+              <Info style={{ width: 19, height: 19, verticalAlign: 'top' }} />
+              大小王、炸弹算0手，其他牌型算1手
             </Text>
-              </View>
-              <View>
-                {(() => {
-                  const solutionsCount = strategyResult.solutions.length
-                  const hiddenMoreSolutions = solutionsCount - 10
-                  return (
-                    <>
-                      {strategyResult.solutions
+          </View>
+          <View>
+            {(() => {
+              const solutionsCount = strategyResult.solutions.length
+              const hiddenMoreSolutions = solutionsCount - 10
+              return (
+                <>
+                  {/* {strategyResult.solutions
                         .slice(0, 10)
                         .map((solution, solutionIndex) => (
                           <CardDeck
@@ -114,22 +114,25 @@ const SolutionWindow: React.FunctionComponent<SolutionWindowProps> = ({
                             }}
                             large={windowSize === 'BIG'}
                           />
-                        ))}
-                      {hiddenMoreSolutions > 0 &&
-                        `还有${hiddenMoreSolutions}种方案可以达到同样的最少手数`}
-                    </>
-                  )
-                })()}
-              </View>
-            </>
-          ))}
-    </ScrollView>
-  )
+                        ))} */}
+                  {hiddenMoreSolutions > 0 &&
+                    `还有${hiddenMoreSolutions}种方案可以达到同样的最少手数`}
+                </>
+              )
+            })()}
+          </View>
+        </>
+      ))}
+  </ScrollView>
+)
 const MemoedSolutionWindow = memo(SolutionWindow)
 
-const SolutionVisualization: React.FunctionComponent<
-  SolutionVisualizationProps
-> = ({ strategyResult, rank, onClose, windowSize }) => (
+const SolutionVisualization: React.FunctionComponent<SolutionVisualizationProps> = ({
+  strategyResult,
+  rank,
+  onClose,
+  windowSize,
+}) => (
   <>
     <View
       style={{

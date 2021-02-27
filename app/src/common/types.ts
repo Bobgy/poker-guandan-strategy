@@ -1,27 +1,18 @@
-import { PortedCppModule } from '../loadCppModule'
+import { CardRaw, NaturalRankWithoutJokers } from '../strategy/models/const'
 import { ResultProps } from '../useResultState'
 import { WindowSize } from '../useWindowSize'
 
 export interface RankState {
-  rank: string
-  setRank: (rank: string) => void
-}
-
-export interface TCard {
-  rank: string
-  suit: string
+  rank: NaturalRankWithoutJokers
+  setRank: (rank: NaturalRankWithoutJokers) => void
 }
 
 export interface CardState {
-  cards: TCard[]
-  addCard(card: TCard): void
+  cards: CardRaw[]
+  addCard(card: CardRaw): void
   clearCards(): void
   randomCards(): void
   deleteLastCard(): void
-}
-
-export interface CppModuleState {
-  strategyModule: null | 'error' | PortedCppModule
 }
 
 export type AppState = RankState &

@@ -1,13 +1,14 @@
-export type SuiteMetadata = {
-  value: string
-  label: string
-  color: string
-}
 export type Suit = 'S' | 'C' | 'D' | 'H'
 export type SuitRedJoker = 'R'
 export type SuitBlackJoker = 'B'
+export type SuitJoker = SuitRedJoker | SuitBlackJoker
 export type AllSuit = Suit | SuitRedJoker | SuitBlackJoker
-export const SUIT: Record<AllSuit, SuiteMetadata> = {
+export type SuiteMetadata<S> = {
+  value: S
+  label: string
+  color: string
+}
+export const SUIT_NORMAL: Record<Suit, SuiteMetadata<Suit>> = {
   H: {
     value: 'H',
     label: '♥',
@@ -28,6 +29,8 @@ export const SUIT: Record<AllSuit, SuiteMetadata> = {
     label: '♣',
     color: 'black',
   },
+} as const
+export const SUIT_JOKER: Record<SuitJoker, SuiteMetadata<SuitJoker>> = {
   B: {
     // black joker
     value: 'B',
@@ -40,10 +43,19 @@ export const SUIT: Record<AllSuit, SuiteMetadata> = {
     label: '',
     color: 'red',
   },
+} as const
+export const SUITS_JOKER = [SUIT_JOKER.B, SUIT_JOKER.R]
+export const SUIT = {
+  ...SUIT_NORMAL,
+  ...SUIT_JOKER,
 }
+export const SUITS = [
+  SUIT_NORMAL.H,
+  SUIT_NORMAL.S,
+  SUIT_NORMAL.C,
+  SUIT_NORMAL.D,
+]
 export const SUIT_VALUES = ['S', 'C', 'D', 'H']
-export const SUITS = [SUIT.H, SUIT.S, SUIT.C, SUIT.D]
-export const SUITS_JOKER = [SUIT.B, SUIT.R]
 export function parseSuit(
   suit: string,
 ): [undefined, string] | [Suit, undefined] {

@@ -1,13 +1,12 @@
-import React, { useCallback, Fragment, useState } from 'react'
-import { View, Text } from 'react-native'
-import { NavigationProps, AppState } from './common/types'
+import React, { Fragment, useCallback, useState } from 'react'
+import { View } from 'react-native'
 import { CardsChooser } from './CardsChooser'
+import { AppState, NavigationProps } from './common/types'
 import { Divider } from './Divider'
-import { commonStyles } from './styles'
-import { cardsToString } from './common/cardUtils'
 import { MyButton } from './MyButton'
 import { RankChooser } from './RankChooser'
-import { parseTCard } from './strategy/models/Card'
+import { cardRawToText } from './strategy/models/Card'
+import { commonStyles } from './styles'
 
 interface StatelessHomePageProps
   extends Pick<
@@ -43,7 +42,7 @@ const HomePage: React.FunctionComponent<StatelessHomePageProps> = ({
 
     setTimeout(() => {
       // console.log(cards)
-      console.log(cards.map(parseTCard))
+      console.log(cards.map(cardRawToText))
       // const result = strategyModule.calc(cardsStr, rank, useValueEstimator)
 
       // set a minimum extra delay to avoid UI flashing too quickly

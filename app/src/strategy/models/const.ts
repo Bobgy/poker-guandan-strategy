@@ -1,4 +1,4 @@
-import { parseSuit, Suit, SuitBlackJoker, SuitRedJoker } from './Suite'
+import { AllSuit, parseSuit, Suit, SuitBlackJoker, SuitRedJoker } from './Suite'
 
 export type J = 11
 export const J = 11
@@ -28,7 +28,8 @@ export type NaturalRank =
   | K
   | BlackJoker
   | RedJoker
-const NATURAL_RANK_MAX = RED_JOKER
+export const NATURAL_RANK_MIN = A
+export const NATURAL_RANK_MAX = RED_JOKER
 export type NaturalRankWithoutJokers = Exclude<
   NaturalRank,
   BlackJoker | RedJoker
@@ -68,8 +69,8 @@ export const NATURAL_RANK: Record<NaturalRank, RankMetadata> = {
   [J]: { label: 'J', naturalRank: J },
   [Q]: { label: 'Q', naturalRank: Q },
   [K]: { label: 'K', naturalRank: K },
-  [BLACK_JOKER]: { label: 'BJ', naturalRank: BLACK_JOKER },
-  [RED_JOKER]: { label: 'RJ', naturalRank: RED_JOKER },
+  [BLACK_JOKER]: { label: 'Joker', naturalRank: BLACK_JOKER },
+  [RED_JOKER]: { label: 'Joker', naturalRank: RED_JOKER },
 } as const
 export function nextRank(rank: NaturalRank): NaturalRank | undefined {
   const next = rank + 1
@@ -119,6 +120,7 @@ export type CardRaw =
       rank: RedJoker
       suit: SuitRedJoker
     }
+export type CardRawLoose = { rank: NaturalRank; suit: AllSuit }
 
 export function parseRawCards(text: string): CardRaw[] {
   const cards: CardRaw[] = []
