@@ -43,9 +43,7 @@ const HomePage: React.FunctionComponent<StatelessHomePageProps> = ({
 
     setTimeout(() => {
       // console.log(cards)
-      console.log(cards.map(cardRawToText))
-      const plans = calc({ cards, mainRank: rank })
-      console.log(plans)
+      const plans = calc({ cards, mainRank: rank, morePlans: true })
       // set a minimum extra delay to avoid UI flashing too quickly
       setTimeout(() => {
         navigation.navigate('Result')
