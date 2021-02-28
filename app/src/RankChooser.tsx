@@ -1,7 +1,11 @@
 import React from 'react'
 import { View, Text, Picker } from 'react-native'
-import { RankState } from './types'
-import { RANKS, SUIT, RANK } from './cardUtils'
+import { RankState } from './common/types'
+import { SUIT } from './strategy/models/Suite'
+import {
+  NATURAL_RANK,
+  NATURAL_RANKS_WITHOUT_JOKERS,
+} from './strategy/models/const'
 
 export function RankChooser({ rank, setRank }: RankState) {
   return (
@@ -14,19 +18,19 @@ export function RankChooser({ rank, setRank }: RankState) {
         当前打
         <Picker
           selectedValue={rank}
-          onValueChange={itemValue => setRank(itemValue)}
+          onValueChange={(itemValue) => setRank(itemValue)}
         >
-          {RANKS.filter(rankOption => !rankOption.isJoker).map(rankOption => (
+          {NATURAL_RANKS_WITHOUT_JOKERS.map((rank) => (
             <Picker.Item
-              key={rankOption.value}
-              label={rankOption.label}
-              value={rankOption.value}
+              key={rank}
+              label={NATURAL_RANK[rank].label}
+              value={rank}
             />
           ))}
         </Picker>{' '}
         <Text style={{ color: SUIT.H.color }}>
           {SUIT.H.label}
-          {RANK[rank].label}
+          {NATURAL_RANK[rank].label}
         </Text>
         是百搭
       </Text>

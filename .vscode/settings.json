@@ -1,4 +1,9 @@
 {
+  "[typescript]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true
+    }
+  },
   "files.associations": {
     "*.jinja": "jinja",
     "*.jinja.schema": "yaml",
@@ -13,7 +18,10 @@
     "__tree": "cpp",
     "functional": "cpp",
     "locale": "cpp",
-    "string": "cpp"
+    "string": "cpp",
+    "chrono": "cpp",
+    "limits": "cpp",
+    "ratio": "cpp"
   },
   "C_Cpp.clang_format_style": "Chromium"
 }

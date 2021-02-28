@@ -1,16 +1,31 @@
-import React, { useState, useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import {
-  View,
-  TouchableOpacity,
-  StyleSheet,
   ScrollView,
+  StyleSheet,
   Text,
+  TouchableOpacity,
+  View,
 } from 'react-native'
-import { RANKS, SUITS, SUITS_JOKER, canIAddCard } from './cardUtils'
-import { CardState, TCard } from './types'
+import { Card, CardDeck } from './Card'
+import { canIAddCard } from './common/cardUtils'
+import { CardState } from './common/types'
 import { Divider } from './Divider'
-import { CardDeck, Card } from './Card'
 import { MyButton } from './MyButton'
+import {
+  A,
+  BLACK_JOKER,
+  CardRaw,
+  NaturalRank,
+  NATURAL_RANK_MAX,
+  NATURAL_RANK_MIN,
+  RED_JOKER,
+} from './strategy/models/const'
+import {
+  AllSuit,
+  SuiteMetadata,
+  SUITS,
+  SUITS_JOKER,
+} from './strategy/models/Suite'
 import { WindowSize } from './useWindowSize'
 
 const palette = {
@@ -33,12 +48,21 @@ export const theme = {
   },
 }
 
+function useRankState() {
+  const { value, increase, decrease } = useIncDecState(A)
+  return {
+    rank: value as NaturalRank,
+    incRank: increase,
+    decRank: decrease,
+  }
+}
+
 function useIncDecState(defaultValue = 0) {
   const [value, setValue] = useState(defaultValue)
-  const increase = useCallback(() => setValue(valueNow => valueNow + 1), [
+  const increase = useCallback(() => setValue((valueNow) => valueNow + 1), [
     setValue,
   ])
-  const decrease = useCallback(() => setValue(valueNow => valueNow - 1), [
+  const decrease = useCallback(() => setValue((valueNow) => valueNow - 1), [
     setValue,
   ])
 
@@ -75,10 +99,10 @@ interface ControlPanelProps {
   clearCards: () => void
   randomCards: () => void
   deleteLastCard: () => void
-  rankID: number
+  rank: NaturalRank
   numberOfCards: number
 }
-const ControlPanel: React.FunctionComponent<ControlPanelProps> = props => (
+const ControlPanel: React.FunctionComponent<ControlPanelProps> = (props) => (
   <View>
     <View
       style={{
@@ -89,7 +113,7 @@ const ControlPanel: React.FunctionComponent<ControlPanelProps> = props => (
     >
       <MyButton
         onPress={props.decRank}
-        disabled={props.rankID <= 0}
+        disabled={props.rank <= NATURAL_RANK_MIN}
         title="<"
         style={controlStyles.incDecButton}
         titleStyle={controlStyles.buttonTitle}
@@ -97,7 +121,7 @@ const ControlPanel: React.FunctionComponent<ControlPanelProps> = props => (
       <MyButton
         onPress={props.incRank}
         title=">"
-        disabled={props.rankID >= RANKS.length - 1}
+        disabled={props.rank >= NATURAL_RANK_MAX}
         style={controlStyles.incDecButton}
         titleStyle={controlStyles.buttonTitle}
       />
@@ -135,38 +159,43 @@ const ControlPanel: React.FunctionComponent<ControlPanelProps> = props => (
 )
 
 interface AddCardPanelProps {
-  cards: TCard[]
-  addCard: (card: TCard) => void
-  rankID: number
+  cards: CardRaw[]
+  addCard: (card: CardRaw) => void
+  rank: NaturalRank
   large?: boolean
 }
-const AddCardPanel: React.FunctionComponent<AddCardPanelProps> = props => (
-  <>
-    {(RANKS[props.rankID].isJoker ? SUITS_JOKER : SUITS).map(suit => {
-      const card = {
-        suit: suit.value,
-        rank: RANKS[props.rankID].value,
-      }
-      const canIAddThisCard = canIAddCard(props.cards, card)
+const AddCardPanel: React.FunctionComponent<AddCardPanelProps> = (props) => {
+  const suits: SuiteMetadata<AllSuit>[] =
+    props.rank === BLACK_JOKER || props.rank === RED_JOKER ? SUITS_JOKER : SUITS
 
-      return (
-        <TouchableOpacity
-          key={suit.value}
-          onPress={() => props.addCard(card)}
-          disabled={!canIAddThisCard}
-        >
-          <Card
-            suit={suit.value}
-            rank={RANKS[props.rankID].value}
+  return (
+    <>
+      {suits.map((suit: SuiteMetadata<AllSuit>) => {
+        const card = {
+          suit: suit.value,
+          rank: props.rank,
+        } as CardRaw
+        const canIAddThisCard = canIAddCard(props.cards, card)
+
+        return (
+          <TouchableOpacity
+            key={suit.value}
+            onPress={() => props.addCard(card)}
             disabled={!canIAddThisCard}
-            style={{ margin: 3 }}
-            large={props.large}
-          />
-        </TouchableOpacity>
-      )
-    })}
-  </>
-)
+          >
+            <Card
+              suit={suit.value}
+              rank={props.rank}
+              disabled={!canIAddThisCard}
+              style={{ margin: 3 }}
+              large={props.large}
+            />
+          </TouchableOpacity>
+        )
+      })}
+    </>
+  )
+}
 
 export function CardsChooser({
   cards,
@@ -178,11 +207,7 @@ export function CardsChooser({
 }: CardState & {
   windowSize: WindowSize
 }) {
-  const {
-    value: rankID,
-    increase: incRank,
-    decrease: decRank,
-  } = useIncDecState()
+  const { rank, incRank, decRank } = useRankState()
 
   return (
     <View style={{ flex: 1 }}>
@@ -197,9 +222,9 @@ export function CardsChooser({
         />
       </View>
       <Divider />
-      <Text style={{ fontSize: 14, margin: 4 }}>{`点击扑克牌添加，目前已有${
-        cards.length
-      }张牌`}</Text>
+      <Text
+        style={{ fontSize: 14, margin: 4 }}
+      >{`点击扑克牌添加，目前已有${cards.length}张牌`}</Text>
       <ScrollView
         style={{
           height: windowSize === 'SMALL' ? 110 : 150,
@@ -214,7 +239,7 @@ export function CardsChooser({
         <AddCardPanel
           cards={cards}
           addCard={addCard}
-          rankID={rankID}
+          rank={rank}
           large={windowSize === 'BIG'}
         />
       </ScrollView>
@@ -223,7 +248,7 @@ export function CardsChooser({
         clearCards={clearCards}
         randomCards={randomCards}
         deleteLastCard={deleteLastCard}
-        rankID={rankID}
+        rank={rank}
         incRank={incRank}
         decRank={decRank}
       />

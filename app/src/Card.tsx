@@ -1,16 +1,21 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import {
-  View,
-  Text,
-  ScrollView,
   Image,
-  StyleSheet,
+  ScrollView,
   StyleProp,
+  StyleSheet,
+  Text,
+  View,
   ViewStyle,
 } from 'react-native'
-import { SUIT, RANK } from './cardUtils'
-import { TCard } from './types'
 import nekoImg from './imgs/neko-40x40.png'
+import {
+  CardRaw,
+  CardRawLoose,
+  NATURAL_RANK,
+  NATURAL_RANKS,
+} from './strategy/models/const'
+import { Suit, SUIT } from './strategy/models/Suite'
 
 const STACKED_CARD_MARGIN = 52
 const STACKED_CARD_MARGIN_LARGE = 68
@@ -80,14 +85,14 @@ export function Card({
   disabled,
   style,
   large,
-}: TCard & {
+}: CardRawLoose & {
   isStacked?: boolean
   disabled?: boolean
   style?: StyleProp<ViewStyle>
   large?: boolean
 }) {
-  const rankDef = RANK[rank]
-  const suitDef = SUIT[suit]
+  const rankDef = NATURAL_RANK[rank]
+  const suitDef = SUIT[suit as Suit] // TODO: fix type force cast
   return (
     <View
       style={[
@@ -124,8 +129,8 @@ const HAND_MARGIN = 13
 const CONTAINER_PADDING = 0
 
 interface CardDeckProps {
-  cards?: TCard[]
-  hands?: TCard[][]
+  cards?: CardRaw[]
+  hands?: CardRaw[][]
   style?: StyleProp<ViewStyle>
   large?: boolean
 }

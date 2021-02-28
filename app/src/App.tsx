@@ -1,17 +1,17 @@
 /// <reference path="lib.d.ts"/>
 
-import React, { useState, FunctionComponent, useEffect } from 'react'
-import { StyleSheet, View, Text, StyleProp, ViewStyle } from 'react-native'
-import { NavigationProps } from './types'
-import { useCardState } from './useCardState'
+import createHistory from 'history/createBrowserHistory'
+import React, { FunctionComponent, useState } from 'react'
+import { StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native'
+import { TransitionGroup } from 'react-transition-group'
+import { NavigationProps } from './common/types'
+import { Fade } from './Fade'
 import Home from './Home'
 import ResultPage from './ResultPage'
+import { A, NaturalRankWithoutJokers } from './strategy/models/const'
+import { useCardState } from './useCardState'
 import { useResultState } from './useResultState'
-import { Fade } from './Fade'
-import { TransitionGroup } from 'react-transition-group'
 import { createBrowserRouterHook } from './useRouterState'
-import createHistory from 'history/createBrowserHistory'
-import { PortedCppModule, loadCppModule } from './loadCppModule'
 import { useWindowSize } from './useWindowSize'
 
 interface AppNavigatorProps extends NavigationProps {
@@ -81,22 +81,10 @@ const history = createHistory()
 const useRouterState = createBrowserRouterHook(routesConfig, history)
 
 function App() {
-  const [rank, setRank] = useState('2')
+  const [rank, setRank] = useState<NaturalRankWithoutJokers>(A)
   const cardStateProps = useCardState()
   const resultProps = useResultState()
   const { route, navigation } = useRouterState()
-  const [strategyModule, setModule] = useState<
-    PortedCppModule | null | 'error'
-  >(null)
-  useEffect(() => {
-    loadCppModule()
-      .then(cppModule => {
-        setModule(cppModule)
-      })
-      .catch(() => {
-        setModule('error')
-      })
-  }, [])
   const windowSize = useWindowSize()
 
   return (
@@ -117,7 +105,6 @@ function App() {
               setRank,
               ...cardStateProps,
               ...resultProps,
-              strategyModule,
               windowSize,
             }}
             navigation={navigation}

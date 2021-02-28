@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GameContext When main rank is 1 understands card order 1`] = `"2 3 4 5 6 7 8 9 10 J Q K A BJ RJ"`;
+
+exports[`GameContext When main rank is 2 understands card order 1`] = `"3 4 5 6 7 8 9 10 J Q K A 2 BJ RJ"`;
+
+exports[`GameContext When main rank is 3 understands card order 1`] = `"2 4 5 6 7 8 9 10 J Q K A 3 BJ RJ"`;
+
+exports[`GameContext When main rank is 4 understands card order 1`] = `"2 3 5 6 7 8 9 10 J Q K A 4 BJ RJ"`;
+
+exports[`GameContext When main rank is 5 understands card order 1`] = `"2 3 4 6 7 8 9 10 J Q K A 5 BJ RJ"`;
+
+exports[`GameContext When main rank is 6 understands card order 1`] = `"2 3 4 5 7 8 9 10 J Q K A 6 BJ RJ"`;
+
+exports[`GameContext When main rank is 7 understands card order 1`] = `"2 3 4 5 6 8 9 10 J Q K A 7 BJ RJ"`;
+
+exports[`GameContext When main rank is 8 understands card order 1`] = `"2 3 4 5 6 7 9 10 J Q K A 8 BJ RJ"`;
+
+exports[`GameContext When main rank is 9 understands card order 1`] = `"2 3 4 5 6 7 8 10 J Q K A 9 BJ RJ"`;
+
+exports[`GameContext When main rank is 10 understands card order 1`] = `"2 3 4 5 6 7 8 9 J Q K A 10 BJ RJ"`;
+
+exports[`GameContext When main rank is 11 understands card order 1`] = `"2 3 4 5 6 7 8 9 10 Q K A J BJ RJ"`;
+
+exports[`GameContext When main rank is 12 understands card order 1`] = `"2 3 4 5 6 7 8 9 10 J K A Q BJ RJ"`;
+
+exports[`GameContext When main rank is 13 understands card order 1`] = `"2 3 4 5 6 7 8 9 10 J Q A K BJ RJ"`;
