@@ -6,6 +6,7 @@ import { Divider } from './Divider'
 import { MyButton } from './MyButton'
 import { RankChooser } from './RankChooser'
 import { cardRawToText } from './strategy/models/Card'
+import { calc } from './strategy/strategy'
 import { commonStyles } from './styles'
 
 interface StatelessHomePageProps
@@ -43,13 +44,13 @@ const HomePage: React.FunctionComponent<StatelessHomePageProps> = ({
     setTimeout(() => {
       // console.log(cards)
       console.log(cards.map(cardRawToText))
-      // const result = strategyModule.calc(cardsStr, rank, useValueEstimator)
-
+      const plans = calc({ cards, mainRank: rank })
+      console.log(plans)
       // set a minimum extra delay to avoid UI flashing too quickly
-      // setTimeout(() => {
-      //   navigation.navigate('Result')
-      //   setResult(result)
-      // }, 300)
+      setTimeout(() => {
+        navigation.navigate('Result')
+        setResult(plans)
+      }, 300)
     }, 0)
   }, [cards, setResult, navigation, useValueEstimator])
 

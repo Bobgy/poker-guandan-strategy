@@ -1,4 +1,4 @@
-import { CardRaw, NATURAL_RANK } from './const'
+import { CardRaw, CardRawLoose, NATURAL_RANK } from './const'
 import { GameContext } from './GameContext'
 import { makeRank, Rank } from './Rank'
 import { AllSuit, SUIT } from './Suite'
@@ -21,4 +21,12 @@ export function cardToText(card: Card): string {
 
 export function cardRawToText(card: CardRaw): string {
   return SUIT[card.suit].label + NATURAL_RANK[card.rank].label
+}
+
+export function cardToCardRaw(card: Card): CardRaw {
+  const loose: CardRawLoose = {
+    rank: card.rank.natural,
+    suit: card.suit,
+  }
+  return loose as CardRaw
 }

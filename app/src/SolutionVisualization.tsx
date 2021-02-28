@@ -15,6 +15,7 @@ import { ReactComponent as Close } from './icons/close.svg'
 import { ReactComponent as Info } from './icons/info.svg'
 import { WindowSize } from './useWindowSize'
 import { NaturalRankWithoutJokers } from './strategy/models/const'
+import { cardToCardRaw } from './strategy/models/Card'
 
 interface SolutionVisualizationProps {
   strategyResult: StrategyResultState
@@ -84,7 +85,7 @@ const SolutionWindow: React.FunctionComponent<SolutionWindowProps> = ({
           >
             <Text
               style={{ fontSize: 18, flexShrink: 0, marginRight: 20 }}
-            >{`最少${strategyResult.minHands}手牌`}</Text>
+            >{`最少${strategyResult[0].score}手牌`}</Text>
             <Text style={{ textAlignVertical: 'center' }}>
               <Info style={{ width: 19, height: 19, verticalAlign: 'top' }} />
               大小王、炸弹算0手，其他牌型算1手
@@ -92,29 +93,22 @@ const SolutionWindow: React.FunctionComponent<SolutionWindowProps> = ({
           </View>
           <View>
             {(() => {
-              const solutionsCount = strategyResult.solutions.length
+              const solutionsCount = strategyResult.length
               const hiddenMoreSolutions = solutionsCount - 10
               return (
                 <>
-                  {/* {strategyResult.solutions
-                        .slice(0, 10)
-                        .map((solution, solutionIndex) => (
-                          <CardDeck
-                            key={solutionIndex}
-                            hands={solution.actualHands.map(hand =>
-                              hand.map(card =>
-                                parseRawCard(card, {
-                                  rank: rank,
-                                  suit: 'H',
-                                }),
-                              ),
-                            )}
-                            style={{
-                              margin: 6,
-                            }}
-                            large={windowSize === 'BIG'}
-                          />
-                        ))} */}
+                  {strategyResult.slice(0, 10).map((plan, planIndex) => (
+                    <CardDeck
+                      key={planIndex}
+                      hands={plan.plays.map((play) =>
+                        play.cards.map(cardToCardRaw),
+                      )}
+                      style={{
+                        margin: 6,
+                      }}
+                      large={windowSize === 'BIG'}
+                    />
+                  ))}
                   {hiddenMoreSolutions > 0 &&
                     `还有${hiddenMoreSolutions}种方案可以达到同样的最少手数`}
                 </>

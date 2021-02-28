@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { StrategyResult } from './loadCppModule'
+import { Plan } from './strategy/models/Plan'
 
-export type StrategyResultState = null | 'loading' | StrategyResult
+export type StrategyResultState = null | 'loading' | Plan[]
 export interface ResultProps {
   strategyResult: StrategyResultState
   setResult: (result: StrategyResultState) => void
