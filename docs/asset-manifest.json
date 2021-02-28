@@ -1,23 +1,22 @@
 {
   "files": {
-    "main.css": "/poker-guandan-strategy/static/css/main.42cc8b22.chunk.css",
-    "main.js": "/poker-guandan-strategy/static/js/main.c32a84ca.chunk.js",
-    "main.js.map": "/poker-guandan-strategy/static/js/main.c32a84ca.chunk.js.map",
-    "runtime-main.js": "/poker-guandan-strategy/static/js/runtime-main.721c0dbb.js",
-    "runtime-main.js.map": "/poker-guandan-strategy/static/js/runtime-main.721c0dbb.js.map",
-    "static/js/2.58b3d2b3.chunk.js": "/poker-guandan-strategy/static/js/2.58b3d2b3.chunk.js",
-    "static/js/2.58b3d2b3.chunk.js.map": "/poker-guandan-strategy/static/js/2.58b3d2b3.chunk.js.map",
+    "main.css": "/poker-guandan-strategy/static/css/main.0d183a93.chunk.css",
+    "main.js": "/poker-guandan-strategy/static/js/main.5a57dd58.chunk.js",
+    "main.js.map": "/poker-guandan-strategy/static/js/main.5a57dd58.chunk.js.map",
+    "runtime-main.js": "/poker-guandan-strategy/static/js/runtime-main.fc8696ca.js",
+    "runtime-main.js.map": "/poker-guandan-strategy/static/js/runtime-main.fc8696ca.js.map",
+    "static/js/2.75ca8810.chunk.js": "/poker-guandan-strategy/static/js/2.75ca8810.chunk.js",
+    "static/js/2.75ca8810.chunk.js.map": "/poker-guandan-strategy/static/js/2.75ca8810.chunk.js.map",
     "index.html": "/poker-guandan-strategy/index.html",
-    "precache-manifest.db4faf7d282f43465c4ce4972a683cd0.js": "/poker-guandan-strategy/precache-manifest.db4faf7d282f43465c4ce4972a683cd0.js",
-    "service-worker.js": "/poker-guandan-strategy/service-worker.js",
-    "static/css/main.42cc8b22.chunk.css.map": "/poker-guandan-strategy/static/css/main.42cc8b22.chunk.css.map",
-    "static/media/close.62e7709e.svg": "/poker-guandan-strategy/static/media/close.62e7709e.svg",
-    "static/media/info.59d1a698.svg": "/poker-guandan-strategy/static/media/info.59d1a698.svg"
+    "static/css/main.0d183a93.chunk.css.map": "/poker-guandan-strategy/static/css/main.0d183a93.chunk.css.map",
+    "static/js/2.75ca8810.chunk.js.LICENSE.txt": "/poker-guandan-strategy/static/js/2.75ca8810.chunk.js.LICENSE.txt",
+    "static/media/close.2c0e4ee3.svg": "/poker-guandan-strategy/static/media/close.2c0e4ee3.svg",
+    "static/media/info.8bfd8780.svg": "/poker-guandan-strategy/static/media/info.8bfd8780.svg"
   },
   "entrypoints": [
-    "static/js/runtime-main.721c0dbb.js",
-    "static/js/2.58b3d2b3.chunk.js",
-    "static/css/main.42cc8b22.chunk.css",
-    "static/js/main.c32a84ca.chunk.js"
+    "static/js/runtime-main.fc8696ca.js",
+    "static/js/2.75ca8810.chunk.js",
+    "static/css/main.0d183a93.chunk.css",
+    "static/js/main.5a57dd58.chunk.js"
   ]
 }
