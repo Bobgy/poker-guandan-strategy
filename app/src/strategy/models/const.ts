@@ -53,24 +53,25 @@ export const NATURAL_RANKS = [
 ] as const
 interface RankMetadata {
   label: string
+  text: string
   naturalRank: NaturalRank
 }
 export const NATURAL_RANK: Record<NaturalRank, RankMetadata> = {
-  [A]: { label: 'A', naturalRank: A },
-  2: { label: '2', naturalRank: 2 },
-  3: { label: '3', naturalRank: 3 },
-  4: { label: '4', naturalRank: 4 },
-  5: { label: '5', naturalRank: 5 },
-  6: { label: '6', naturalRank: 6 },
-  7: { label: '7', naturalRank: 7 },
-  8: { label: '8', naturalRank: 8 },
-  9: { label: '9', naturalRank: 9 },
-  10: { label: '10', naturalRank: 10 },
-  [J]: { label: 'J', naturalRank: J },
-  [Q]: { label: 'Q', naturalRank: Q },
-  [K]: { label: 'K', naturalRank: K },
-  [BLACK_JOKER]: { label: 'Joker', naturalRank: BLACK_JOKER },
-  [RED_JOKER]: { label: 'Joker', naturalRank: RED_JOKER },
+  [A]: { label: 'A', text: 'A', naturalRank: A },
+  2: { label: '2', text: '2', naturalRank: 2 },
+  3: { label: '3', text: '3', naturalRank: 3 },
+  4: { label: '4', text: '4', naturalRank: 4 },
+  5: { label: '5', text: '5', naturalRank: 5 },
+  6: { label: '6', text: '6', naturalRank: 6 },
+  7: { label: '7', text: '7', naturalRank: 7 },
+  8: { label: '8', text: '8', naturalRank: 8 },
+  9: { label: '9', text: '9', naturalRank: 9 },
+  10: { label: '10', text: '10', naturalRank: 10 },
+  [J]: { label: 'J', text: 'J', naturalRank: J },
+  [Q]: { label: 'Q', text: 'Q', naturalRank: Q },
+  [K]: { label: 'K', text: 'K', naturalRank: K },
+  [BLACK_JOKER]: { label: 'Joker', text: 'J', naturalRank: BLACK_JOKER },
+  [RED_JOKER]: { label: 'Joker', text: 'J', naturalRank: RED_JOKER },
 } as const
 export function nextRank(rank: NaturalRank): NaturalRank | undefined {
   const next = rank + 1

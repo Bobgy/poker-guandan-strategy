@@ -45,7 +45,7 @@ describe('Strategy Module', () => {
       },
       {
         cardsText: 'H2H2S2H2D2D2C2C2',
-        bestPlan: ['♥2♥2♠2♥2♦2♦2♣2♣2'],
+        bestPlan: ['♥2♥2♠2♥2', '♦2♦2♣2♣2'],
         score: 0,
       },
       {
@@ -84,22 +84,23 @@ describe('Strategy Module', () => {
       {
         mainRank: K,
         cardsText: 'HKD3D4D5S6',
-        bestPlan: ['♦3♦4♦5♠6♥K'],
+        bestPlan: ['♥K♦3♦4♦5♠6'],
       },
       {
         mainRank: K,
-        cardsText: 'HKD3D3D4D4D5',
-        bestPlan: ['♦3♦3♦4♦4♦5♥K'],
+        cardsText: 'HKD3D3D4D5D5',
+        bestPlan: ['♦3♦3♦4♥K♦5♦5'],
       },
       {
         mainRank: K,
         cardsText: 'HKD3D3D4D4D4',
-        bestPlan: ['♦3♦3♥K♦4♦4♦4'],
+        bestPlan: ['♦4♦4♦4♥K', '♦3♦3'],
+        score: 1,
       },
       {
         mainRank: 9,
         cardsText: 'H9D10DJDQDK',
-        bestPlan: ['♦10♦J♦Q♦K♥9'],
+        bestPlan: ['♥9♦10♦J♦Q♦K'],
         score: 0,
       },
       {
@@ -116,64 +117,47 @@ describe('Strategy Module', () => {
     runTestCase({
       cardsText: 'DAD3H8H6CKSKD4CJD3C3H9C2H5S9DJC3HKH7CKHAH5C2C4S3RJCAS5',
       mainRank: 3,
-      callback: (result) => {
-        expect(result).toMatchInlineSnapshot(`
-                  Object {
-                    "plan": Array [
-                      "♥5♥6♥7♥8♥9",
-                      "♣K♠K♥K♣K",
-                      "♦3♦3♦4♣4♥5♠5",
-                      "♦A♥A♣A♣2♣2",
-                      "♣3♣3♠3♣J♦J",
-                      "♠9",
-                      "RJ",
-                    ],
-                    "score": 5,
-                  }
-              `)
-      },
+      bestPlan: [
+        '♥5♥6♥7♥8♥9',
+        '♣K♠K♥K♣K',
+        '♣2♣2♦3♦3♦4♣4',
+        '♦A♥A♣A♥5♠5',
+        '♣3♣3♠3♣J♦J',
+        '♠9',
+        'RJ',
+      ],
+      score: 5,
     })
     runTestCase({
       cardsText: 'DAD3H8H6CKSKD4CJH3H3H9C2H5S9DJC3HKH7CKHAH5C2C4S3RJCAS5',
       mainRank: 3,
-      callback: (result) => {
-        expect(result).toMatchInlineSnapshot(`
-          Object {
-            "plan": Array [
-              "♥6♥7♥8♥9♥3",
-              "♣K♠K♥K♣K♥3",
-              "♦A♥A♣A♣2♣2",
-              "♦3♣3♠3♦4♣4",
-              "♥5♥5♠5♣J♦J",
-              "♠9",
-              "RJ",
-            ],
-            "score": 5,
-          }
-        `)
-      },
+      bestPlan: [],
+      bestPlan: [
+        '♥3♥5♥6♥7♥8',
+        '♣K♠K♥K♣K',
+        '♣2♣2♦3♣3♦4♣4',
+        '♦A♥A♣A♥5♠5',
+        '♣J♦J♥3♥9♠9',
+        '♠3',
+        'RJ',
+      ],
+      score: 5,
     })
     runTestCase({
       cardsText: 'CKD10H4DKD6CJCKS2H8DADJD4C9S7HJS3BJRJD2HQH5S8D9S5S10D2C5',
       mainRank: 6,
-      callback: (result) => {
-        expect(result).toMatchInlineSnapshot(`
-          Object {
-            "plan": Array [
-              "♦6♠7♥8♣9♦10",
-              "♠8♦9♠10♣J♥Q",
-              "♠2♦2♦2♥4♦4",
-              "♥5♠5♣5♦J♥J",
-              "♣K♦K♣K",
-              "♦A",
-              "♠3",
-              "BJ",
-              "RJ",
-            ],
-            "score": 9,
-          }
-        `)
-      },
+      bestPlan: [
+        '♦A♠2♠3♥4♥5',
+        '♦6♠7♥8♣9♦10',
+        '♠8♦9♠10♣J♥Q',
+        '♠5♣5',
+        '♦J♥J',
+        '♣K♦K♣K♦2♦2',
+        '♦4',
+        'BJ',
+        'RJ',
+      ],
+      score: 9,
     })
   })
 })

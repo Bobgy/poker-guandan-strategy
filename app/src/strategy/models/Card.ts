@@ -16,11 +16,11 @@ export function parseCardRaw(raw: CardRaw, context: GameContext): Card {
 }
 
 export function cardToText(card: Card): string {
-  return SUIT[card.suit].label + NATURAL_RANK[card.rank.natural].label
+  return SUIT[card.suit].text + NATURAL_RANK[card.rank.natural].text
 }
 
 export function cardRawToText(card: CardRaw): string {
-  return SUIT[card.suit].label + NATURAL_RANK[card.rank].label
+  return SUIT[card.suit].text + NATURAL_RANK[card.rank].text
 }
 
 export function cardToCardRaw(card: Card): CardRaw {

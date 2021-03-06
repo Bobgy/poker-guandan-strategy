@@ -6,27 +6,32 @@ export type AllSuit = Suit | SuitRedJoker | SuitBlackJoker
 export type SuiteMetadata<S> = {
   value: S
   label: string
+  text: string
   color: string
 }
 export const SUIT_NORMAL: Record<Suit, SuiteMetadata<Suit>> = {
   H: {
     value: 'H',
     label: '♥',
+    text: '♥',
     color: 'red',
   },
   D: {
     value: 'D',
     label: '♦',
+    text: '♦',
     color: 'red',
   },
   S: {
     value: 'S',
     label: '♠',
+    text: '♠',
     color: 'black',
   },
   C: {
     value: 'C',
     label: '♣',
+    text: '♣',
     color: 'black',
   },
 } as const
@@ -35,12 +40,14 @@ export const SUIT_JOKER: Record<SuitJoker, SuiteMetadata<SuitJoker>> = {
     // black joker
     value: 'B',
     label: '',
+    text: 'B',
     color: 'black',
   },
   R: {
     // red joker
     value: 'R',
     label: '',
+    text: 'R',
     color: 'red',
   },
 } as const
