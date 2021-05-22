@@ -131,7 +131,6 @@ describe('Strategy Module', () => {
     runTestCase({
       cardsText: 'DAD3H8H6CKSKD4CJH3H3H9C2H5S9DJC3HKH7CKHAH5C2C4S3RJCAS5',
       mainRank: 3,
-      bestPlan: [],
       bestPlan: [
         '♥3♥5♥6♥7♥8',
         '♣K♠K♥K♣K',
@@ -143,6 +142,25 @@ describe('Strategy Module', () => {
       ],
       score: 5,
     })
+    runTestCase({
+      cardsText: 'CKD10H4DKD6CJCKS2H8DADJD4C9S7HJS3BJRJD2HQH5S8D9S5S10D2C5',
+      mainRank: 6,
+      bestPlan: [
+        '♦A♠2♠3♥4♥5',
+        '♦6♠7♥8♣9♦10',
+        '♠8♦9♠10♣J♥Q',
+        '♠5♣5',
+        '♦J♥J',
+        '♣K♦K♣K♦2♦2',
+        '♦4',
+        'BJ',
+        'RJ',
+      ],
+      score: 9,
+    })
+  })
+
+  describe.only('new algorithm', () => {
     runTestCase({
       cardsText: 'CKD10H4DKD6CJCKS2H8DADJD4C9S7HJS3BJRJD2HQH5S8D9S5S10D2C5',
       mainRank: 6,

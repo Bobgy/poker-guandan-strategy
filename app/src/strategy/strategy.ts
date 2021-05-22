@@ -35,13 +35,23 @@ export function calc({
   }
 }
 
-const makeBestPlanCollector = () => {
+// returns score, the smaller the better
+type Scorer = (plan: Plan) => number
+const handsScore: Scorer = (plan) => plan.score
+const MAX_SCORE = 1e100
+
+const makeBestPlanCollector = ({
+  scorer = handsScore,
+}: { scorer?: Scorer } = {}) => {
   let bestPlan: Plan | undefined = undefined
+  let bestScore: number = MAX_SCORE
   let count = 0
   return {
     collectPlan: (plan: Plan) => {
-      if (bestPlan == null || plan.score <= bestPlan.score) {
+      const currentScore = scorer(plan)
+      if (bestPlan == null || currentScore <= bestScore) {
         bestPlan = plan
+        bestScore = currentScore
       }
       ++count
       if (count > MAX_PLANS) {
@@ -52,8 +62,11 @@ const makeBestPlanCollector = () => {
   }
 }
 
-const makeAllBestPlansCollector = () => {
+const makeAllBestPlansCollector = ({
+  scorer = handsScore,
+}: { scorer?: Scorer } = {}) => {
   let bestPlans: Plan[] = []
+  let bestScore: number = MAX_SCORE
   let count = 0
   return {
     collectPlan: (plan: Plan) => {
@@ -61,11 +74,14 @@ const makeAllBestPlansCollector = () => {
       if (count > MAX_PLANS) {
         throw new Error('too many plans')
       }
+      const currentScore = scorer(plan)
       if (bestPlans.length === 0) {
         bestPlans.push(plan)
-      } else if (plan.score < bestPlans[0].score) {
+        bestScore = currentScore
+      } else if (currentScore < bestScore) {
         bestPlans = [plan]
-      } else if (plan.score === bestPlans[0].score) {
+        bestScore = currentScore
+      } else if (currentScore === bestScore) {
         bestPlans.push(plan)
       } else {
         // ignore non-best plans
