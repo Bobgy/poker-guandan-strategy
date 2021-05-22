@@ -43,7 +43,12 @@ const HomePage: React.FunctionComponent<StatelessHomePageProps> = ({
 
     setTimeout(() => {
       // console.log(cards)
-      const plans = calc({ cards, mainRank: rank, morePlans: true })
+      const plans = calc({
+        cards,
+        mainRank: rank,
+        morePlans: true,
+        scorer: useValueEstimator ? 'HEURISTICS' : 'HANDS',
+      })
       // set a minimum extra delay to avoid UI flashing too quickly
       setTimeout(() => {
         navigation.navigate('Result')

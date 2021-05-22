@@ -1,12 +1,13 @@
 import { A, K, NaturalRankWithoutJokers, parseRawCards } from './models/const'
 import { planToText } from './models/Plan'
-import { calc } from './strategy'
+import { calc, Scorers } from './strategy'
 
 type TestCase = {
   name?: string
   cardsText: string
   mainRank?: NaturalRankWithoutJokers
   only?: boolean
+  scorer?: Scorers
 } & (
   | {
       bestPlan: string[]
@@ -128,66 +129,98 @@ describe('Strategy Module', () => {
       ],
       score: 5,
     })
-    runTestCase({
-      cardsText: 'DAD3H8H6CKSKD4CJH3H3H9C2H5S9DJC3HKH7CKHAH5C2C4S3RJCAS5',
-      mainRank: 3,
-      bestPlan: [
-        '♥3♥5♥6♥7♥8',
-        '♣K♠K♥K♣K',
-        '♣2♣2♦3♣3♦4♣4',
-        '♦A♥A♣A♥5♠5',
-        '♣J♦J♥3♥9♠9',
-        '♠3',
-        'RJ',
-      ],
-      score: 5,
-    })
-    runTestCase({
-      cardsText: 'CKD10H4DKD6CJCKS2H8DADJD4C9S7HJS3BJRJD2HQH5S8D9S5S10D2C5',
-      mainRank: 6,
-      bestPlan: [
-        '♦A♠2♠3♥4♥5',
-        '♦6♠7♥8♣9♦10',
-        '♠8♦9♠10♣J♥Q',
-        '♠5♣5',
-        '♦J♥J',
-        '♣K♦K♣K♦2♦2',
-        '♦4',
-        'BJ',
-        'RJ',
-      ],
-      score: 9,
-    })
+    runTestCases([
+      {
+        cardsText: 'DAD3H8H6CKSKD4CJH3H3H9C2H5S9DJC3HKH7CKHAH5C2C4S3RJCAS5',
+        mainRank: 3,
+        bestPlan: [
+          '♥3♥5♥6♥7♥8',
+          '♣K♠K♥K♣K',
+          '♣2♣2♦3♣3♦4♣4',
+          '♦A♥A♣A♥5♠5',
+          '♣J♦J♥3♥9♠9',
+          '♠3',
+          'RJ',
+        ],
+        score: 5,
+      },
+      {
+        scorer: 'HEURISTICS',
+        cardsText: 'DAD3H8H6CKSKD4CJH3H3H9C2H5S9DJC3HKH7CKHAH5C2C4S3RJCAS5',
+        mainRank: 3,
+        bestPlan: [
+          '♥5♥6♥7♥8♥9',
+          '♣2♣2♥3♥3',
+          '♣K♠K♥K♣K',
+          '♣J♦J',
+          '♦A♥A♣A♦4♣4',
+          '♦3♣3♠3♥5♠5',
+          '♠9',
+          'RJ',
+        ],
+        score: -4.788888888888889,
+      },
+    ])
+    runTestCases([
+      {
+        cardsText: 'CKD10H4DKD6CJCKS2H8DADJD4C9S7HJS3BJRJD2HQH5S8D9S5S10D2C5',
+        mainRank: 6,
+        bestPlan: [
+          '♦A♠2♠3♥4♥5',
+          '♦6♠7♥8♣9♦10',
+          '♠8♦9♠10♣J♥Q',
+          '♠5♣5',
+          '♦J♥J',
+          '♣K♦K♣K♦2♦2',
+          '♦4',
+          'BJ',
+          'RJ',
+        ],
+        score: 9,
+      },
+      {
+        scorer: 'HEURISTICS',
+        cardsText: 'CKD10H4DKD6CJCKS2H8DADJD4C9S7HJS3BJRJD2HQH5S8D9S5S10D2C5',
+        mainRank: 6,
+        bestPlan: [
+          '♠2♠3♥4♥5♦6',
+          '♠7♥8♣9♦10♣J',
+          '♠8♦9♠10♦J♥Q',
+          '♠5♣5',
+          '♣K♦K♣K♦2♦2',
+          '♦A',
+          '♦4',
+          '♥J',
+          'BJ',
+          'RJ',
+        ],
+        score: -0.39999999999999986,
+      },
+    ])
   })
 
-  describe.only('new algorithm', () => {
-    runTestCase({
-      cardsText: 'CKD10H4DKD6CJCKS2H8DADJD4C9S7HJS3BJRJD2HQH5S8D9S5S10D2C5',
-      mainRank: 6,
-      bestPlan: [
-        '♦A♠2♠3♥4♥5',
-        '♦6♠7♥8♣9♦10',
-        '♠8♦9♠10♣J♥Q',
-        '♠5♣5',
-        '♦J♥J',
-        '♣K♦K♣K♦2♦2',
-        '♦4',
-        'BJ',
-        'RJ',
-      ],
-      score: 9,
-    })
+  describe('heuristics scorer unit tests', () => {
+    runTestCases([
+      {
+        scorer: 'HEURISTICS',
+        cardsText: 'RJRJ',
+        bestPlan: ['RJ', 'RJ'],
+        score: -2,
+      },
+    ])
   })
 })
 
 function calcBestPlan({
   cardsText,
   mainRank = A,
+  scorer,
 }: {
   cardsText: string
   mainRank?: NaturalRankWithoutJokers
+  scorer?: Scorers
 }): { textPlan: string[]; score: number } {
-  const plan = calc({ cards: parseRawCards(cardsText), mainRank })[0]
+  const plan = calc({ cards: parseRawCards(cardsText), mainRank, scorer })[0]
   return { textPlan: planToText(plan), score: plan.score }
 }
 
@@ -199,6 +232,7 @@ function runTestCase({
   score,
   only,
   callback,
+  scorer,
 }: TestCase) {
   const func = only ? it.only : it
   func(
@@ -207,6 +241,7 @@ function runTestCase({
       const { textPlan: actualPlan, score: actualScore } = calcBestPlan({
         cardsText,
         mainRank,
+        scorer,
       })
       if (!callback) {
         expect({ plan: actualPlan, score: actualScore }).toEqual({
@@ -228,13 +263,15 @@ function runTestCases(cases: TestCase[]) {
 
 function updateTestCases(cases: TestCase[]) {
   let expectedCases: TestCase[] = []
-  cases.forEach(({ name, cardsText, mainRank, score, bestPlan }) => {
+  cases.forEach(({ name, cardsText, mainRank, score, bestPlan, scorer }) => {
     const { textPlan: actualPlan, score: actualScore } = calcBestPlan({
       cardsText,
       mainRank,
+      scorer,
     })
     expectedCases.push({
       name,
+      scorer,
       cardsText,
       mainRank,
       bestPlan: actualPlan,

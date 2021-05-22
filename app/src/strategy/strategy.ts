@@ -4,20 +4,26 @@ import { parseCardRaw } from './models/Card'
 import { CardRaw, NaturalRankWithoutJokers } from './models/const'
 import { GameContext } from './models/GameContext'
 import { Plan } from './models/Plan'
+import { handsScore, heuristicScore, MAX_SCORE, Scorer } from './scorers'
+
+export type Scorers = 'HANDS' | 'HEURISTICS'
 
 export function calc({
   cards: rawCards,
   mainRank,
   morePlans = true,
+  scorer = 'HANDS',
 }: {
   cards: CardRaw[]
   mainRank: NaturalRankWithoutJokers
   morePlans?: boolean // not only return the best plan
+  scorer?: Scorers
 }): Plan[] {
   const context = new GameContext(mainRank)
   const cards = rawCards.map((rawCard) => parseCardRaw(rawCard, context))
+  const scorerFunc = scorer === 'HEURISTICS' ? heuristicScore : handsScore
   if (morePlans) {
-    const planCollector = makeAllBestPlansCollector()
+    const planCollector = makeAllBestPlansCollector({ scorer: scorerFunc })
     iteratePlans({ cards, collectPlan: planCollector.collectPlan, context })
     const bestPlans = planCollector.getBestPlans()
     if (bestPlans.length == 0) {
@@ -25,7 +31,7 @@ export function calc({
     }
     return bestPlans
   } else {
-    const bestPlanCollector = makeBestPlanCollector()
+    const bestPlanCollector = makeBestPlanCollector({ scorer: scorerFunc })
     iteratePlans({ cards, collectPlan: bestPlanCollector.collectPlan, context })
     const bestPlan = bestPlanCollector.getBestPlan()
     if (bestPlan == null) {
@@ -34,11 +40,6 @@ export function calc({
     return [bestPlan]
   }
 }
-
-// returns score, the smaller the better
-type Scorer = (plan: Plan) => number
-const handsScore: Scorer = (plan) => plan.score
-const MAX_SCORE = 1e100
 
 const makeBestPlanCollector = ({
   scorer = handsScore,
@@ -49,6 +50,7 @@ const makeBestPlanCollector = ({
   return {
     collectPlan: (plan: Plan) => {
       const currentScore = scorer(plan)
+      plan.score = currentScore
       if (bestPlan == null || currentScore <= bestScore) {
         bestPlan = plan
         bestScore = currentScore
@@ -75,6 +77,7 @@ const makeAllBestPlansCollector = ({
         throw new Error('too many plans')
       }
       const currentScore = scorer(plan)
+      plan.score = currentScore
       if (bestPlans.length === 0) {
         bestPlans.push(plan)
         bestScore = currentScore
