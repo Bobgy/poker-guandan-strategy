@@ -199,7 +199,7 @@ describe('Strategy Module', () => {
     ])
   })
 
-  describe.only('heuristics scorer unit tests', () => {
+  describe('heuristics scorer unit tests', () => {
     runTestCases([
       {
         scorer: 'HEURISTICS',
