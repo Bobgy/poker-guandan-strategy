@@ -5,7 +5,6 @@ import { AppState, NavigationProps } from './common/types'
 import { Divider } from './Divider'
 import { MyButton } from './MyButton'
 import { RankChooser } from './RankChooser'
-import { cardRawToText } from './strategy/models/Card'
 import { calc } from './strategy/strategy'
 import { commonStyles } from './styles'
 
@@ -19,8 +18,6 @@ interface StatelessHomePageProps
       | 'addCard'
       | 'randomCards'
       | 'deleteLastCard'
-      | 'strategyResult'
-      | 'setResult'
       | 'windowSize'
     >,
     Pick<NavigationProps, 'navigation'> {}
@@ -32,30 +29,12 @@ const HomePage: React.FunctionComponent<StatelessHomePageProps> = ({
   addCard,
   randomCards,
   deleteLastCard,
-  strategyResult,
-  setResult,
   navigation,
   windowSize,
 }) => {
-  const [useValueEstimator, setUseValueEstimator] = useState(true)
   const handleSolutionCalcButton = useCallback(() => {
-    setResult('loading')
-
-    setTimeout(() => {
-      // console.log(cards)
-      const plans = calc({
-        cards,
-        mainRank: rank,
-        morePlans: true,
-        scorer: useValueEstimator ? 'HEURISTICS' : 'HANDS',
-      })
-      // set a minimum extra delay to avoid UI flashing too quickly
-      setTimeout(() => {
-        navigation.navigate('Result')
-        setResult(plans)
-      }, 300)
-    }, 0)
-  }, [cards, setResult, navigation, useValueEstimator])
+    navigation.navigate('Result')
+  }, [])
 
   return (
     <Fragment>
@@ -71,13 +50,6 @@ const HomePage: React.FunctionComponent<StatelessHomePageProps> = ({
         ]}
       >
         <RankChooser rank={rank} setRank={setRank} />
-        <MyButton
-          title={useValueEstimator ? '价值' : '手数'}
-          onPress={() => setUseValueEstimator((use) => !use)}
-          titleStyle={{
-            fontSize: 18,
-          }}
-        />
       </View>
       <Divider />
       <View
@@ -104,11 +76,9 @@ const HomePage: React.FunctionComponent<StatelessHomePageProps> = ({
         ]}
       >
         {(() => {
-          const isReady = strategyResult !== 'loading'
           return (
             <MyButton
-              title={isReady ? '开始拆牌' : '拆牌中...'}
-              disabled={!isReady}
+              title={'开始拆牌'}
               onPress={handleSolutionCalcButton}
               style={{
                 height: 60,

@@ -13,6 +13,7 @@ import { useCardState } from './useCardState'
 import { useResultState } from './useResultState'
 import { createBrowserRouterHook } from './useRouterState'
 import { useWindowSize } from './useWindowSize'
+import { QueryClient, QueryClientProvider } from 'react-query'
 
 interface AppNavigatorProps extends NavigationProps {
   route: string
@@ -118,4 +119,12 @@ function App() {
   )
 }
 
-export default App
+// Create a client
+const queryClient = new QueryClient()
+const EnhancedApp = () => (
+  <QueryClientProvider client={queryClient}>
+    <App />
+  </QueryClientProvider>
+)
+
+export default EnhancedApp

@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import { Plan } from './strategy/models/Plan'
 
-export type StrategyResultState = null | 'loading' | Plan[]
+export type StrategyResult = null | 'loading' | { title: string; plans: Plan[] }
 export interface ResultProps {
-  strategyResult: StrategyResultState
-  setResult: (result: StrategyResultState) => void
+  strategyResult: StrategyResult[]
+  setResult: (result: StrategyResult[]) => void
 }
 export const useResultState = () => {
-  const [strategyResult, setResult] = useState<StrategyResultState>(null)
+  const [strategyResult, setResult] = useState<StrategyResult[]>([])
   return {
     strategyResult,
     setResult,

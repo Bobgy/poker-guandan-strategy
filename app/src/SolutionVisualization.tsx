@@ -10,7 +10,7 @@ import {
 import { Divider } from './Divider'
 import { CardDeck } from './Card'
 import { commonStyles } from './styles'
-import { StrategyResultState } from './useResultState'
+import { StrategyResult } from './useResultState'
 import { ReactComponent as Close } from './icons/close.svg'
 import { ReactComponent as Info } from './icons/info.svg'
 import { WindowSize } from './useWindowSize'
@@ -18,7 +18,7 @@ import { NaturalRankWithoutJokers } from './strategy/models/const'
 import { cardToCardRaw } from './strategy/models/Card'
 
 interface SolutionVisualizationProps {
-  strategyResult: StrategyResultState
+  strategyResult: StrategyResult[]
   rank: NaturalRankWithoutJokers
   windowSize: WindowSize
   onClose: () => void
@@ -47,24 +47,19 @@ const CloseWindowButton: React.FunctionComponent<WindowSizeToggleProps> = (
   </TouchableOpacity>
 )
 
-interface SolutionWindowProps {
+const MAX_SOLUTIONS = 5
+
+interface SolutionViewProps {
   rank: NaturalRankWithoutJokers
-  strategyResult: StrategyResultState
+  strategyResult: StrategyResult
   windowSize: WindowSize
 }
-const SolutionWindow: React.FunctionComponent<SolutionWindowProps> = ({
+const SolutionView: React.FunctionComponent<SolutionViewProps> = ({
   strategyResult,
   rank,
   windowSize,
 }) => (
-  <ScrollView
-    style={[
-      commonStyles.container,
-      {
-        flex: 2,
-      },
-    ]}
-  >
+  <>
     {strategyResult &&
       (strategyResult === 'loading' ? (
         <Text
@@ -72,7 +67,7 @@ const SolutionWindow: React.FunctionComponent<SolutionWindowProps> = ({
             fontSize: 20,
           }}
         >
-          {/* 计算中... */}
+          计算中
         </Text>
       ) : (
         <>
@@ -85,7 +80,7 @@ const SolutionWindow: React.FunctionComponent<SolutionWindowProps> = ({
           >
             <Text
               style={{ fontSize: 18, flexShrink: 0, marginRight: 20 }}
-            >{`最少${strategyResult[0].score}手牌`}</Text>
+            >{`最少${strategyResult.plans[0].score}手牌`}</Text>
             <Text style={{ textAlignVertical: 'center' }}>
               <Info style={{ width: 19, height: 19, verticalAlign: 'top' }} />
               大小王、炸弹算0手，其他牌型算1手
@@ -93,33 +88,35 @@ const SolutionWindow: React.FunctionComponent<SolutionWindowProps> = ({
           </View>
           <View>
             {(() => {
-              const solutionsCount = strategyResult.length
-              const hiddenMoreSolutions = solutionsCount - 10
+              const solutionsCount = strategyResult.plans.length
+              const hiddenMoreSolutions = solutionsCount - MAX_SOLUTIONS
               return (
                 <>
-                  {strategyResult.slice(0, 10).map((plan, planIndex) => (
-                    <CardDeck
-                      key={planIndex}
-                      hands={plan.plays.map((play) =>
-                        play.cards.map(cardToCardRaw),
-                      )}
-                      style={{
-                        margin: 6,
-                      }}
-                      large={windowSize === 'BIG'}
-                    />
-                  ))}
+                  {strategyResult.plans
+                    .slice(0, MAX_SOLUTIONS)
+                    .map((plan, planIndex) => (
+                      <CardDeck
+                        key={planIndex}
+                        hands={plan.plays.map((play) =>
+                          play.cards.map(cardToCardRaw),
+                        )}
+                        style={{
+                          margin: 6,
+                        }}
+                        large={windowSize === 'BIG'}
+                      />
+                    ))}
                   {hiddenMoreSolutions > 0 &&
-                    `还有${hiddenMoreSolutions}种方案可以达到同样的最少手数`}
+                    `还有${hiddenMoreSolutions}种方案`}
                 </>
               )
             })()}
           </View>
         </>
       ))}
-  </ScrollView>
+  </>
 )
-const MemoedSolutionWindow = memo(SolutionWindow)
+const MemoedSolutionView = memo(SolutionView)
 
 const SolutionVisualization: React.FunctionComponent<SolutionVisualizationProps> = ({
   strategyResult,
@@ -158,11 +155,22 @@ const SolutionVisualization: React.FunctionComponent<SolutionVisualizationProps>
       />
     </View>
     <Divider />
-    <MemoedSolutionWindow
-      strategyResult={strategyResult}
-      rank={rank}
-      windowSize={windowSize}
-    />
+    <ScrollView
+      style={[
+        commonStyles.container,
+        {
+          flex: 2,
+        },
+      ]}
+    >
+      {strategyResult.map((result) => (
+        <MemoedSolutionView
+          strategyResult={result}
+          rank={rank}
+          windowSize={windowSize}
+        />
+      ))}
+    </ScrollView>
   </>
 )
 
