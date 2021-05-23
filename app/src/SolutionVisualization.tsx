@@ -80,11 +80,7 @@ const SolutionView: React.FunctionComponent<SolutionViewProps> = ({
           >
             <Text
               style={{ fontSize: 18, flexShrink: 0, marginRight: 20 }}
-            >{`最少${strategyResult.plans[0].score}手牌`}</Text>
-            <Text style={{ textAlignVertical: 'center' }}>
-              <Info style={{ width: 19, height: 19, verticalAlign: 'top' }} />
-              大小王、炸弹算0手，其他牌型算1手
-            </Text>
+            >{`分数${strategyResult.plans[0].score}`}</Text>
           </View>
           <View>
             {(() => {

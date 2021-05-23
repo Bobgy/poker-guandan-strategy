@@ -13,20 +13,12 @@ function ResultPage({ screenProps, navigation }: NavigationProps) {
     morePlans: true,
     scorer: 'HEURISTICS' as const,
   }
-  console.log(args1)
-  const [transitioned, setTransitioned] = useState(false)
-  useEffect(() => {
-    const handle = setTimeout(() => {
-      setTransitioned(true)
-    }, 500)
-    return () => {
-      clearTimeout(handle)
-    }
-  }, [])
   const { status: status1, data: plans1 } = useQuery(
     ['calc', args1],
-    async () => calc(args1),
-    { enabled: transitioned },
+    async () => {
+      await delay(500)
+      return calc(args1)
+    },
   )
   const args2 = {
     cards,
@@ -36,7 +28,10 @@ function ResultPage({ screenProps, navigation }: NavigationProps) {
   }
   const { status: status2, data: plans2 } = useQuery(
     ['calc', args2],
-    async () => calc(args2),
+    async () => {
+      await delay(0)
+      return calc(args2)
+    },
     { enabled: status1 == 'success' },
   )
   let strategyResult: StrategyResult[] = ['loading']
@@ -60,3 +55,9 @@ function ResultPage({ screenProps, navigation }: NavigationProps) {
   )
 }
 export default ResultPage
+
+function delay(millis: number) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, millis)
+  })
+}
