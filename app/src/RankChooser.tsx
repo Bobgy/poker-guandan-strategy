@@ -3,6 +3,8 @@ import { View, Text, Picker } from 'react-native'
 import { RankState } from './common/types'
 import { SUIT } from './strategy/models/Suite'
 import {
+  BLACK_JOKER,
+  NaturalRankWithoutJokers,
   NATURAL_RANK,
   NATURAL_RANKS_WITHOUT_JOKERS,
 } from './strategy/models/const'
@@ -18,7 +20,9 @@ export function RankChooser({ rank, setRank }: RankState) {
         当前打
         <Picker
           selectedValue={rank}
-          onValueChange={(itemValue) => setRank(itemValue)}
+          onValueChange={(itemValue) =>
+            setRank(assertNonJokerNaturalRank(parseInt(itemValue, 10)))
+          }
         >
           {NATURAL_RANKS_WITHOUT_JOKERS.map((rank) => (
             <Picker.Item
@@ -36,4 +40,11 @@ export function RankChooser({ rank, setRank }: RankState) {
       </Text>
     </View>
   )
+}
+
+function assertNonJokerNaturalRank(rank: number): NaturalRankWithoutJokers {
+  if (!Number.isInteger(rank) || rank <= 0 || rank >= BLACK_JOKER) {
+    throw new Error(`rank ${rank} is not valid non-joker natural rank`)
+  }
+  return rank as NaturalRankWithoutJokers
 }

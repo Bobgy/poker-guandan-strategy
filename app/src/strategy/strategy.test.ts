@@ -199,13 +199,20 @@ describe('Strategy Module', () => {
     ])
   })
 
-  describe('heuristics scorer unit tests', () => {
+  describe.only('heuristics scorer unit tests', () => {
     runTestCases([
       {
         scorer: 'HEURISTICS',
         cardsText: 'RJRJ',
         bestPlan: ['RJ', 'RJ'],
         score: -2,
+      },
+      {
+        scorer: 'HEURISTICS',
+        mainRank: 2,
+        cardsText: 'SJSJHJH2',
+        bestPlan: ['♠J♠J♥J♥2'],
+        score: -1,
       },
     ])
   })

@@ -13,6 +13,7 @@ function ResultPage({ screenProps, navigation }: NavigationProps) {
     morePlans: true,
     scorer: 'HEURISTICS' as const,
   }
+  console.log(args1)
   const [transitioned, setTransitioned] = useState(false)
   useEffect(() => {
     const handle = setTimeout(() => {
