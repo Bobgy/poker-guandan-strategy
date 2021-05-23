@@ -1,22 +1,22 @@
 {
   "files": {
     "main.css": "/poker-guandan-strategy/static/css/main.0d183a93.chunk.css",
-    "main.js": "/poker-guandan-strategy/static/js/main.c2609410.chunk.js",
-    "main.js.map": "/poker-guandan-strategy/static/js/main.c2609410.chunk.js.map",
+    "main.js": "/poker-guandan-strategy/static/js/main.39d80a96.chunk.js",
+    "main.js.map": "/poker-guandan-strategy/static/js/main.39d80a96.chunk.js.map",
     "runtime-main.js": "/poker-guandan-strategy/static/js/runtime-main.fc8696ca.js",
     "runtime-main.js.map": "/poker-guandan-strategy/static/js/runtime-main.fc8696ca.js.map",
-    "static/js/2.0b2459d7.chunk.js": "/poker-guandan-strategy/static/js/2.0b2459d7.chunk.js",
-    "static/js/2.0b2459d7.chunk.js.map": "/poker-guandan-strategy/static/js/2.0b2459d7.chunk.js.map",
+    "static/js/2.1eaf6bda.chunk.js": "/poker-guandan-strategy/static/js/2.1eaf6bda.chunk.js",
+    "static/js/2.1eaf6bda.chunk.js.map": "/poker-guandan-strategy/static/js/2.1eaf6bda.chunk.js.map",
     "index.html": "/poker-guandan-strategy/index.html",
     "static/css/main.0d183a93.chunk.css.map": "/poker-guandan-strategy/static/css/main.0d183a93.chunk.css.map",
-    "static/js/2.0b2459d7.chunk.js.LICENSE.txt": "/poker-guandan-strategy/static/js/2.0b2459d7.chunk.js.LICENSE.txt",
+    "static/js/2.1eaf6bda.chunk.js.LICENSE.txt": "/poker-guandan-strategy/static/js/2.1eaf6bda.chunk.js.LICENSE.txt",
     "static/media/close.2c0e4ee3.svg": "/poker-guandan-strategy/static/media/close.2c0e4ee3.svg",
     "static/media/info.8bfd8780.svg": "/poker-guandan-strategy/static/media/info.8bfd8780.svg"
   },
   "entrypoints": [
     "static/js/runtime-main.fc8696ca.js",
-    "static/js/2.0b2459d7.chunk.js",
+    "static/js/2.1eaf6bda.chunk.js",
     "static/css/main.0d183a93.chunk.css",
-    "static/js/main.c2609410.chunk.js"
+    "static/js/main.39d80a96.chunk.js"
   ]
 }
