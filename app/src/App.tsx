@@ -1,6 +1,6 @@
 /// <reference path="lib.d.ts"/>
 
-import createHistory from 'history/createBrowserHistory'
+import {createBrowserHistory} from 'history'
 import React, { FunctionComponent, useState } from 'react'
 import { StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native'
 import { TransitionGroup } from 'react-transition-group'
@@ -77,7 +77,7 @@ const routesConfig = {
     },
   },
 }
-const history = createHistory()
+const history = createBrowserHistory()
 
 const useRouterState = createBrowserRouterHook(routesConfig, history)
 
